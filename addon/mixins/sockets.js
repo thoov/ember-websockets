@@ -1,14 +1,5 @@
 import Ember from 'ember';
 
-
-var READY_STATES = {
-		NOT_ESTABLISHED: 0,
-		ESTABLISHED: 1,
-		CLOSING_HANDSHAKE: 2,
-		CLOSED: 3
-	};
-
-
 export default Ember.Mixin.create({
 
 	socketURL: null,
@@ -17,6 +8,7 @@ export default Ember.Mixin.create({
 	setupController: function(controller) {
 
 		var socketURL = this.get('socketURL'),
+			socketEventListeners = ['onclose', 'onerror', 'onmessage', 'onopen'],
 			websocket;
 
 
@@ -26,7 +18,7 @@ export default Ember.Mixin.create({
 			TODO: a better check could be put here to check if the string
 			is an actual url, etc.
 		*/
-		if( Ember.isEmpty(socketURL) ) {
+		if(Ember.isEmpty(socketURL)) {
 			this._super.apply(this, arguments);
 			return false;
 		}
@@ -36,9 +28,11 @@ export default Ember.Mixin.create({
 			Initialize the socket
 		*/
 		websocket = new window.WebSocket(this.get('socketURL'));
-		websocket.onopen = function() {
-			controller.send('onopen');
-		};
+		socketEventListeners.forEach(function(item) {
+			websocket[item] = function(data) {
+				this.send(item, data);
+			}.bind(controller);
+		});
 
 
 		this.set('socketConnection', websocket);
@@ -51,6 +45,10 @@ export default Ember.Mixin.create({
 		this._super.apply(this, arguments);
 	},
 
+	deactivate: function() {
+		this.get('socketConnection').close();
+	},
+
 	actions: {
 		/*
 			This is an action that controllers, components, view, etc can send
@@ -58,6 +56,15 @@ export default Ember.Mixin.create({
 		*/
 		emit: function(data) {
 			this.get('socketConnection').send(data);
-		}
+		},
+
+		/*
+			These are just catch alls so we do not get the error message: 'nothing
+			handled this action...'. These should be overridden by the controller.
+		*/
+		onmessage: Ember.K,
+		onerror: Ember.K,
+		onopen: Ember.K,
+		onclose: Ember.K
 	}
 });

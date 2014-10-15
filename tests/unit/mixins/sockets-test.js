@@ -1,29 +1,64 @@
 import Ember from 'ember';
 import SocketsMixin from 'ember-sockets/mixins/sockets';
 
-module('SocketsMixin');
+var webSocketFunction;
 
-// Replace this with your real tests.
-test('it works', function() {
-  var SocketsObject = Ember.Object.extend(SocketsMixin);
-  var subject = SocketsObject.create();
-  ok(subject);
+module('SocketsMixin', {
+  setup: function() {
+    webSocketFunction = window.WebSocket;
+    window.WebSocket = function() {
+      ok(true);
+      start();
+    };
+  },
+  teardown: function() {
+    window.WebScoket = webSocketFunction;
+  }
 });
 
 
-test('websockets function gets called', function() {
-    expect( 1 );
-    stop();
+asyncTest('the route setup happens correctly during setupController', function() {
+    var socketsRoute, socketsController;
 
-    var SocketsRoute = Ember.Route.extend(SocketsMixin).create();
-    var SocketsController = Ember.Controller.create();
+    expect(3);
 
-    window.WebSocket = function() {
-        console.log('here')
+    socketsRoute = Ember.Route.extend(SocketsMixin, {
+        socketURL: 'ws://localhost:8080'
+    }).create(),
 
-        ok(true);
-        start();
-    };
+    socketsController = Ember.Controller.extend({}).create();
 
-    SocketsRoute.setupController(SocketsController);
+    socketsRoute.setupController(socketsController);
+
+    ok(Ember.typeOf(socketsRoute.get('socketConnection')) === 'object');
+    ok(socketsRoute.get('socketConnection') instanceof window.WebSocket);
+});
+
+
+asyncTest('the route setup happens correctly during setupController', function() {
+    var socketsRoute, socketsController;
+
+    expect(3);
+
+    socketsRoute = Ember.Route.extend(SocketsMixin, {
+        socketURL: 'ws://localhost:8080'
+    }).create(),
+
+    socketsController = Ember.Controller.extend({
+      actions: {
+        onopen: function() {
+          ok(true)
+          start();
+        }
+      }
+
+    }).create();
+
+    socketsRoute.setupController(socketsController);
+
+    socketsRoute.get('socketConnection').open
+
+
+    ok(Ember.typeOf(socketsRoute.get('socketConnection')) === 'object');
+    ok(socketsRoute.get('socketConnection') instanceof window.WebSocket);
 });
