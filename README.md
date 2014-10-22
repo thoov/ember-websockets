@@ -11,7 +11,7 @@ names and methods may change.
 
 * `npm install ember-websockets --save-dev`
 
-## How to use it in your app
+## Simple example of using it in your app
 
 Import the socket mixin and add it to any route(s) that you wish
 to add socket support to:
@@ -54,16 +54,9 @@ export default Ember.Controller.extend({
 });
 ```
 
-## Route Mixin Properties
+## Handling events from the server
 
-The websocket mixin adds a few properties which you can configure on your route.
-
-* **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
-* **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
-
-## WebSocket Actions / Events
-
-There are 4 events that can happen: **(onopen, onmessage, onclose, and onerror)**. You can add action handlers for any of
+There are 4 events that can happen: **onopen, onmessage, onclose, and onerror**. You can add action handlers for any of
 these on either your route or controller. Here is an example of all the actions a controller could handle:
 
 ```javascript
@@ -84,3 +77,10 @@ export default Ember.Controller.extend({
   }
 });
 ```
+
+## Route Mixin Properties
+
+The websocket mixin adds a few properties which you can configure on your route.
+
+* **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
+* **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
