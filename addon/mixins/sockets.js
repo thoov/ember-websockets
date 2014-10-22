@@ -1,15 +1,22 @@
 import Ember from 'ember';
+import ENUMS from '../utils/enums';
+
+var typeOf = Ember.typeOf;
 
 export default Ember.Mixin.create({
 
 	socketURL: null,
+	socketContexts: {}, // This is shared between route instances.
+	multiRoute: null,
 	socketConnection: null,
+	closeSocketOnTransition: null,
 
 	setupController: function(controller) {
 
 		var socketURL = this.get('socketURL'),
 			socketEventListeners = ['onclose', 'onerror', 'onmessage', 'onopen'],
-			websocket;
+			websocket = this.get('socketConnection'),
+			socketContexts = this.get('socketContexts');
 
 
 		/*
@@ -23,20 +30,20 @@ export default Ember.Mixin.create({
 			return false;
 		}
 
-
 		/*
 			Initialize the socket
 		*/
-		websocket = new window.WebSocket(this.get('socketURL'));
-		socketEventListeners.forEach(function(item) {
-			websocket[item] = function(data) {
-				this.send(item, data);
-			}.bind(controller);
-		});
+		if(!websocket || websocket.readyState === ENUMS.READY_STATES.CLOSED) {
+			if(socketContexts[socketURL]) {
+				socketContexts[socketURL].pushObject(controller);
+			}
+			else {
+				socketContexts[socketURL] = [controller];
+			}
 
-
-		this.set('socketConnection', websocket);
-
+			websocket = new window.WebSocket(socketURL);
+			this.set('socketConnection', this._initializeSocket(websocket, socketEventListeners, socketContexts));
+		}
 
 		/*
 			Make sure that we call the super function just in case the object
@@ -45,8 +52,37 @@ export default Ember.Mixin.create({
 		this._super.apply(this, arguments);
 	},
 
+	/*
+		Overrides the onopen, onmessage, etc methods that get envoked on the socket.
+		This methods will instead send an action and pass along the data coming back.
+	*/
+	_initializeSocket: function(websocket, socketEventListeners, socketContexts) {
+		socketEventListeners.forEach(function(eventName) {
+			websocket[eventName] = function(data) {
+				socketContexts[data.currentTarget.url.split('').slice(0, -1).join('')].forEach(function(context) {
+					context.send(eventName, data);
+				});
+			};
+		});
+
+		return websocket;
+	},
+
+	/*
+		When the route deactivates or "transitions away" we will either close the
+		connection or keep it "alive"
+	*/
 	deactivate: function() {
-		this.get('socketConnection').close();
+		this._super.apply(this, arguments);
+		var closeSocket = this.get('closeSocketOnTransition'),
+			socketContexts = this.get('socketContexts'),
+			socketURL = this.get('socketURL');
+
+		if(closeSocket === true || typeOf(closeSocket) === 'null') {
+			this.get('socketConnection').close();
+			this.set('socketConnection', null);
+			socketContexts[socketURL].removeObject(this);
+		}
 	},
 
 	actions: {
@@ -54,7 +90,12 @@ export default Ember.Mixin.create({
 			This is an action that controllers, components, view, etc can send
 			which will make its way to the
 		*/
-		emit: function(data) {
+		emit: function(data, shouldStringify) {
+
+			if(shouldStringify && JSON && JSON.stringify) {
+				data = JSON.stringify(data);
+			}
+
 			this.get('socketConnection').send(data);
 		},
 

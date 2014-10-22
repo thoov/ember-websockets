@@ -1,0 +1,9 @@
+{{#each messages}}
+    <p>{{text}}</p>
+{{/each}}
+
+<div>
+    {{input value=messageText}}
+
+    <button {{action 'submitText'}}>Send Message</button>
+</div>
