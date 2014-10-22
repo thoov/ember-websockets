@@ -16,7 +16,7 @@ names and methods may change.
 Import the socket mixin and add it to any route(s) that you wish
 to add socket support to:
 
-```
+```javascript
 import socketMixin from 'ember-websockets/mixins/sockets';
 export default Ember.Route.extend(socketMixin, {
   socketURL: 'ws://localhost:8080'
@@ -25,7 +25,7 @@ export default Ember.Route.extend(socketMixin, {
 
 Next set up any actions on your controller which you want handle:
 
-```
+```javascript
 export default Ember.Controller.extend({
   actions: {
     onopen: function() {
@@ -43,7 +43,7 @@ export default Ember.Controller.extend({
 The websocket mixin adds an action called `emit` onto the route which you can envoke
 within your app. Here is an example:
 
-```
+```javascript
 export default Ember.Controller.extend({
   actions: {
     onopen: function() {
