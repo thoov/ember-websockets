@@ -5,9 +5,9 @@ module.exports = function(app) {
     socketServer.on('connection', function(ws) {
 
         ws.on('message', function(message) {
-            console.log('received: %s', message);
+            var messageFromClient = JSON.parse(message);
 
-            ws.send(message);
+            ws.send('from the server: ' + messageFromClient);
         });
 
         console.log('Someone has connected.');

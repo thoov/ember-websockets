@@ -9,7 +9,7 @@ export default Ember.Controller.extend({
         onopen: function() {},
 
         onmessage: function(messageFromSocket) {
-            this.get('messages').pushObject({text: JSON.parse(messageFromSocket.data)});
+            this.get('messages').pushObject({text: messageFromSocket.data});
         },
 
         submitText: function() {

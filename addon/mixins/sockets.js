@@ -7,9 +7,9 @@ export default Ember.Mixin.create({
 
 	socketURL: null,
 	socketContexts: {}, // This is shared between route instances.
-	multiRoute: null,
+	keepSocketAlive: null,
 	socketConnection: null,
-	closeSocketOnTransition: null,
+	disableSocketConcurrency: null,
 
 	setupController: function(controller) {
 
@@ -35,10 +35,10 @@ export default Ember.Mixin.create({
 		*/
 		if(!websocket || websocket.readyState === ENUMS.READY_STATES.CLOSED) {
 			if(socketContexts[socketURL]) {
-				socketContexts[socketURL].pushObject(controller);
+				socketContexts[socketURL].pushObject({controller: controller, route: this});
 			}
 			else {
-				socketContexts[socketURL] = [controller];
+				socketContexts[socketURL] = [{controller: controller, route: this}];
 			}
 
 			websocket = new window.WebSocket(socketURL);
@@ -60,7 +60,7 @@ export default Ember.Mixin.create({
 		socketEventListeners.forEach(function(eventName) {
 			websocket[eventName] = function(data) {
 				socketContexts[data.currentTarget.url.split('').slice(0, -1).join('')].forEach(function(context) {
-					context.send(eventName, data);
+					context.controller.send(eventName, data);
 				});
 			};
 		});
@@ -74,14 +74,14 @@ export default Ember.Mixin.create({
 	*/
 	deactivate: function() {
 		this._super.apply(this, arguments);
-		var closeSocket = this.get('closeSocketOnTransition'),
+		var keepSocketAlive = this.get('keepSocketAlive'),
 			socketContexts = this.get('socketContexts'),
 			socketURL = this.get('socketURL');
 
-		if(closeSocket === true || typeOf(closeSocket) === 'null') {
+		if(keepSocketAlive === false || typeOf(keepSocketAlive) === 'null') {
 			this.get('socketConnection').close();
 			this.set('socketConnection', null);
-			socketContexts[socketURL].removeObject(this);
+			socketContexts[socketURL] = socketContexts[socketURL].rejectBy('route', this);
 		}
 	},
 
