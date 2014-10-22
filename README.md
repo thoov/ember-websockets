@@ -46,9 +46,33 @@ within your app. Here is an example:
 
 ```javascript
 export default Ember.Controller.extend({
+  chatRoomInputText: null,
+
   actions: {
-    onopen: function(socketEvent) {
-      this.send('emit', 'This is some test data I want to send');
+    buttonClicked: function() {
+      // This would "emit" the chatRoomInputText to the server.
+      this.send('emit', this.get('chatRoomInputText'));
+    }
+  }
+});
+```
+
+Note: Here we are only sending a simple string through the websocket. You can send more complex data types by using
+JSON.stringify. I have added an optional 3rd parameter for stringifing the data for you. Here is an example:
+
+```javascript
+export default Ember.Controller.extend({
+  chatRoomInputText: null,
+  chatRoomUserName: 'Testing',
+
+  actions: {
+    buttonClicked: function() {
+      var inputText = this.get('chatRoomInputText'),
+          userName = this.get('chatRoomUserName');
+
+      // This would "emit" a custom object through the websocket. Note the argument true. It must be passed if you
+      // want to send a custom object like this example.
+      this.send('emit', {text: inputText, user: userName}, true);
     }
   }
 });
