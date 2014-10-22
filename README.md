@@ -57,7 +57,7 @@ export default Ember.Controller.extend({
 });
 ```
 
-Note: Here we are only sending a simple string through the websocket. You can send more complex data types by using
+**Note**: Here we are only sending a simple string through the websocket. You can send more complex data types by using
 JSON.stringify. I have added an optional 3rd parameter for stringifing the data for you. Here is an example:
 
 ```javascript
@@ -70,7 +70,8 @@ export default Ember.Controller.extend({
       var inputText = this.get('chatRoomInputText'),
           userName = this.get('chatRoomUserName');
 
-      // This would "emit" a custom object through the websocket. Note the argument true. It must be passed if you
+      // This would "emit" a custom object through the websocket.
+      // Note the argument true. It must be passed if you
       // want to send a custom object like this example.
       this.send('emit', {text: inputText, user: userName}, true);
     }
