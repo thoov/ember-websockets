@@ -1,25 +1,51 @@
-# Ember-sockets
+# EmberJS WebSockets Addon
 
-This README outlines the details of collaborating on this Ember addon.
+This addon aims to be a simple and easy way to integrate with any websocket
+backend. It has been designed to be minimalistic, flexible, and lightweight instead of
+forcing certain conventions on the developer.
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+* `npm install ember-websockets --save-dev`
 
-## Running
+## How to use it in your app
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+Import the socket mixin and add it to any route(s) that you wish
+to add socket support to:
 
-## Running Tests
+```
+import socketMixin from 'ember-websockets/mixins/sockets';
+export default Ember.Route.extend(socketMixin, {
+  socketURL: 'ws://localhost:8080'
+});
+```
 
-* `ember test`
-* `ember test --server`
+Next set up any actions on your controller which you want handle:
 
-## Building
+```
+export default Ember.Controller.extend({
+  actions: {
+    onopen: function() {
+      console.log('On open has been called!');
+    },
+    onmessage: function(socketEvent) {
+      console.log('On message has been called!');
+    }
+  }
+});
+```
 
-* `ember build`
+## Sending events to the server
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+The websocket mixin adds an action called `emit` onto the route which you can envoke
+within your app. Here is an example:
+
+```
+export default Ember.Controller.extend({
+  actions: {
+    onopen: function() {
+      this.send('emit', 'This is some test data I want to send');
+    }
+  }
+});
+```

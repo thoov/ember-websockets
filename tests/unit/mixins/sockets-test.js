@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import SocketsMixin from 'ember-sockets/mixins/sockets';
+import SocketsMixin from 'ember-websockets/mixins/sockets';
 
 QUnit.config.testTimeout = 2000;
 

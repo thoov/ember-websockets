@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import socketsMixin from 'ember-sockets/mixins/sockets';
+import socketsMixin from 'ember-websockets/mixins/sockets';
 
 export default Ember.Route.extend(socketsMixin, {
 

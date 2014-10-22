@@ -1,3 +1,3 @@
 module.exports = {
-  name: 'ember-sockets'
+  name: 'ember-websockets'
 };
