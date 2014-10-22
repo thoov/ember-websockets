@@ -117,6 +117,6 @@ The websocket mixin adds a few properties which you can configure on your route.
 
 ## FAQ
 
-* recommended backend library/framework: The only requirement for this mixin to work is a service that can handle ws or wss protocols.
+* **Recommended backend library/framework**: The only requirement for this mixin to work is a service that can handle ws or wss protocols.
 For this reason socket.io will not work as it does not use the standard ws protocol. Instead I would look at [ws](https://github.com/einaros/ws)
 which is a great package.
