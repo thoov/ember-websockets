@@ -20,6 +20,7 @@ to add socket support to:
 import socketMixin from 'ember-websockets/mixins/sockets';
 export default Ember.Route.extend(socketMixin, {
   socketURL: 'ws://localhost:8080'
+  // There are a few more options which are explained below
 });
 ```
 
@@ -28,7 +29,7 @@ Next set up any actions on your controller which you want handle:
 ```javascript
 export default Ember.Controller.extend({
   actions: {
-    onopen: function() {
+    onopen: function(socketEvent) {
       console.log('On open has been called!');
     },
     onmessage: function(socketEvent) {
@@ -46,7 +47,7 @@ within your app. Here is an example:
 ```javascript
 export default Ember.Controller.extend({
   actions: {
-    onopen: function() {
+    onopen: function(socketEvent) {
       this.send('emit', 'This is some test data I want to send');
     }
   }
@@ -57,5 +58,29 @@ export default Ember.Controller.extend({
 
 The websocket mixin adds a few properties which you can configure on your route.
 
-* **socketURL** (required): This is the URL of your websocket server. This is of the form ws://XXX or wss://XXX
+* **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
 * **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
+
+## WebSocket Actions / Events
+
+There are 4 events that can happen: **(onopen, onmessage, onclose, and onerror)**. You can add action handlers for any of
+these on either your route or controller. Here is an example of all the actions a controller could handle:
+
+```javascript
+export default Ember.Controller.extend({
+  actions: {
+    onopen: function(socketEvent) {
+      console.log('On open has been called!');
+    },
+    onmessage: function(socketEvent) {
+      console.log('On message has been called!');
+    }
+    onclose: function(socketEvent) {
+      console.log('On close has been called!');
+    }
+    onerror: function(socketEvent) {
+      console.log('On error has been called! :-(');
+    }
+  }
+});
+```
