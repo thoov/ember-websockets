@@ -70,7 +70,7 @@ export default Ember.Mixin.create({
 			return true;
 		}
 
-		Ember.assert('SocketURL is missing or is not correctly setup');
+		Ember.Logger.log('SocketURL is missing or is not correctly setup');
 		return false;
 	},
 
@@ -85,9 +85,11 @@ export default Ember.Mixin.create({
 			socketURL = this.get('socketURL');
 
 		if(keepSocketAlive === false || typeOf(keepSocketAlive) === 'null') {
-			this.get('socketConnection').close();
-			this.set('socketConnection', null);
-			socketContexts[socketURL] = socketContexts[socketURL].rejectBy('route', this);
+			if(this.get('socketConnection')) {
+				this.get('socketConnection').close();
+				this.set('socketConnection', null);
+				socketContexts[socketURL] = socketContexts[socketURL].rejectBy('route', this);
+			}
 		}
 	},
 

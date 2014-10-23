@@ -19,7 +19,7 @@ module('SocketsMixin', {
 
 
 test('setup of the mixin happens correctly during a route\'s setupController', function() {
-    expect(4);
+    expect(3);
 
     sockCntr = Ember.Controller.extend({}).create();
     sockRoute.setupController(sockCntr);
@@ -27,7 +27,15 @@ test('setup of the mixin happens correctly during a route\'s setupController', f
     ok(sockRoute.get('socketConnection') instanceof window.WebSocket, 'socketConnection is of type WebSocket');
     strictEqual(sockRoute.get('socketContexts.' + sockRoute.get('socketURL')).filterBy('route', sockRoute).length, 1, 'socketContexts is setup correctly with the correct controller inside of it');
     strictEqual(sockRoute.get('keepSocketAlive'), null, 'keepSocketAlive is null by default');
-    strictEqual(sockRoute.get('disableSocketConcurrency'), null, 'disableSocketConcurrency is null by default');
+});
+
+test('validation of the socket url happens correctly', function() {
+    expect(4);
+
+    ok(sockRoute.validateSocketURL('ws://localhost:8080'));
+    ok(sockRoute.validateSocketURL('wss://localhost:8080'));
+    ok(!sockRoute.validateSocketURL('http://localhost:8080'));
+    ok(!sockRoute.validateSocketURL('https://localhost:8080'));
 });
 
 asyncTest('onopen event is fired and can be handled by a controller', function() {
