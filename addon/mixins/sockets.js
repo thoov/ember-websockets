@@ -9,7 +9,6 @@ export default Ember.Mixin.create({
 	socketContexts: {}, // This is shared between route instances.
 	keepSocketAlive: null,
 	socketConnection: null,
-	disableSocketConcurrency: null,
 
 	setupController: function(controller) {
 
@@ -18,14 +17,7 @@ export default Ember.Mixin.create({
 			websocket = this.get('socketConnection'),
 			socketContexts = this.get('socketContexts');
 
-
-		/*
-			Make sure that the socketURL is set
-
-			TODO: a better check could be put here to check if the string
-			is an actual url, etc.
-		*/
-		if(Ember.isEmpty(socketURL)) {
+		if(this.validateSocketURL(socketURL)) {
 			this._super.apply(this, arguments);
 			return false;
 		}
@@ -42,7 +34,7 @@ export default Ember.Mixin.create({
 			}
 
 			websocket = new window.WebSocket(socketURL);
-			this.set('socketConnection', this._initializeSocket(websocket, socketEventListeners, socketContexts));
+			this.set('socketConnection', this.initializeSocket(websocket, socketEventListeners, socketContexts));
 		}
 
 		/*
@@ -56,7 +48,7 @@ export default Ember.Mixin.create({
 		Overrides the onopen, onmessage, etc methods that get envoked on the socket.
 		This methods will instead send an action and pass along the data coming back.
 	*/
-	_initializeSocket: function(websocket, socketEventListeners, socketContexts) {
+	initializeSocket: function(websocket, socketEventListeners, socketContexts) {
 		socketEventListeners.forEach(function(eventName) {
 			websocket[eventName] = function(data) {
 				socketContexts[data.currentTarget.url.split('').slice(0, -1).join('')].forEach(function(context) {
@@ -66,6 +58,20 @@ export default Ember.Mixin.create({
 		});
 
 		return websocket;
+	},
+
+	/*
+		Validates that the socketURL is set and contains a valid ws or wss protocal url
+	*/
+	validateSocketURL: function(socketURL) {
+		var wsProtocolRegex = /(ws|wss):\/\//i;
+
+		if(!Ember.isEmpty(socketURL) && socketURL.match(wsProtocolRegex)) {
+			return true;
+		}
+
+		Ember.Logger.log('SocketURL is missing or is not correctly setup: ', socketURL);
+		return false;
 	},
 
 	/*
