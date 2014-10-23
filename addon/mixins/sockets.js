@@ -17,7 +17,7 @@ export default Ember.Mixin.create({
 			websocket = this.get('socketConnection'),
 			socketContexts = this.get('socketContexts');
 
-		if(this.validateSocketURL(socketURL)) {
+		if(!this.validateSocketURL(socketURL)) {
 			this._super.apply(this, arguments);
 			return false;
 		}
@@ -70,7 +70,7 @@ export default Ember.Mixin.create({
 			return true;
 		}
 
-		Ember.Logger.log('SocketURL is missing or is not correctly setup: ', socketURL);
+		Ember.assert('SocketURL is missing or is not correctly setup');
 		return false;
 	},
 
