@@ -11,9 +11,8 @@ export default Ember.Mixin.create({
 	socketConnection: null,
 
 	setupController: function(controller) {
-
-		var socketURL = this.get('socketURL'),
-			socketEventListeners = ['onclose', 'onerror', 'onmessage', 'onopen'],
+		var urlHashKey,
+			socketURL = this.get('socketURL'),
 			websocket = this.get('socketConnection'),
 			socketContexts = this.get('socketContexts');
 
@@ -23,18 +22,27 @@ export default Ember.Mixin.create({
 		}
 
 		/*
-			Initialize the socket
+			Initialize the socket if it is null or has been closed.
+			If the ready state is closed this is because the route closed the socket on a previous
+			deactivate and now we are back into this same route so we need to reopen (create) it.
 		*/
 		if(!websocket || websocket.readyState === ENUMS.READY_STATES.CLOSED) {
-			if(socketContexts[socketURL]) {
-				socketContexts[socketURL].pushObject({controller: controller, route: this});
-			}
-			else {
-				socketContexts[socketURL] = [{controller: controller, route: this}];
+			websocket = new window.WebSocket(socketURL);
+			urlHashKey = websocket.url;
+
+			// This will only fire if the urlHashKey has added an extra / to the end of the url. This will only
+			// happen if your socketURL is at the rootLevel such as ws://example.com or ws://localhost:8080 in which the
+			// the urlHashKey will be ws://example.com/ and ws://localhost:8080/ respectfully.
+			this.set('socketURL', urlHashKey);
+
+			// If we dont have the hashKey in our shared object this means we are creating the first socket for a given
+			// url
+			if(!socketContexts[urlHashKey]) {
+				socketContexts[urlHashKey] = [];
 			}
 
-			websocket = new window.WebSocket(socketURL);
-			this.set('socketConnection', this.initializeSocket(websocket, socketEventListeners, socketContexts));
+			socketContexts[urlHashKey].pushObject({controller: controller, route: this});
+			this.set('socketConnection', this.initializeSocket(websocket, socketContexts));
 		}
 
 		/*
@@ -48,10 +56,10 @@ export default Ember.Mixin.create({
 		Overrides the onopen, onmessage, etc methods that get envoked on the socket.
 		This methods will instead send an action and pass along the data coming back.
 	*/
-	initializeSocket: function(websocket, socketEventListeners, socketContexts) {
-		socketEventListeners.forEach(function(eventName) {
+	initializeSocket: function(websocket, socketContexts) {
+		ENUMS.SOCKET_EVENTS.forEach(function(eventName) {
 			websocket[eventName] = function(data) {
-				socketContexts[data.currentTarget.url.split('').slice(0, -1).join('')].forEach(function(context) {
+				socketContexts[data.currentTarget.url].forEach(function(context) {
 					context.controller.send(eventName, data);
 				});
 			};

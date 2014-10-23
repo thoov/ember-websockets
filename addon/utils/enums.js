@@ -4,5 +4,6 @@ export default {
         OPEN: 1,
         CLOSING: 2,
         CLOSED: 3
-    }
+    },
+    SOCKET_EVENTS: ['onclose', 'onerror', 'onmessage', 'onopen']
 };
