@@ -17,7 +17,6 @@ module('SocketsMixin', {
     }
 });
 
-
 test('setup of the mixin happens correctly during a route\'s setupController', function() {
     expect(4);
 
@@ -28,16 +27,18 @@ test('setup of the mixin happens correctly during a route\'s setupController', f
     strictEqual(sockRoute.get('socketContexts.' + sockRoute.get('socketURL')).filterBy('route', sockRoute).length, 1, 'socketContexts is setup correctly with the correct controller inside of it');
     strictEqual(sockRoute.get('keepSocketAlive'), null, 'keepSocketAlive is null by default');
     strictEqual(sockRoute.get('socketURL'), 'ws://localhost:8081/', 'the socketURL has been changed to reflect the urlHashKey ie: a slash has been added');
-
 });
 
 test('validation of the socket url happens correctly', function() {
-    expect(4);
+    expect(7);
 
     ok(sockRoute.validateSocketURL('ws://localhost:8080'));
     ok(sockRoute.validateSocketURL('wss://localhost:8080'));
     ok(!sockRoute.validateSocketURL('http://localhost:8080'));
     ok(!sockRoute.validateSocketURL('https://localhost:8080'));
+    ok(!sockRoute.validateSocketURL());
+    ok(!sockRoute.validateSocketURL(''));
+    ok(!sockRoute.validateSocketURL('foo-bar'));
 });
 
 asyncTest('onopen event is fired and can be handled by a controller', function() {
@@ -46,7 +47,6 @@ asyncTest('onopen event is fired and can be handled by a controller', function()
     sockCntr = Ember.Controller.extend({
         actions: {
             onopen: function(data) {
-
                 ok(true, 'onopen event was fired and caught by a controller action');
                 ok(data instanceof window.Event, 'data argument is an instance of Event');
                 start();

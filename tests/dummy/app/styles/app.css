@@ -1,3 +1,21 @@
 html, body {
   margin: 20px;
 }
+
+.container {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.message-box {
+    border: 1px solid #EEE;
+    min-height: 50px;
+}
+
+.message-inputs {
+    float: right;
+}
+
+input[type="text"] {
+    width: 200px;
+}

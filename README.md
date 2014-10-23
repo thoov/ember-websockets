@@ -115,8 +115,28 @@ The websocket mixin adds a few properties which you can configure on your route.
 * **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
 * **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
 
+## Live Example
+
+* `git clone git@github.com:thoov/ember-websockets.git`
+* `cd ember-websockets`
+* `npm install`
+* `ember serve`
+* Then visit http://localhost:4200/sockets/chatroom to view a very simple example.
+
+The source code for the live example lives in `ember-websockets/tests/dummy`
+
+## Running tests
+
+Currently running tests from `ember test` do not work. This is due to the mock websocket server that is needed. I am
+working on removing this restriction. In the mean time if you visit `http://localhost:4200/tests` after you follow the
+above live example steps you will see all of the tests running.
+
 ## FAQ
 
 * **Recommended backend library/framework**: The only requirement for this mixin to work is a service that can handle ws or wss protocols.
 For this reason socket.io will not work as it does not use the standard ws protocol. Instead, I would look at [ws](https://github.com/einaros/ws)
 which is a great package.
+
+* **Browser Support**: Current support for browsers is fairly good with all modern browsers and most mobile browsers
+supporting websockets in their current a previously stable versions. It goes without saying that older versions of IE are
+not supported. For a more detailed [break down](http://caniuse.com/#feat=websockets)

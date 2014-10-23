@@ -1,0 +1,14 @@
+<p>This page shows off hitting a stub endpoint which simply returns what you type in.</p>
+<p>Visit <a href="https://github.com/thoov/ember-websockets/tree/master/tests/dummy/app" target="_blank">here</a> to see the code for this example</p>
+
+<div class="message-box">
+    {{#each messages}}
+        <p>{{text}}</p>
+    {{/each}}
+</div>
+
+<div class="message-inputs">
+    {{input value=messageText}}
+
+    <button {{action 'submitText'}}>Send Message</button>
+</div>
