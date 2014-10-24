@@ -130,6 +130,10 @@ Currently running tests from `ember test` do not work. This is due to the mock w
 working on removing this restriction. In the mean time if you visit `http://localhost:4200/tests` after you follow the
 above live example steps you will see all of the tests running.
 
+## Feedback or issues
+
+If you have any feedback, encounter any bugs, or just have a question, please feel free to create a [github issue](https://github.com/thoov/ember-websockets/issues/new) or send me a tweet at @thoov.
+
 ## FAQ
 
 * **Recommended backend library/framework**: The only requirement for this mixin to work is a service that can handle ws or wss protocols.
@@ -137,5 +141,5 @@ For this reason socket.io will not work as it does not use the standard ws proto
 which is a great package.
 
 * **Browser Support**: Current support for browsers is fairly good with all modern browsers and most mobile browsers
-supporting websockets in their current a previously stable versions. It goes without saying that older versions of IE are
+supporting websockets in their current and previously stable versions. It goes without saying that older versions of IE are
 not supported. For a more detailed [break down](http://caniuse.com/#feat=websockets)
