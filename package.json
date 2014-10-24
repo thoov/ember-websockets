@@ -1,6 +1,6 @@
 {
   "name": "ember-websockets",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "directories": {
     "doc": "doc",
     "test": "tests"

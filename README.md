@@ -4,8 +4,7 @@ This addon aims to be a simple and easy way to integrate with any websocket
 backend. It has been designed to be minimalistic, flexible, and lightweight instead of
 forcing certain conventions on the developer.
 
-**NOTE**: This is still a work in progress and is "Alpha" quality. Please note that property
-names and methods may change.
+**NOTE**: This is still a work in progress and is "Beta" quality.
 
 ## Installation
 
