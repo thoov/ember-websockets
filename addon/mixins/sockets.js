@@ -9,12 +9,14 @@ export default Ember.Mixin.create({
 	socketContexts: {}, // This is shared between route instances.
 	keepSocketAlive: null,
 	socketConnection: null,
+	socketBinaryType: null,
 
 	setupController: function(controller) {
 		var urlHashKey,
 			socketURL = this.get('socketURL'),
 			websocket = this.get('socketConnection'),
-			socketContexts = this.get('socketContexts');
+			socketContexts = this.get('socketContexts'),
+			socketBinaryType = this.get('socketBinaryType');
 
 		if(!this.validateSocketURL(socketURL)) {
 			this._super.apply(this, arguments);
@@ -28,6 +30,7 @@ export default Ember.Mixin.create({
 		*/
 		if(!websocket || websocket.readyState === ENUMS.READY_STATES.CLOSED) {
 			websocket = new window.WebSocket(socketURL);
+			websocket.binaryType = socketBinaryType || 'blob';
 			urlHashKey = websocket.url;
 
 			// This will only fire if the urlHashKey has added an extra / to the end of the url. This will only
@@ -73,7 +76,7 @@ export default Ember.Mixin.create({
 	*/
 	validateSocketURL: function(socketURL) {
 		var wsProtocolRegex = /^(ws|wss):\/\//i;
-		
+
 		if(!Ember.isEmpty(socketURL) && socketURL.match(wsProtocolRegex)) {
 			return true;
 		}
