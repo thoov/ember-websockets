@@ -9,12 +9,14 @@ export default Ember.Mixin.create({
 	socketContexts: {}, // This is shared between route instances.
 	keepSocketAlive: null,
 	socketConnection: null,
+	socketBinaryType: null,
 
 	setupController: function(controller) {
 		var urlHashKey,
 			socketURL = this.get('socketURL'),
 			websocket = this.get('socketConnection'),
-			socketContexts = this.get('socketContexts');
+			socketContexts = this.get('socketContexts'),
+			socketBinaryType = this.get('socketBinaryType');
 
 		if(!this.validateSocketURL(socketURL)) {
 			this._super.apply(this, arguments);
@@ -26,8 +28,9 @@ export default Ember.Mixin.create({
 			If the ready state is closed this is because the route closed the socket on a previous
 			deactivate and now we are back into this same route so we need to reopen (create) it.
 		*/
-		if(!websocket || websocket.readyState === ENUMS.READY_STATES.CLOSED) {
+		if(!websocket || websocket.readyState === window.WebSocket.CLOSED) {
 			websocket = new window.WebSocket(socketURL);
+			websocket.binaryType = socketBinaryType || 'blob';
 			urlHashKey = websocket.url;
 
 			// This will only fire if the urlHashKey has added an extra / to the end of the url. This will only
@@ -73,7 +76,7 @@ export default Ember.Mixin.create({
 	*/
 	validateSocketURL: function(socketURL) {
 		var wsProtocolRegex = /^(ws|wss):\/\//i;
-		
+
 		if(!Ember.isEmpty(socketURL) && socketURL.match(wsProtocolRegex)) {
 			return true;
 		}
@@ -131,7 +134,7 @@ export default Ember.Mixin.create({
 			}
 
 			// Only send the data if we have an active connection
-			if(socketConnection && typeOf(socketConnection.send) === 'function' && socketConnection.readyState === ENUMS.READY_STATES.OPEN) {
+			if(socketConnection && typeOf(socketConnection.send) === 'function' && socketConnection.readyState === window.WebSocket.OPEN) {
 				socketConnection.send(data);
 			}
 		},
