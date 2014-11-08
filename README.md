@@ -119,7 +119,7 @@ The websocket mixin adds a few properties which you can configure on your route.
 * `git clone git@github.com:thoov/ember-websockets.git`
 * `cd ember-websockets`
 * `npm install`
-* `ember serve`
+* `ember s`
 * Then visit http://localhost:4200/sockets/chatroom to view a very simple example.
 
 The source code for the live example lives in `ember-websockets/tests/dummy`
