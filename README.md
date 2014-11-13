@@ -6,7 +6,7 @@ forcing certain conventions on the developer.
 
 ## Installation
 
-* `npm install ember-websockets --save-dev`
+`npm install ember-websockets --save-dev`
 
 ## Simple example of using it in your app
 
