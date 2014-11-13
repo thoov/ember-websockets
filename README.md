@@ -6,7 +6,7 @@ forcing certain conventions on the developer.
 
 ## Installation
 
-* `npm install ember-websockets --save-dev`
+`npm install ember-websockets --save-dev`
 
 ## Simple example of using it in your app
 
@@ -141,3 +141,5 @@ which is a great package.
 * **Browser Support**: Current support for browsers is fairly good with all modern browsers and most mobile browsers
 supporting websockets in their current and previously stable versions. It goes without saying that older versions of IE are
 not supported. For a more detailed [break down](http://caniuse.com/#feat=websockets)
+
+* **License**: EmberJS WebSockets Addon falls under the [MIT license](https://github.com/thoov/ember-websockets/blob/5c6f968a0f857f9ae04d9e702091bd809537c6ec/%20LICENSE.txt)
