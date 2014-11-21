@@ -128,6 +128,9 @@ Currently running tests from `ember test` do not work. This is due to the mock w
 working on removing this restriction. In the mean time if you visit `http://localhost:4200/tests` after you follow the
 above live example steps you will see all of the tests running.
 
+**Note**: I have started working on a [mocking library](https://github.com/thoov/mock-socks) so that tests will start
+working via the command line. More on this to come.
+
 ## Feedback or issues
 
 If you have any feedback, encounter any bugs, or just have a question, please feel free to create a [github issue](https://github.com/thoov/ember-websockets/issues/new) or send me a tweet at [@thoov](https://twitter.com/thoov).
