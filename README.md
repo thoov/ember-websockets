@@ -130,7 +130,7 @@ above live example steps you will see all of the tests running.
 
 ## Feedback or issues
 
-If you have any feedback, encounter any bugs, or just have a question, please feel free to create a [github issue](https://github.com/thoov/ember-websockets/issues/new) or send me a tweet at @thoov.
+If you have any feedback, encounter any bugs, or just have a question, please feel free to create a [github issue](https://github.com/thoov/ember-websockets/issues/new) or send me a tweet at [@thoov](https://twitter.com/thoov).
 
 ## FAQ
 
