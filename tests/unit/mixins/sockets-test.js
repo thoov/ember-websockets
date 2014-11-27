@@ -13,7 +13,7 @@ var TEST_SOCKET_URL = 'ws://localhost:8081/';
 module('SocketsMixin', {
     setup: function() {
         originalWebSocket = window.WebSocket;
-        window.WebSocket = window.MockSocks;
+        window.WebSocket = window.MockSocket;
 
         webSocketServer = new window.WebSocketServer('ws://localhost:8081/');
         webSocketServer.on('connection', function(server) {
