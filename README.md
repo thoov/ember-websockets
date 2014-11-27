@@ -4,6 +4,8 @@ This addon aims to be a simple and easy way to integrate with any websocket
 backend. It has been designed to be minimalistic, flexible, and lightweight instead of
 forcing certain conventions on the developer.
 
+[![Build Status](https://travis-ci.org/thoov/ember-websockets.svg?branch=master)](https://travis-ci.org/thoov/ember-websockets)
+
 ## Installation
 
 `npm install ember-websockets --save-dev`
@@ -124,12 +126,13 @@ The source code for the live example lives in `ember-websockets/tests/dummy`
 
 ## Running tests
 
-Currently running tests from `ember test` do not work. This is due to the mock websocket server that is needed. I am
-working on removing this restriction. In the mean time if you visit `http://localhost:4200/tests` after you follow the
-above live example steps you will see all of the tests running.
+* `git clone git@github.com:thoov/ember-websockets.git`
+* `cd ember-websockets`
+* `npm install`
+* `ember t`
+* or `ember s` then visit http://localhost:4200/tests to view the tests.
 
-**Note**: I have started working on a [mocking library](https://github.com/thoov/mock-socks) so that tests will start
-working via the command line. More on this to come.
+**Note**: To get the test to run in PhantomJS I created a mocking library found here: [mocking library](https://github.com/thoov/mock-socket)
 
 ## Feedback or issues
 
