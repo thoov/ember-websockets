@@ -1,4 +1,3 @@
-/*jshint -W087 */
 import Ember from 'ember';
 import SocketsMixin from 'ember-websockets/mixins/sockets';
 
@@ -80,14 +79,14 @@ asyncTest('onopen event is fired and can be handled by a controller', function()
 });
 
 
-asyncTest('onmessage event is fired and can be handled by a controller', function(assert) {
+asyncTest('onmessage event is fired and can be handled by a controller', function() {
     expect(3);
 
     var sockCntr = Ember.Controller.extend({
         actions: {
             onmessage: function(data) {
-                assert.ok(true, 'onmessage event was fired and caught by a controller action');
-                assert.ok(typeof data === 'object', 'data argument is an instance of Event');
+                ok(true, 'onmessage event was fired and caught by a controller action');
+                ok(typeof data === 'object', 'data argument is an instance of Event');
                 strictEqual(data.data, 'This is a sample message', 'data has expected text');
                 start();
             }
