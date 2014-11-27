@@ -26,9 +26,6 @@ module('SocketsMixin', {
     teardown: function() {
         sockRoute.deactivate();
         window.WebSocket = originalWebSocket;
-
-        sockCntr = null;
-        sockRoute = null;
     }
 });
 
@@ -69,12 +66,10 @@ asyncTest('onopen event is fired and can be handled by a controller', function()
             onopen: function(data) {
                 ok(true, 'onopen event was fired and caught by a controller action');
                 ok(typeof data === 'object', 'data argument is an instance of Event');
-
                 start();
             }
         }
     }).create();
-
     sockRoute.setupController(sockCntr);
 });
 
@@ -92,6 +87,5 @@ asyncTest('onmessage event is fired and can be handled by a controller', functio
             }
         }
     }).create();
-
     sockRoute.setupController(sockCntr);
 });
