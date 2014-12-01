@@ -1,5 +1,5 @@
 (function() {
-    var ENUMS = ['onclose', 'onerror', 'onmessage', 'onopen'];
+    var ENUMS = {SOCKET_EVENTS: ['onclose', 'onerror', 'onmessage', 'onopen']};
     var EmberWebsocket = Ember.Mixin.create({
         socketURL: null,
         socketContexts: {}, // This is shared between route instances.
