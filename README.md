@@ -116,17 +116,22 @@ The websocket mixin adds a few properties which you can configure on your route.
 
 ## Using websockets inside of a non Ember-CLI app
 
-First download the assets:
+First get the assets:
+```
+npm install ember-websockets --save-dev
+```
+or
 ```
 git clone git@github.com:thoov/ember-websockets.git
 ```
 
 After you get the assets include the dist file in your HTML file:
-```js
+```html
 <script src="js/libs/jquery.js"></script>
 <script src="js/libs/handlebars.js"></script>
 <script src="js/libs/ember.js"></script>
-<script src="./path/to/dist/ember-websockets.js"></script> // Make sure that you include this below your ember.js include
+<script src="./path/to/dist/ember-websockets.js"></script>
+// Make sure that you include this below your ember.js include
 ```
 This will add the mixin to a global variable called EmberWebsocket.
 
