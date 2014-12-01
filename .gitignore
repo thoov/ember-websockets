@@ -15,3 +15,7 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
+
+# Adding for non cli version
+!/dist/.gitkeep
+!/dist/ember-websockets.js
