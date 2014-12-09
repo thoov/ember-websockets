@@ -116,7 +116,7 @@ The websocket mixin adds a few properties which you can configure on your route.
 * **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
 * **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
 
-## Using ember-websockets inside of a non CLI Ember app
+## Using ember-websockets with a non CLI Ember app
 
 First get the assets:
 ```
