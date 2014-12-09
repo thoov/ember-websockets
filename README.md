@@ -116,7 +116,7 @@ The websocket mixin adds a few properties which you can configure on your route.
 * **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
 * **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
 
-## Using websockets inside of a non Ember-CLI app
+## Using ember-websockets inside of a non CLI Ember app
 
 First get the assets:
 ```
@@ -161,7 +161,7 @@ The source code for the live example lives in `ember-websockets/tests/dummy`
 * `ember t`
 * or `ember s` then visit http://localhost:4200/tests to view the tests.
 
-**Note**: To get the test to run in PhantomJS I created a mocking library found here: [mocking library](https://github.com/thoov/mock-socket)
+**Note**: To get the test to run in PhantomJS I created a mocking library found here: [mocking library](https://github.com/thoov/mock-socket) Note that it is still a work in progress.
 
 ## Feedback or issues
 
