@@ -104,7 +104,7 @@ export default Ember.Controller.extend({
 });
 ```
 
-All actions are passed with a Event object as the first argument. There are several useful properties which you might
+All actions are passed with an Event object as the first argument. There are several useful properties which you might
 want to use within it but the most important will be **data** and will contain the data sent from the server.
 
 **NOTE**: If on your server you send back `JSON.stringify` data then you will need to do a `JSON.parse` within your action!
