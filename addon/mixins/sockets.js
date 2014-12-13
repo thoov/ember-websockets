@@ -12,11 +12,11 @@ export default Ember.Mixin.create({
 	socketBinaryType: null,
 
 	setupController: function(controller) {
-		var urlHashKey,
-			socketURL = this.get('socketURL'),
-			websocket = this.get('socketConnection'),
-			socketContexts = this.get('socketContexts'),
-			socketBinaryType = this.get('socketBinaryType');
+		var urlHashKey;
+		var socketURL        = this.get('socketURL');
+		var websocket        = this.get('socketConnection');
+		var socketContexts   = this.get('socketContexts');
+		var socketBinaryType = this.get('socketBinaryType');
 
 		if(!this.validateSocketURL(socketURL)) {
 			this._super.apply(this, arguments);
@@ -100,8 +100,6 @@ export default Ember.Mixin.create({
 		connection or keep it "alive"
 	*/
 	deactivate: function() {
-		var socketURL        = this.get('socketURL');
-		var socketContexts   = this.get('socketContexts');
 		var keepSocketAlive  = this.get('keepSocketAlive');
 		var socketConnection = this.get('socketConnection');
 
@@ -140,8 +138,6 @@ export default Ember.Mixin.create({
 			This action closes the websocket connection.
 		*/
 		closeSocket: function() {
-			var socketURL        = this.get('socketURL');
-			var socketContexts   = this.get('socketContexts');
 			var socketConnection = this.get('socketConnection');
 
 			if(socketConnection && typeOf(socketConnection.close) === 'function') {

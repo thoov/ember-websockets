@@ -26,6 +26,10 @@ module('Onopen, opmessage, and onclose intergration tests', {
     },
     teardown: function() {
         window.WebSocket = originalWebSocket;
+        testController.onopen = Ember.K;
+        testController.onmessage = Ember.K;
+        testController.onclose = Ember.K;
+        testController.onerror = Ember.K;
         Ember.run(App, App.destroy);
     }
 });
@@ -63,26 +67,25 @@ test('Onclose event fires correct', function() {
 
     visit('/sockets/test').then(function() {
         testController.send('closeSocket');
+        // We dont want the onclose method to fire when the route deactivates
+        testController.onclose = Ember.K;
     });
 });
 
 test('Onclose event fires on route deactivate', function() {
-    expect(6);
+    expect(2);
 
     testController.onclose = function(event) {
         ok(true, 'onclose event was fired and caught by a controller action');
         equal(event.type, 'close', 'event type is correct');
     };
 
-    // this will be called twice
-    testController.onopen = function(event) {
-        ok(true, 'onclose event was fired and caught by a controller action');
-        equal(event.type, 'open', 'event type is correct');
-    };
-
     visit('/sockets/test').then(function() {
         visit('/').then(function() {
-            visit('/sockets/test');
+            visit('/sockets/test').then(function() {
+                // We dont want the onclose method to fire when the route deactivates
+                testController.onclose = Ember.K;
+            });
         });
     });
 });
