@@ -1,5 +1,8 @@
 {
   "predef": [
+    "WebSocket",
+    "MockSocket",
+    "WebSocketServer",
     "document",
     "window",
     "location",

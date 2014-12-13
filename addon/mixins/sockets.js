@@ -44,6 +44,7 @@ export default Ember.Mixin.create({
 				socketContexts[urlHashKey] = [];
 			}
 
+			this.removeRouteFromContexts(socketContexts, socketURL, this);
 			socketContexts[urlHashKey].pushObject({controller: controller, route: this});
 			this.set('socketConnection', this.initializeSocket(websocket, socketContexts));
 		}
@@ -99,12 +100,10 @@ export default Ember.Mixin.create({
 		connection or keep it "alive"
 	*/
 	deactivate: function() {
-		var socketURL = this.get('socketURL'),
-			socketContexts = this.get('socketContexts'),
-			keepSocketAlive = this.get('keepSocketAlive'),
-			socketConnection = this.get('socketConnection');
-
-		this._super.apply(this, arguments);
+		var socketURL        = this.get('socketURL');
+		var socketContexts   = this.get('socketContexts');
+		var keepSocketAlive  = this.get('keepSocketAlive');
+		var socketConnection = this.get('socketConnection');
 
 		// By default within deactivate we will close the connection and remove it from
 		// memory. If keepSocketAlive is set to true then we will skip this and the socket
@@ -114,11 +113,9 @@ export default Ember.Mixin.create({
 			if(socketConnection && typeOf(socketConnection.close) === 'function') {
 				socketConnection.close();
 			}
-
-			this.removeRouteFromContexts(socketContexts, socketURL, this);
-
-			this.set('socketConnection', null);
 		}
+
+		this._super.apply(this, arguments);
 	},
 
 	actions: {
@@ -136,6 +133,19 @@ export default Ember.Mixin.create({
 			// Only send the data if we have an active connection
 			if(socketConnection && typeOf(socketConnection.send) === 'function' && socketConnection.readyState === window.WebSocket.OPEN) {
 				socketConnection.send(data);
+			}
+		},
+
+		/*
+			This action closes the websocket connection.
+		*/
+		closeSocket: function() {
+			var socketURL        = this.get('socketURL');
+			var socketContexts   = this.get('socketContexts');
+			var socketConnection = this.get('socketConnection');
+
+			if(socketConnection && typeOf(socketConnection.close) === 'function') {
+				socketConnection.close();
 			}
 		},
 
