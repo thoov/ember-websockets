@@ -103,9 +103,8 @@ export default Ember.Mixin.create({
 		var keepSocketAlive  = this.get('keepSocketAlive');
 		var socketConnection = this.get('socketConnection');
 
-		// By default within deactivate we will close the connection and remove it from
-		// memory. If keepSocketAlive is set to true then we will skip this and the socket
-		// will not be closed.
+		// By default within deactivate we will close the connection. If keepSocketAlive
+		// is set to true then we will skip this and the socket will not be closed.
 		if(!keepSocketAlive) {
 
 			if(socketConnection && typeOf(socketConnection.close) === 'function') {
