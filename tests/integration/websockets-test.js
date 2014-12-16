@@ -58,8 +58,10 @@ test('Onmessage event fires correct', function() {
 });
 
 test('Onclose event fires correct', function() {
-    expect(2);
+    expect(4);
 
+    // the onclose method should be called twice: once for the send action
+    // and once for the route deactivation
     testController.onclose = function(event) {
         ok(true, 'onclose event was fired and caught by a controller action');
         equal(event.type, 'close', 'event type is correct');
@@ -67,14 +69,13 @@ test('Onclose event fires correct', function() {
 
     visit('/sockets/test').then(function() {
         testController.send('closeSocket');
-        // We dont want the onclose method to fire when the route deactivates
-        testController.onclose = Ember.K;
     });
 });
 
 test('Onclose event fires on route deactivate', function() {
-    expect(2);
+    expect(4);
 
+    // the onclose method should be called twice once for both /sockets/test "route deactivations"
     testController.onclose = function(event) {
         ok(true, 'onclose event was fired and caught by a controller action');
         equal(event.type, 'close', 'event type is correct');
@@ -82,10 +83,7 @@ test('Onclose event fires on route deactivate', function() {
 
     visit('/sockets/test').then(function() {
         visit('/').then(function() {
-            visit('/sockets/test').then(function() {
-                // We dont want the onclose method to fire when the route deactivates
-                testController.onclose = Ember.K;
-            });
+            visit('/sockets/test');
         });
     });
 });
