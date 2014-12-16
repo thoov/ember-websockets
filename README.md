@@ -80,6 +80,25 @@ export default Ember.Controller.extend({
 });
 ```
 
+## Closing the connection
+
+The mixin adds an action called `closeSocket` which will close the socket connection:
+
+```javascript
+export default Ember.Controller.extend({
+    someFunction: function() {
+        this.send('closeSocket');
+    },
+
+    actions: {
+        onclose: function() {
+            // This will be called after the
+            // closeSocket action has happened
+        }
+    }
+});
+```
+
 ## Handling events from the server
 
 There are 4 events that can happen: **onopen, onmessage, onclose, and onerror**. You can add action handlers for any of
