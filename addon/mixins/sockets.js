@@ -1,15 +1,16 @@
 import Ember from 'ember';
 import ENUMS from '../utils/enums';
 
-var typeOf = Ember.typeOf;
+var typeOf  = Ember.typeOf;
+var isEmpty = Ember.isEmpty;
 
 export default Ember.Mixin.create({
 
-	socketURL: null,
-	socketContexts: {}, // This is shared between route instances.
-	keepSocketAlive: null,
-	socketConnection: null,
-	socketBinaryType: null,
+	socketURL        : null,
+	socketContexts   : {}, // This is shared between route instances.
+	keepSocketAlive  : null,
+	socketConnection : null,
+	socketBinaryType : null,
 
 	setupController: function(controller) {
 		var urlHashKey;
@@ -77,17 +78,28 @@ export default Ember.Mixin.create({
 	},
 
 	/*
-		Validates that the socketURL is set and contains a valid ws or wss protocal url
+		Validates that the socketURL is set and contains a valid ws or wss protocal url.
+		socketURL can either be a string or an array of strings.
 	*/
 	validateSocketURL: function(socketURL) {
 		var wsProtocolRegex = /^(ws|wss):\/\//i;
+		var urlsAreValid    = true;
 
-		if(!Ember.isEmpty(socketURL) && socketURL.match(wsProtocolRegex)) {
-			return true;
+		if(typeOf(socketURL) !== 'array') {
+			socketURL = [socketURL];
 		}
 
-		Ember.Logger.log('SocketURL is missing or is not correctly setup');
-		return false;
+		if(Ember.isEmpty(socketURL)) {
+			return false;
+		}
+
+		Ember.EnumerableUtils.forEach(socketURL, function(url) {
+			if(Ember.isEmpty(url) || !url.match(wsProtocolRegex)) {
+				urlsAreValid = false;
+			}
+		});
+
+		return urlsAreValid;
 	},
 
 	removeRouteFromContexts: function(socketContexts, socketURL, route) {
@@ -151,9 +163,9 @@ export default Ember.Mixin.create({
 			These are just catch alls so we do not get the error message: 'nothing
 			handled this action...'. These should be overridden by the controller.
 		*/
-		onmessage: Ember.K,
-		onerror: Ember.K,
-		onopen: Ember.K,
-		onclose: Ember.K
+		onmessage : Ember.K,
+		onerror   : Ember.K,
+		onopen    : Ember.K,
+		onclose   : Ember.K
 	}
 });

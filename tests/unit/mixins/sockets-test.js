@@ -6,7 +6,7 @@ module('Sockets Mixin');
 test('validation of the socket url happens correctly', function() {
     var emberObject = Ember.Object.createWithMixins(SocketsMixin);
 
-    expect(7);
+    expect(12);
 
     ok(emberObject.validateSocketURL('ws://localhost:8080'));
     ok(emberObject.validateSocketURL('wss://localhost:8080'));
@@ -15,4 +15,10 @@ test('validation of the socket url happens correctly', function() {
     ok(!emberObject.validateSocketURL());
     ok(!emberObject.validateSocketURL(''));
     ok(!emberObject.validateSocketURL('foo-bar'));
+
+    ok(emberObject.validateSocketURL(['ws://localhost:8080']));
+    ok(emberObject.validateSocketURL(['wss://localhost:8080']));
+    ok(emberObject.validateSocketURL(['ws://localhost:8080', 'wss://localhost:8080']));
+    ok(!emberObject.validateSocketURL(['ws://localhost:8080', 'https://localhost:8080']));
+    ok(!emberObject.validateSocketURL([]));
 });
