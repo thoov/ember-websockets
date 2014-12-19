@@ -21,8 +21,8 @@ module('Onopen, opmessage, and onclose intergration tests', {
 
         App = startApp();
 
-        testRoute = App.__container__.lookup('route:sockets.test');
-        testController = App.__container__.lookup('controller:sockets.test');
+        testRoute = App.__container__.lookup('route:testing.foo');
+        testController = App.__container__.lookup('controller:testing.foo');
     },
     teardown: function() {
         window.WebSocket = originalWebSocket;
@@ -42,7 +42,7 @@ test('Onopen event fires correct', function() {
         equal(event.type, 'open', 'event type is correct');
     };
 
-    visit('/sockets/test');
+    visit('/testing/foo');
 });
 
 test('Onmessage event fires correct', function() {
@@ -54,7 +54,7 @@ test('Onmessage event fires correct', function() {
         equal(event.data, sampleData, 'the data recieved is correct');
     };
 
-    visit('/sockets/test');
+    visit('/testing/foo');
 });
 
 test('Onclose event fires correct', function() {
@@ -67,9 +67,9 @@ test('Onclose event fires correct', function() {
         equal(event.type, 'close', 'event type is correct');
     };
 
-    visit('/sockets/test').then(function() {
+    visit('/testing/foo').then(function() {
         testController.send('closeSocket');
-        
+
         visit('/');
     });
 });
@@ -83,9 +83,9 @@ test('Onclose event fires on route deactivate', function() {
         equal(event.type, 'close', 'event type is correct');
     };
 
-    visit('/sockets/test').then(function() {
+    visit('/testing/foo').then(function() {
         visit('/').then(function() {
-            visit('/sockets/test').then(function() {
+            visit('/testing/foo').then(function() {
                 visit('/');
             });
         });
