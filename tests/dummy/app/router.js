@@ -9,9 +9,14 @@ Router.map(function() {
 
     this.resource('sockets', function() {
         this.route('chatroom');
-        this.route('test'); // Used for intergration tests
+        this.route('test');
     });
 
+    // Used for intergration tests
+    this.resource('testing', function() {
+        this.route('foo');
+        this.route('bar');
+    });
 });
 
 export default Router;

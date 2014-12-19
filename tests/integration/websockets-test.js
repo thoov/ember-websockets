@@ -4,7 +4,7 @@ import startApp from '../helpers/start-app';
 
 var App;
 var originalWebSocket;
-var webSocketServer;
+var mockServer;
 var testRoute;
 var testController;
 var sampleData = 'This is a sample message';
@@ -14,8 +14,8 @@ module('Onopen, opmessage, and onclose intergration tests', {
         originalWebSocket = WebSocket;
         window.WebSocket = MockSocket;
 
-        webSocketServer = new WebSocketServer('ws://localhost:8081/');
-        webSocketServer.on('connection', function(server) {
+        mockServer = new MockServer('ws://localhost:8081/');
+        mockServer.on('connection', function(server) {
             server.send(sampleData);
         });
 
@@ -69,6 +69,8 @@ test('Onclose event fires correct', function() {
 
     visit('/sockets/test').then(function() {
         testController.send('closeSocket');
+        
+        visit('/');
     });
 });
 
@@ -83,7 +85,9 @@ test('Onclose event fires on route deactivate', function() {
 
     visit('/sockets/test').then(function() {
         visit('/').then(function() {
-            visit('/sockets/test');
+            visit('/sockets/test').then(function() {
+                visit('/');
+            });
         });
     });
 });
