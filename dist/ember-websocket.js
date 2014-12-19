@@ -1,5 +1,6 @@
 (function() {
     var ENUMS = {SOCKET_EVENTS: ['onclose', 'onerror', 'onmessage', 'onopen']};
+    var typeOf = Ember.typeOf;
     var EmberWebsocket = Ember.Mixin.create({
         socketURL: null,
         socketContexts: {}, // This is shared between route instances.
@@ -60,7 +61,11 @@
             Ember.EnumerableUtils.forEach(ENUMS.SOCKET_EVENTS, function(eventName) {
                 websocket[eventName] = function(data) {
                     socketContexts[data.currentTarget.url].forEach(function(context) {
-                        context.controller.send(eventName, data);
+
+                        // Only fire the action on the socket we care about.
+                        if(context.route.socketConnection === data.target) {
+                            context.controller.send(eventName, data);
+                        }
                     });
                 };
             });
@@ -102,7 +107,6 @@
             // By default within deactivate we will close the connection. If keepSocketAlive
             // is set to true then we will skip this and the socket will not be closed.
             if(!keepSocketAlive) {
-
                 if(socketConnection && typeOf(socketConnection.close) === 'function') {
                     socketConnection.close();
                 }
