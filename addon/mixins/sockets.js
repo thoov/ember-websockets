@@ -1,58 +1,78 @@
 import Ember from 'ember';
-import ENUMS from '../utils/enums';
 
-var typeOf  = Ember.typeOf;
-var isEmpty = Ember.isEmpty;
+var typeOf       = Ember.typeOf;
+var isEmpty      = Ember.isEmpty;
+var socketEvents = ['onclose', 'onerror', 'onmessage', 'onopen'];
+var forEach      = Ember.EnumerableUtils.forEach;
 
 export default Ember.Mixin.create({
 
-	socketURL        : null,
-	socketContexts   : {}, // This is shared between route instances.
-	keepSocketAlive  : null,
-	socketConnection : null,
-	socketBinaryType : null,
+	socketURL            : null,
+	socketContexts       : {}, // This is shared between all route instances.
+	keepSocketAlive      : null,
+	socketBinaryType     : null,
+	socketConnections    : null,
+	socketConfigurations : null,
 
 	setupController: function(controller) {
-		var urlHashKey;
-		var socketURL        = this.get('socketURL');
-		var websocket        = this.get('socketConnection');
-		var socketContexts   = this.get('socketContexts');
-		var socketBinaryType = this.get('socketBinaryType');
+		var socketConnections    = [];
+		var socketURL            = this.get('socketURL');
+		var socketContexts       = this.get('socketContexts');
+		var socketBinaryType     = this.get('socketBinaryType');
+		var socketConfigurations = this.get('socketConfigurations');
 
-		if(!this.validateSocketURL(socketURL)) {
+		/*
+		* Normalize the single and multi socket configs into one so we can
+		* just loop over an array in both cases. IE: a single socket is just
+		* an array of one item.
+		*/
+		if(isEmpty(socketConfigurations)) {
+			socketConfigurations = [{url: socketURL, binaryType: socketBinaryType}];
+		}
+
+		/*
+		* Make sure that all of the urls in the configuration are set and valid.
+		*/
+		if(!this.validateSocketURL(socketConfigurations)) {
 			this._super.apply(this, arguments);
 			return false;
 		}
 
 		/*
-			Initialize the socket if it is null or has been closed.
-			If the ready state is closed this is because the route closed the socket on a previous
-			deactivate and now we are back into this same route so we need to reopen (create) it.
+		* Setup each socket connection if it needs to be setup.
 		*/
-		if(!websocket || websocket.readyState === window.WebSocket.CLOSED) {
-			websocket = new window.WebSocket(socketURL);
-			websocket.binaryType = socketBinaryType || 'blob';
-			urlHashKey = websocket.url;
+		forEach(socketConfigurations, function(socketConfig) {
+			var urlHashKey       = '';
+			var socketURL        = socketConfig.url;
+			var websocket        = socketConnections[socketURL];
+			var socketBinaryType = socketConfig.socketBinaryType || 'blob';
 
-			// This will only fire if the urlHashKey has added an extra / to the end of the url. This will only
-			// happen if your socketURL is at the rootLevel such as ws://example.com or ws://localhost:8080 in which the
-			// the urlHashKey will be ws://example.com/ and ws://localhost:8080/ respectfully.
-			this.set('socketURL', urlHashKey);
+			if(!websocket || websocket.readyState === window.WebSocket.CLOSED) {
+				websocket            = new window.WebSocket(socketURL);
+				websocket.binaryType = socketBinaryType;
+				urlHashKey           = websocket.url;
 
-			// If we dont have the hashKey in our shared object this means we are creating the first socket for a given
-			// url
-			if(!socketContexts[urlHashKey]) {
-				socketContexts[urlHashKey] = [];
+				// If we dont have the hashKey in our shared object this means we
+				// are creating the first socket for a given url
+				if(!socketContexts[urlHashKey]) {
+					socketContexts[urlHashKey] = [];
+				}
+
+				this.removeRouteFromContexts(socketContexts, urlHashKey, this); // TODO: can we remove this?
+				socketContexts[urlHashKey].pushObject({controller: controller, route: this});
+
+				socketConnections.push(this.initializeSocket(websocket, socketContexts));
 			}
+			else {
+				socketConnections.push(websocket);
+			}
+		}, this);
 
-			this.removeRouteFromContexts(socketContexts, socketURL, this);
-			socketContexts[urlHashKey].pushObject({controller: controller, route: this});
-			this.set('socketConnection', this.initializeSocket(websocket, socketContexts));
-		}
+		this.set('socketConnections', socketConnections);
 
 		/*
-			Make sure that we call the super function just in case the object
-			who is using this mixin will have their activate function called.
+		* Make sure that we call the super function just in case the object
+		* who is using this mixin will have their activate function called.
 		*/
 		this._super.apply(this, arguments);
 	},
@@ -62,12 +82,12 @@ export default Ember.Mixin.create({
 		This methods will instead send an action and pass along the data coming back.
 	*/
 	initializeSocket: function(websocket, socketContexts) {
-		Ember.EnumerableUtils.forEach(ENUMS.SOCKET_EVENTS, function(eventName) {
+		forEach(socketEvents, function(eventName) {
 			websocket[eventName] = function(data) {
 				socketContexts[data.currentTarget.url].forEach(function(context) {
 
 					// Only fire the action on the socket we care about.
-					if(context.route.socketConnection === data.target) {
+					if(context.route.socketConnections.contains(data.target)) {
 						context.controller.send(eventName, data);
 					}
 				});
@@ -78,22 +98,19 @@ export default Ember.Mixin.create({
 	},
 
 	/*
-		Validates that the socketURL is set and contains a valid ws or wss protocal url.
-		socketURL can either be a string or an array of strings.
+		Validates that an array of socketURLs is set and contains a valid ws or wss protocal url.
 	*/
-	validateSocketURL: function(socketURL) {
+	validateSocketURL: function(arrayOfURLs) {
 		var wsProtocolRegex = /^(ws|wss):\/\//i;
 		var urlsAreValid    = true;
 
-		if(typeOf(socketURL) !== 'array') {
-			socketURL = [socketURL];
-		}
-
-		if(isEmpty(socketURL)) {
+		if(isEmpty(arrayOfURLs) || typeOf(arrayOfURLs) !== 'array') {
 			return false;
 		}
 
-		Ember.EnumerableUtils.forEach(socketURL, function(url) {
+		forEach(arrayOfURLs, function(socketConfig) {
+			var url = socketConfig.url;
+
 			if(isEmpty(url) || !url.match(wsProtocolRegex)) {
 				urlsAreValid = false;
 			}
@@ -117,13 +134,30 @@ export default Ember.Mixin.create({
 	*/
 	deactivate: function() {
 		var keepSocketAlive  = this.get('keepSocketAlive');
-		var socketConnection = this.get('socketConnection');
+		var socketConnections = this.get('socketConnections');
+		var socketConfigurations = this.get('socketConfigurations');
 
-		// By default within deactivate we will close the connection. If keepSocketAlive
-		// is set to true then we will skip this and the socket will not be closed.
-		if(!keepSocketAlive) {
-			if(socketConnection && typeOf(socketConnection.close) === 'function') {
-				socketConnection.close();
+		/*
+		* Normalize the single and multi socket configs into one so we can
+		* just loop over an array in both cases. IE: a single socket is just
+		* an array of one item.
+		*/
+		if(!isEmpty(socketConfigurations)) {
+			forEach(socketConnections, function(connection) {
+				if(!connection.keepSocketAlive) {
+					if(connection && typeOf(connection.close) === 'function') {
+						connection.close();
+					}
+				}
+			});
+		}
+		else {
+			// By default within deactivate we will close the connection. If keepSocketAlive
+			// is set to true then we will skip this and the socket will not be closed.
+			if(!keepSocketAlive) {
+				if(socketConnections[0] && typeOf(socketConnections[0].close) === 'function') {
+					socketConnections[0].close();
+				}
 			}
 		}
 
@@ -150,13 +184,16 @@ export default Ember.Mixin.create({
 
 		/*
 			This action closes the websocket connection.
+			TODO: right now this will close all of your connections. Need to add the ability
+			to close a single connection.
 		*/
 		closeSocket: function() {
-			var socketConnection = this.get('socketConnection');
-
-			if(socketConnection && typeOf(socketConnection.close) === 'function') {
-				socketConnection.close();
-			}
+			var socketConnections = this.get('socketConnections');
+			forEach(socketConnections, function(connection) {
+				if(connection && typeOf(connection.close) === 'function') {
+					connection.close();
+				}
+			});
 		},
 
 		/*

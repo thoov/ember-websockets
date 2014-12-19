@@ -16,6 +16,7 @@ Router.map(function() {
     this.resource('testing', function() {
         this.route('foo');
         this.route('bar');
+        this.route('multi');
     });
 });
 

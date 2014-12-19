@@ -9,7 +9,6 @@ var testFooRoute;
 var testBarRoute;
 var testFooController;
 var testBarController;
-var sampleData = 'This is a sample message';
 
 module('Onopen, opmessage, and onclose intergration tests for multiple routes', {
     setup: function() {
