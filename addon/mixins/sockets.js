@@ -89,12 +89,12 @@ export default Ember.Mixin.create({
 			socketURL = [socketURL];
 		}
 
-		if(Ember.isEmpty(socketURL)) {
+		if(isEmpty(socketURL)) {
 			return false;
 		}
 
 		Ember.EnumerableUtils.forEach(socketURL, function(url) {
-			if(Ember.isEmpty(url) || !url.match(wsProtocolRegex)) {
+			if(isEmpty(url) || !url.match(wsProtocolRegex)) {
 				urlsAreValid = false;
 			}
 		});
