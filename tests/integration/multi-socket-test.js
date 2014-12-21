@@ -56,3 +56,25 @@ test('Onclose will fire for each socket', function() {
         visit('/');
     });
 });
+
+test('Can close just a single connection', function() {
+    var semaphore = 0;
+
+    expect(2);
+
+    testMultiController.onclose = function(event) {
+        semaphore++;
+        if(semaphore === 1) {
+            equal(event.origin, 'ws://localhost:8082/', '');
+        }
+        else {
+            equal(event.origin, 'ws://localhost:8081/', '');
+        }
+    };
+
+    visit('/testing/multi').then(function() {
+        testMultiController.send('closeSocket', 'socket2');
+        testMultiController.send('closeSocket', 'socket1');
+        visit('/');
+    });
+});
