@@ -224,11 +224,15 @@ export default Ember.Mixin.create({
 		* which will make its way to the
 		*/
 		emit: function(data, socketKey, shouldStringify) {
+			var socketToEmit    = false;
 			var socketContexts  = this.get('socketContexts');
 			var socketsForRoute = this.findSocketsForRoute(this, socketContexts);
 
-			if(typeOf(socketKey) !== 'string') {
+			if(typeOf(socketKey) === 'boolean') {
 				shouldStringify = socketKey;
+			}
+			else {
+				socketToEmit = this.findSocketByKey(socketKey, socketsForRoute);
 			}
 
 			if(shouldStringify && JSON && JSON.stringify) {
@@ -239,7 +243,7 @@ export default Ember.Mixin.create({
 				var connection = context.websocket;
 
 				// Only send the data if we have an active connection
-				if(connection && typeOf(connection.send) === 'function' && connection.readyState === WebSocket.OPEN) {
+				if(connection && connection.readyState === WebSocket.OPEN && (!socketToEmit || connection === socketToEmit)) {
 					connection.send(data);
 				}
 			});

@@ -57,6 +57,21 @@ test('Onclose will fire for each socket', function() {
     });
 });
 
+test('Can emit to just a single connection', function() {
+    expect(2);
+
+    mockServerA.on('connection', function(server) {
+        server.on('message', function(event) {
+            equal(event.data, sampleData);
+            equal(event.origin, 'ws://localhost:8081/');
+        });
+    });
+
+    visit('/testing/multi').then(function() {
+        testMultiController.send('emit', sampleData, 'socket1');
+    });
+});
+
 test('Can close just a single connection', function() {
     var semaphore = 0;
 
@@ -65,10 +80,10 @@ test('Can close just a single connection', function() {
     testMultiController.onclose = function(event) {
         semaphore++;
         if(semaphore === 1) {
-            equal(event.origin, 'ws://localhost:8082/', '');
+            equal(event.origin, 'ws://localhost:8082/', 'The second socket was closed first so we expect to recieve it first');
         }
         else {
-            equal(event.origin, 'ws://localhost:8081/', '');
+            equal(event.origin, 'ws://localhost:8081/', 'The first socket was closed second so we expect to recieve it second');
 
             // This will transition away which will fire the deactivate function.
             // It should not call the onclose method as we have closed all of the
