@@ -69,12 +69,16 @@ test('Can close just a single connection', function() {
         }
         else {
             equal(event.origin, 'ws://localhost:8081/', '');
+
+            // This will transition away which will fire the deactivate function.
+            // It should not call the onclose method as we have close all of the
+            // connections.
+            visit('/');
         }
     };
 
     visit('/testing/multi').then(function() {
         testMultiController.send('closeSocket', 'socket2');
         testMultiController.send('closeSocket', 'socket1');
-        visit('/');
     });
 });
