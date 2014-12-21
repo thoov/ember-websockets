@@ -71,7 +71,7 @@ test('Can close just a single connection', function() {
             equal(event.origin, 'ws://localhost:8081/', '');
 
             // This will transition away which will fire the deactivate function.
-            // It should not call the onclose method as we have close all of the
+            // It should not call the onclose method as we have closed all of the
             // connections.
             visit('/');
         }

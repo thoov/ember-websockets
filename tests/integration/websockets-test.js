@@ -58,19 +58,17 @@ test('Onmessage event fires correct', function() {
 });
 
 test('Onclose event fires correct', function() {
-    expect(4);
+    expect(2);
 
-    // the onclose method should be called twice: once for the send action
-    // and once for the route deactivation
     testController.onclose = function(event) {
         ok(true, 'onclose event was fired and caught by a controller action');
         equal(event.type, 'close', 'event type is correct');
+
+        visit('/');
     };
 
     visit('/testing/foo').then(function() {
         testController.send('closeSocket');
-
-        visit('/');
     });
 });
 

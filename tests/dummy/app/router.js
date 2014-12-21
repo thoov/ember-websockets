@@ -17,6 +17,8 @@ Router.map(function() {
         this.route('foo');
         this.route('bar');
         this.route('multi');
+        this.route('alive');
+        this.route('multi-alive');
     });
 });
 

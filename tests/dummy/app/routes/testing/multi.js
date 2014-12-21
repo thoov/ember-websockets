@@ -2,7 +2,6 @@ import Ember from 'ember';
 import socketMixin from 'ember-websockets/mixins/sockets';
 
 export default Ember.Route.extend(socketMixin, {
-
     socketConfigurations: [{
         key: 'socket1',
         url: 'ws://localhost:8081',
