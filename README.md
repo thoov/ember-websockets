@@ -215,7 +215,9 @@ The websocket mixin adds a few properties which you can configure on your route.
 Below are the properties for a **single*** socket connection:
 
 **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
+
 **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
+
 **socketBinaryType** (optional, default='blob'): This will let you specify the type of binary data being transmitted by the connection.
 It should be either 'blob' or 'arraybuffer'.
 
