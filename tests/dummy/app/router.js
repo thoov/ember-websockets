@@ -9,7 +9,7 @@ Router.map(function() {
 
     this.resource('sockets', function() {
         this.route('chatroom');
-        this.route('test');
+        this.route('multichat');
     });
 
     // Used for intergration tests
