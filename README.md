@@ -42,7 +42,7 @@ export default Ember.Controller.extend({
 });
 ```
 
-## Multi Socket Support
+## Multiple Socket per Route Support
 
 **NOTE**: If you are just setting up a single connection for a route then use the above
 section and skip this one.
@@ -105,14 +105,12 @@ can handle this:
 export default Ember.Controller.extend({
     actions: {
         onopen: function(socketEvent) {
-
             if(socketEvent.origin === 'ws://localhost:8001') {
                 console.log('On open for socket1 has been called');
             }
             else {
                 console.log('On open for socket2 has been called');
             }
-
         }
     }
 });
@@ -175,7 +173,7 @@ export default Ember.Controller.extend({
 });
 ```
 
-**NOTE**: If you do not include any key then all open sockets will receive the message.
+**NOTE**: If you do not include a key then all open sockets will receive the message.
 
 ## Closing a connection
 
@@ -208,22 +206,22 @@ export default Ember.Controller.extend({
 });
 ```
 
-**NOTE**: If you do not include any key then all open sockets will close.
+**NOTE**: If you do not include a key then all open sockets will close.
 
 ## Route Mixin Properties
 
 The websocket mixin adds a few properties which you can configure on your route.
 
-Below are the properties for a single socket connection:
+Below are the properties for a **single*** socket connection:
 
-* **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
-* **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
-* **socketBinaryType** (optional, default='blob'): This will let you specify the type of binary data being transmitted by the connection.
+**socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
+**keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
+**socketBinaryType** (optional, default='blob'): This will let you specify the type of binary data being transmitted by the connection.
 It should be either 'blob' or 'arraybuffer'.
 
-Below is the property setting up multiple connections on a single route:
+Below is the property setting up **multiple** connections on a single route:
 
-* **socketConfigurations** (required): An array of objects that specify how each connections should be set up. Each object should be of this
+**socketConfigurations** (required): An array of objects that specify how each connections should be set up. Each object should be of this
 form:
 
 ```javascript
