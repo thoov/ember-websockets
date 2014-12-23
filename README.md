@@ -55,17 +55,17 @@ import socketMixin from 'ember-websockets/mixins/sockets';
 export default Ember.Route.extend(socketMixin, {
     socketConfigurations: [{
         key: 'socket1',
-        url: 'ws://localhost:8001',
+        socketURL: 'ws://localhost:8001',
     },{
         key: 'socket2',
-        url: 'ws://localhost:8002',
+        socketURL: 'ws://localhost:8002',
         keepSocketAlive: false,
         socketBinaryType: 'blob'
     }]
 });
 ```
 
-**NOTE**: The only required field is url but it is advised to include a key. The
+**NOTE**: The only required field is socketURL but it is advised to include a key. The
 key will allow you to send messages or close individual sockets.
 
 ## Handling events from the server
