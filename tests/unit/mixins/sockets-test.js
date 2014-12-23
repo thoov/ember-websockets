@@ -6,13 +6,20 @@ module('Sockets Mixin');
 test('validation of the socket url happens correctly', function() {
     var emberObject = Ember.Object.createWithMixins(SocketsMixin);
 
-    expect(7);
+    expect(13);
 
-    ok(emberObject.validateSocketURL('ws://localhost:8080'));
-    ok(emberObject.validateSocketURL('wss://localhost:8080'));
-    ok(!emberObject.validateSocketURL('http://localhost:8080'));
-    ok(!emberObject.validateSocketURL('https://localhost:8080'));
-    ok(!emberObject.validateSocketURL());
-    ok(!emberObject.validateSocketURL(''));
-    ok(!emberObject.validateSocketURL('foo-bar'));
+    ok(!emberObject.validateSocketConfigurations('ws://localhost:8080'));
+    ok(!emberObject.validateSocketConfigurations('wss://localhost:8080'));
+    ok(!emberObject.validateSocketConfigurations('http://localhost:8080'));
+    ok(!emberObject.validateSocketConfigurations('https://localhost:8080'));
+    ok(!emberObject.validateSocketConfigurations());
+    ok(!emberObject.validateSocketConfigurations(''));
+    ok(!emberObject.validateSocketConfigurations('foo-bar'));
+
+    ok(emberObject.validateSocketConfigurations([{socketURL: 'ws://localhost:8080'}]));
+    ok(emberObject.validateSocketConfigurations([{socketURL:'wss://localhost:8080'}]));
+    ok(emberObject.validateSocketConfigurations([{socketURL:'ws://localhost:8080'}, {socketURL:'wss://localhost:8080'}]));
+    ok(!emberObject.validateSocketConfigurations([{socketURL:'ws://localhost:8080'}, {socketURL:'https://localhost:8080'}]));
+    ok(!emberObject.validateSocketConfigurations([]));
+    ok(!emberObject.validateSocketConfigurations([{socketURL: ''}]));
 });
