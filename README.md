@@ -5,6 +5,7 @@ backend. It has been designed to be minimalistic, flexible, and lightweight inst
 forcing certain conventions on the developer.
 
 [![Build Status](https://travis-ci.org/thoov/ember-websockets.svg?branch=master)](https://travis-ci.org/thoov/ember-websockets)
+[![Code Climate](https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg)](https://codeclimate.com/github/thoov/ember-websockets)
 
 ## Installation
 
@@ -22,6 +23,7 @@ import socketMixin from 'ember-websockets/mixins/sockets';
 export default Ember.Route.extend(socketMixin, {
   socketURL: 'ws://localhost:8080'
   // There are a few more options which are explained below
+  // including multi socket support
 });
 ```
 
@@ -40,9 +42,85 @@ export default Ember.Controller.extend({
 });
 ```
 
+## Multi Socket Support
+
+**NOTE**: If you are just setting up a single connection for a route then use the above
+section and skip this one.
+
+You can specify n number of socket connections using the socketConfigurations
+property. Here is an example of that:
+
+```javascript
+import socketMixin from 'ember-websockets/mixins/sockets';
+export default Ember.Route.extend(socketMixin, {
+    socketConfigurations: [{
+        key: 'socket1',
+        url: 'ws://localhost:8001',
+    },{
+        key: 'socket2',
+        url: 'ws://localhost:8002',
+        keepSocketAlive: false,
+        socketBinaryType: 'blob'
+    }]
+});
+```
+
+**NOTE**: The only required field is url but it is advised to include a key. The
+key will allow you to send messages or close individual sockets.
+
+## Handling events from the server
+
+There are 4 events that can happen: **onopen, onmessage, onclose, and onerror**. You can add action handlers for any of
+these on either your route or controller. Here is an example of all the actions a controller could handle:
+
+```javascript
+export default Ember.Controller.extend({
+    actions: {
+        onopen: function(socketEvent) {
+            console.log('On open has been called!');
+        },
+        onmessage: function(socketEvent) {
+            console.log('On message has been called!');
+        }
+        onclose: function(socketEvent) {
+            console.log('On close has been called!');
+        }
+        onerror: function(socketEvent) {
+            console.log('On error has been called! :-(');
+        }
+    }
+});
+```
+
+All actions are passed with an Event object as the first argument. There are several useful properties which you might
+want to use within it but the most important will be **data** and will contain the data sent from the server.
+
+**NOTE**: If on your server you send back `JSON.stringify` data then you will need to do a `JSON.parse` within your action!
+
+If you have specified more than one socket for a given route then those sockets will trigger
+onto the same onopen/onmessage/onclose actions on the controller. Below is how you
+can handle this:
+
+```javascript
+export default Ember.Controller.extend({
+    actions: {
+        onopen: function(socketEvent) {
+
+            if(socketEvent.origin === 'ws://localhost:8001') {
+                console.log('On open for socket1 has been called');
+            }
+            else {
+                console.log('On open for socket2 has been called');
+            }
+
+        }
+    }
+});
+```
+
 ## Sending events to the server
 
-The websocket mixin adds an action called `emit` onto the route which you can envoke
+The websocket mixin adds an action called `emit` onto the route which you can invoke
 within your app. Here is an example:
 
 ```javascript
@@ -80,9 +158,28 @@ export default Ember.Controller.extend({
 });
 ```
 
-## Closing the connection
+If you have multiple sockets open then you can specify which socket you want the message
+to go to. Here is an example of that:
 
-The mixin adds an action called `closeSocket` which will close the socket connection:
+```javascript
+export default Ember.Controller.extend({
+    chatRoomInputText: null,
+
+    actions: {
+        buttonClicked: function() {
+            // Note that socket1 is the key used in the socketConfigurations
+            // property on the route.
+            this.send('emit', this.get('chatRoomInputText'), 'socket1');
+        }
+    }
+});
+```
+
+**NOTE**: If you do not include any key then all open sockets will receive the message.
+
+## Closing a connection
+
+The websocket mixin adds an action called `closeSocket` which will close the socket connection:
 
 ```javascript
 export default Ember.Controller.extend({
@@ -99,41 +196,44 @@ export default Ember.Controller.extend({
 });
 ```
 
-## Handling events from the server
-
-There are 4 events that can happen: **onopen, onmessage, onclose, and onerror**. You can add action handlers for any of
-these on either your route or controller. Here is an example of all the actions a controller could handle:
+If you have multiple sockets open then you can specify which socket you want to
+close by passing a key. Here is an example of that:
 
 ```javascript
 export default Ember.Controller.extend({
-  actions: {
-    onopen: function(socketEvent) {
-      console.log('On open has been called!');
-    },
-    onmessage: function(socketEvent) {
-      console.log('On message has been called!');
+    someFunction: function() {
+        // This will only close the socket1 connections
+        this.send('closeSocket', 'socket1');
     }
-    onclose: function(socketEvent) {
-      console.log('On close has been called!');
-    }
-    onerror: function(socketEvent) {
-      console.log('On error has been called! :-(');
-    }
-  }
 });
 ```
 
-All actions are passed with an Event object as the first argument. There are several useful properties which you might
-want to use within it but the most important will be **data** and will contain the data sent from the server.
-
-**NOTE**: If on your server you send back `JSON.stringify` data then you will need to do a `JSON.parse` within your action!
+**NOTE**: If you do not include any key then all open sockets will close.
 
 ## Route Mixin Properties
 
 The websocket mixin adds a few properties which you can configure on your route.
 
+Below are the properties for a single socket connection:
+
 * **socketURL** (required): This is the URL of your websocket server. This is of the form `ws://XXX` or `wss://XXX`
 * **keepSocketAlive** (optional, default=false): This will tell the mixin whether or not to close the socket when the route transitions away. Set this to true if you want your actions to still be called even if the route is not active.
+* **socketBinaryType** (optional, default='blob'): This will let you specify the type of binary data being transmitted by the connection.
+It should be either 'blob' or 'arraybuffer'.
+
+Below is the property setting up multiple connections on a single route:
+
+* **socketConfigurations** (required): An array of objects that specify how each connections should be set up. Each object should be of this
+form:
+
+```javascript
+{
+    key: 'a unique string that will identify the socket'
+    socketURL: 'the socket url',
+    keepSocketAlive: false,
+    socketBinaryType: 'blob'
+}
+```
 
 ## Using ember-websockets with a non CLI Ember app
 
@@ -180,7 +280,7 @@ The source code for the live example lives in `ember-websockets/tests/dummy`
 * `ember t`
 * or `ember s` then visit http://localhost:4200/tests to view the tests.
 
-**Note**: To get the test to run in PhantomJS I created a mocking library found here: [mocking library](https://github.com/thoov/mock-socket) Note that it is still a work in progress.
+**NOTE**: To get the test to run in PhantomJS I created a mocking library found here: [mocking library](https://github.com/thoov/mock-socket) Note that it is still a work in progress.
 
 ## Feedback or issues
 

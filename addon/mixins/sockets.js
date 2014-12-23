@@ -26,7 +26,7 @@ export default Ember.Mixin.create({
 		*/
 		if(isEmpty(socketConfigurations)) {
 			socketConfigurations = [{
-				url: socketURL,
+				socketURL: socketURL,
 				binaryType: socketBinaryType,
 				key: 'default'
 			}];
@@ -54,10 +54,10 @@ export default Ember.Mixin.create({
 		*/
 		var socketsForRoute = this.findSocketsForRoute(this, socketContexts);
 
-		forEach(socketConfigurations, function(socketConfig) {
+		forEach(socketConfigurations, function(socketConfig, index) {
 			var urlHashKey       = '';
-			var socketKey        = socketConfig.key || 'default';
-			var socketURL        = socketConfig.url;
+			var socketKey        = socketConfig.key || 'default_' + index;
+			var socketURL        = socketConfig.socketURL;
 			var socketBinaryType = socketConfig.socketBinaryType || 'blob';
 			var websocket        = this.findSocketByKey(socketConfig.key, socketsForRoute);
 
@@ -155,7 +155,7 @@ export default Ember.Mixin.create({
 		}
 
 		forEach(arrayOfURLs, function(socketConfig) {
-			var url = socketConfig.url;
+			var url = socketConfig.socketURL;
 
 			if(isEmpty(url) || !url.match(wsProtocolRegex)) {
 				urlsAreValid = false;

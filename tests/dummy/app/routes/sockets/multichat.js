@@ -4,11 +4,11 @@ import socketMixin from 'ember-websockets/mixins/sockets';
 export default Ember.Route.extend(socketMixin, {
 	socketConfigurations: [{
 		key: 'socket1',
-		url: 'ws://localhost:8101/',
+		socketURL: 'ws://localhost:8101/',
 		keepSocketAlive: false
 	},{
 		key: 'socket2',
-		url: 'ws://localhost:8102',
+		socketURL: 'ws://localhost:8102',
 		keepSocketAlive: false
 	}]
 });

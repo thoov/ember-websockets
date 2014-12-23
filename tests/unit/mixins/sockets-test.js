@@ -16,10 +16,10 @@ test('validation of the socket url happens correctly', function() {
     ok(!emberObject.validateSocketConfigurations(''));
     ok(!emberObject.validateSocketConfigurations('foo-bar'));
 
-    ok(emberObject.validateSocketConfigurations([{url: 'ws://localhost:8080'}]));
-    ok(emberObject.validateSocketConfigurations([{url:'wss://localhost:8080'}]));
-    ok(emberObject.validateSocketConfigurations([{url:'ws://localhost:8080'}, {url:'wss://localhost:8080'}]));
-    ok(!emberObject.validateSocketConfigurations([{url:'ws://localhost:8080'}, {url:'https://localhost:8080'}]));
+    ok(emberObject.validateSocketConfigurations([{socketURL: 'ws://localhost:8080'}]));
+    ok(emberObject.validateSocketConfigurations([{socketURL:'wss://localhost:8080'}]));
+    ok(emberObject.validateSocketConfigurations([{socketURL:'ws://localhost:8080'}, {socketURL:'wss://localhost:8080'}]));
+    ok(!emberObject.validateSocketConfigurations([{socketURL:'ws://localhost:8080'}, {socketURL:'https://localhost:8080'}]));
     ok(!emberObject.validateSocketConfigurations([]));
-    ok(!emberObject.validateSocketConfigurations([{url: ''}]));
+    ok(!emberObject.validateSocketConfigurations([{socketURL: ''}]));
 });
