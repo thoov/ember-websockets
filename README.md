@@ -7,8 +7,6 @@ forcing certain conventions on the developer.
 [![Build Status](https://travis-ci.org/thoov/ember-websockets.svg?branch=master)](https://travis-ci.org/thoov/ember-websockets)
 [![Code Climate](https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg)](https://codeclimate.com/github/thoov/ember-websockets)
 
-## Installation
-
 ```
 npm install ember-websockets --save-dev
 ```
