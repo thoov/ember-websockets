@@ -7,6 +7,15 @@ forcing certain conventions on the developer.
 [![Build Status](https://travis-ci.org/thoov/ember-websockets.svg?branch=master)](https://travis-ci.org/thoov/ember-websockets)
 [![Code Climate](https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg)](https://codeclimate.com/github/thoov/ember-websockets)
 
+## Installation
+
+To install as an Ember CLI addon (v0.1.5 or greater):
+```
+ember install:addon ember-websockets
+```
+
+Or if you are using Ember CLI < 0.1.5:
+
 ```
 npm install ember-websockets --save-dev
 ```
