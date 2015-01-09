@@ -248,17 +248,15 @@ First get the assets:
 ```
 npm install ember-websockets --save-dev
 ```
-or
-```
-git clone git@github.com:thoov/ember-websockets.git
-```
+
+Second include the [standalone JS file](https://github.com/thoov/ember-websockets/blob/master/vendor/ember-websocket.js) inside of your HTML (located inside of the vendor folder):
 
 After you get the assets include the dist file in your HTML file:
 ```html
 <script src="js/libs/jquery.js"></script>
 <script src="js/libs/handlebars.js"></script>
 <script src="js/libs/ember.js"></script>
-<script src="./path/to/dist/ember-websockets.js"></script>
+<script src="./path/to/vendor/ember-websockets.js"></script>
 // Make sure that you include this below your ember.js include
 ```
 This will add the mixin to a global variable called EmberWebsocket.
@@ -268,6 +266,7 @@ App.IndexRoute = Ember.Route.extend(window.EmberWebsocket, {
     socketURL: 'ws://localhost:8080'
 });
 ```
+**NOTE:** The standalone JS dist file used to be located inside of the dist folder but has moved to the vendor folder.
 
 ## Live Example
 
