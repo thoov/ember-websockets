@@ -178,10 +178,24 @@ export default Ember.Mixin.create({
 	},
 
 	/*
-	* When the route deactivates or "transitions away" we will either close the
-	* connection or keep it "alive"
+	* When the route deactivates (ie transitions away) or resets (ie a dynamic segment of a route is updated)
+	* we will either close the connection or keep it "alive". This logic used to be contained
+	* within the deactivate method but if you have a single route with a dynamic segment than
+	* the "deactive" method is never called. EX: if you have something like this:
+	*
+	* updateSocketURL: function(roomID) {
+	*   this.set('socketURL', 'ws://localhost:8080/room/%@'.fmt(roomID));
+	* },
+	*
+	* setupController: function(controller, model) {
+	*   this.updateSocketURL(model.id);
+	*   this._super.apply(this, arguments);
+	* }
+	*
+	* And if you transitioned from room/1 to room/2. The room/1 socket would not close thus we needed to
+	* place this logic on the resetController.
 	*/
-	deactivate: function() {
+	resetController: function() {
 		var socketContexts       = this.get('socketContexts');
 		var keepSocketAlive      = this.get('keepSocketAlive');
 		var socketConfigurations = this.get('socketConfigurations');
