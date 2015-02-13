@@ -115,7 +115,6 @@ export default Ember.Mixin.create({
 
 	findSocketByKey: function(/* key, arrayOfSockets */) {
 		var socket = this.findContextByKey.apply(this, arguments);
-
 		return socket ? socket['websocket'] : false;
 	},
 
@@ -145,10 +144,6 @@ export default Ember.Mixin.create({
 						context.controller.send(eventName, data);
 					}
 				});
-
-				// Remove any inactive sockets (ie active = false) from the contexts object
-				// this purely to clean up socketContexts.
-				socketContexts[data.currentTarget.url] = socketContexts[data.currentTarget.url].filterBy('active');
 			};
 		});
 
