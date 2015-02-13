@@ -19,6 +19,4 @@ module.exports = function(app) {
             ws.send('Every 5 seconds the backend is sending a message.');
         }, 5000);
     });
-
-
 };

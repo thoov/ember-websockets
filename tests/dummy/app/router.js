@@ -20,6 +20,7 @@ Router.map(function() {
         this.route('multi');
         this.route('alive');
         this.route('multi-alive');
+        this.route('dynamic', {path: 'dynamic/:room_id'});
     });
 });
 

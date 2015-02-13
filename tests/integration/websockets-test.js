@@ -12,7 +12,7 @@ var sampleData = 'This is a sample message';
 module('Onopen, opmessage, and onclose intergration tests', {
     setup: function() {
         originalWebSocket = WebSocket;
-        window.WebSocket = MockSocket;
+        window.WebSocket  = MockSocket;
 
         mockServer = new MockServer('ws://localhost:8081/');
         mockServer.on('connection', function(server) {
@@ -21,15 +21,16 @@ module('Onopen, opmessage, and onclose intergration tests', {
 
         App = startApp();
 
-        testRoute = App.__container__.lookup('route:testing.foo');
+        testRoute      = App.__container__.lookup('route:testing.foo');
         testController = App.__container__.lookup('controller:testing.foo');
     },
     teardown: function() {
         window.WebSocket = originalWebSocket;
-        testController.onopen = Ember.K;
-        testController.onmessage = Ember.K;
-        testController.onclose = Ember.K;
-        testController.onerror = Ember.K;
+        Ember.EnumerableUtils.forEach([testController], function(controller) {
+            Ember.EnumerableUtils.forEach(['onopen', 'onmessage', 'onclose', 'onerror'], function(method) {
+                controller[method] = Ember.K;
+            });
+        });
         Ember.run(App, App.destroy);
     }
 });
@@ -72,10 +73,10 @@ test('Onclose event fires correct', function() {
     });
 });
 
-test('Onclose event fires on route deactivate', function() {
+test('Onclose event fires on route resetController', function() {
     expect(4);
 
-    // the onclose method should be called twice once for both /sockets/test "route deactivations"
+    // the onclose method should be called twice once for both /sockets/test "route resetController"
     testController.onclose = function(event) {
         ok(true, 'onclose event was fired and caught by a controller action');
         equal(event.type, 'close', 'event type is correct');

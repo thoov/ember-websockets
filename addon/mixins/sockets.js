@@ -49,6 +49,11 @@ export default Ember.Mixin.create({
 		*		websocket: the actual socket object
 		*		route: this
 		*		controller: the controller which we will send the actions to.
+		*		active: this lets the mixin know if this socket should be kept alive.
+		*				when a socket is closed we no longer want findSocketsForRoute
+		*				to return it but we still want the onclose callback to fire.
+		*				Therefore we cannot simply remove the entry from socketContexts
+		*				but instead use this boolean flag.
 		*	}]
 		* }
 		*/
@@ -81,7 +86,8 @@ export default Ember.Mixin.create({
 					controller : controller,
 					route      : this,
 					websocket  : this.initializeSocket(websocket, socketContexts),
-					key        : socketKey
+					key        : socketKey,
+					active     : true
 				});
 			}
 		}, this);
@@ -98,26 +104,27 @@ export default Ember.Mixin.create({
 
 		forEach(Ember.keys(socketContexts), function(key) {
 			forEach(socketContexts[key], function(contextObject) {
-
-				if(route === contextObject.route) {
+				if(route === contextObject.route && contextObject.active) {
 					socketsForRoute.push(contextObject);
 				}
-
 			});
 		});
 
 		return socketsForRoute;
 	},
 
-	findSocketByKey: function(key, arrayOfSockets) {
+	findSocketByKey: function(/* key, arrayOfSockets */) {
+		var socket = this.findContextByKey.apply(this, arguments);
+		return socket ? socket['websocket'] : false;
+	},
+
+	findContextByKey: function(key, arrayOfSockets) {
 		var socketForKey = false;
 
 		forEach(arrayOfSockets, function(socketContext) {
-
 			if(socketContext.key === key) {
-				socketForKey = socketContext.websocket;
+				socketForKey = socketContext;
 			}
-
 		});
 
 		return socketForKey;
@@ -208,11 +215,13 @@ export default Ember.Mixin.create({
 		*/
 		if(!isEmpty(socketConfigurations)) {
 			forEach(socketConfigurations, function(config) {
-				var connection = this.findSocketByKey(config.key, socketsForRoute);
+				var context = this.findContextByKey(config.key, socketsForRoute);
 
-				if(!config.keepSocketAlive && connection && connection.readyState === WebSocket.OPEN) {
-					connection.close();
+				if(!config.keepSocketAlive && context.websocket && context.websocket.readyState === WebSocket.OPEN) {
+					context.websocket.close();
+					context.active = false;
 				}
+
 			}, this);
 		}
 		else {
@@ -224,6 +233,7 @@ export default Ember.Mixin.create({
 				forEach(socketsForRoute, function(contexts) {
 					if(contexts.websocket && contexts.websocket.readyState === WebSocket.OPEN) {
 						contexts.websocket.close();
+						contexts.active = false;
 					}
 				});
 			}
@@ -280,6 +290,7 @@ export default Ember.Mixin.create({
 			forEach(socketsForRoute, function(connection) {
 				if(connection.websocket && (!socketToClose || connection.websocket === socketToClose)) {
 					connection.websocket.close();
+					connection.active = false;
 				}
 			});
 		},

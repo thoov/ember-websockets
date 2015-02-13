@@ -1,5 +1,10 @@
 'use strict';
 
 module.exports = function(/* environment, appConfig */) {
-  return { };
+  return {
+    contentSecurityPolicyHeader: 'Content-Security-Policy-Report-Only',
+    contentSecurityPolicy: {
+        'connect-src': "*",
+      }
+  };
 };
