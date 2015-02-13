@@ -81,7 +81,8 @@ export default Ember.Mixin.create({
 					controller : controller,
 					route      : this,
 					websocket  : this.initializeSocket(websocket, socketContexts),
-					key        : socketKey
+					key        : socketKey,
+					active     : true // TODO: explain this more
 				});
 			}
 		}, this);
@@ -98,11 +99,9 @@ export default Ember.Mixin.create({
 
 		forEach(Ember.keys(socketContexts), function(key) {
 			forEach(socketContexts[key], function(contextObject) {
-
-				if(route === contextObject.route) {
+				if(route === contextObject.route && contextObject.active) {
 					socketsForRoute.push(contextObject);
 				}
-
 			});
 		});
 
@@ -113,11 +112,9 @@ export default Ember.Mixin.create({
 		var socketForKey = false;
 
 		forEach(arrayOfSockets, function(socketContext) {
-
 			if(socketContext.key === key) {
 				socketForKey = socketContext.websocket;
 			}
-
 		});
 
 		return socketForKey;
@@ -136,6 +133,9 @@ export default Ember.Mixin.create({
 					if(context.websocket === data.target) {
 						context.controller.send(eventName, data);
 					}
+
+					// TODO: if the context is not active and we are recieve an onclose then
+					// we can remove it from socketContexts
 				});
 			};
 		});
@@ -225,6 +225,8 @@ export default Ember.Mixin.create({
 					if(contexts.websocket && contexts.websocket.readyState === WebSocket.OPEN) {
 						contexts.websocket.close();
 					}
+
+					contexts.active = false;
 				});
 			}
 		}
