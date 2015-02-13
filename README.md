@@ -242,6 +242,40 @@ form:
 }
 ```
 
+## Dynamic Socket Urls
+
+Below is an example of how routes with dynamic segments and be used to generate
+different socketURLs based on the params which are passed in.
+
+```javascript
+// router.js
+Router.map(function() {
+    this.route('dynamic', {path: 'dynamic/:room_id'});
+});
+
+
+// routes/dynamic.js
+import Ember from 'ember';
+import socketMixin from 'ember-websockets/mixins/sockets';
+
+export default Ember.Route.extend(socketMixin, {
+    socketURL: null,
+
+    updateSocketURL: function(roomID) {
+        this.set('socketURL', 'ws://localhost:8084/room/%@'.fmt(roomID));
+    },
+
+    model: function(params) {
+        return {id: params.room_id};
+    },
+
+    setupController: function(controller, model) {
+        this._super.apply(this, arguments);
+        this.updateSocketURL(model.id);
+    }
+});
+```
+
 ## Using ember-websockets with a non CLI Ember app
 
 First get the assets:
