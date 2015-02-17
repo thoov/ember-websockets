@@ -141,7 +141,9 @@ export default Ember.Mixin.create({
 
 					// Only fire the action on the socket we care about.
 					if(context.websocket === data.target) {
-						context.controller.send(eventName, data);
+                        Ember.run(function(){
+                            context.controller.send(eventName, data);
+                        });
 					}
 				});
 			};
