@@ -1,5 +1,8 @@
 # Ember WebSockets Changelog
 
+### 0.6.2 (February 17, 2015)
+- [#18](https://github.com/thoov/ember-websockets/pull/18) Wrapping event handler inside of a ember run to prevent async issues
+
 ### 0.6.1 (February 12, 2015)
 - [#17](https://github.com/thoov/ember-websockets/pull/17) Fixing issue where dynamic socketURLs would not property reset
 
