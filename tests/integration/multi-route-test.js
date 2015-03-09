@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
 var App;
@@ -35,23 +35,23 @@ module('Onopen, opmessage, and onclose intergration tests for multiple routes', 
     }
 });
 
-test('Onopen and onclose will fire for each route visited', function() {
-    expect(4);
+test('Onopen and onclose will fire for each route visited', function(assert) {
+  assert.expect(4);
 
     testFooController.onopen = function(event) {
-        ok(true, 'onopen event was fired and caught by a controller action');
+      assert.ok(true, 'onopen event was fired and caught by a controller action');
     };
 
     testFooController.onclose = function(event) {
-        ok(true, 'onclose event was fired and caught by a controller action');
+        assert.ok(true, 'onclose event was fired and caught by a controller action');
     };
 
     testBarController.onopen = function(event) {
-        ok(true, 'onopen event was fired and caught by a controller action');
+        assert.ok(true, 'onopen event was fired and caught by a controller action');
     };
 
     testBarController.onclose = function(event) {
-        ok(true, 'onclose event was fired and caught by a controller action');
+        assert.ok(true, 'onclose event was fired and caught by a controller action');
     };
 
     visit('/testing/foo').then(function() {

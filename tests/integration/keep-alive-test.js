@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
 var App;
@@ -34,15 +34,15 @@ module('Keep alive tests', {
 	}
 });
 
-test('that setting keep alive will not close a socket', function() {
-	expect(1);
+test('that setting keep alive will not close a socket', function(assert) {
+	assert.expect(1);
 
 	testAliveController.onopen = function(event) {
-		ok(true, 'onopen event was fired only once');
+		assert.ok(true, 'onopen event was fired only once');
 	};
 
 	testAliveController.onclose = function(event) {
-		ok(false, 'onclose event will not fire as we set keep alive to true');
+		assert.ok(false, 'onclose event will not fire as we set keep alive to true');
 	};
 
 	visit('/testing/alive').then(function() {
@@ -55,18 +55,18 @@ test('that setting keep alive will not close a socket', function() {
 });
 
 
-test('that setting keep alive will not close a socket', function() {
-	expect(7);
+test('that setting keep alive will not close a socket', function(assert) {
+	assert.expect(7);
 
 	// This should be called 3 times.
 	testMultiController.onopen = function(event) {
-		ok(true, 'onopen event was fired only once');
+		assert.ok(true, 'onopen event was fired only once');
 	};
 
 	// This should be called twice
 	testMultiController.onclose = function(event) {
-		equal(event.origin, 'ws://localhost:8081/');
-		ok(true, 'onclose event will not fire as we set keep alive to true');
+		assert.equal(event.origin, 'ws://localhost:8081/');
+		assert.ok(true, 'onclose event will not fire as we set keep alive to true');
 	};
 
 	visit('/testing/multi-alive').then(function() {

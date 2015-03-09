@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
 var App;
@@ -34,14 +34,14 @@ module('Dynamic socketURL tests', {
     }
 });
 
-test('that dynamic route works as expected', function() {
-    expect(4);
+test('that dynamic route works as expected', function(assert) {
+  assert.expect(4);
 
     dynamicController.onopen = function(event) {
-        ok(true, 'onopen event was fired');
+      assert.ok(true, 'onopen event was fired');
     };
     dynamicController.onclose = function(event) {
-        ok(true, 'onclose event was fired');
+      assert.ok(true, 'onclose event was fired');
     };
 
     visit('/testing/dynamic/1').then(function() {
