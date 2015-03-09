@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
 var App;
@@ -35,35 +35,35 @@ module('Onopen, opmessage, and onclose intergration tests', {
     }
 });
 
-test('Onopen event fires correct', function() {
-    expect(2);
+test('Onopen event fires correct', function(assert) {
+  assert.expect(2);
 
     testController.onopen = function(event) {
-        ok(true, 'onopen event was fired and caught by a controller action');
-        equal(event.type, 'open', 'event type is correct');
+      assert.ok(true, 'onopen event was fired and caught by a controller action');
+      assert.equal(event.type, 'open', 'event type is correct');
     };
 
     visit('/testing/foo');
 });
 
-test('Onmessage event fires correct', function() {
-    expect(3);
+test('Onmessage event fires correct', function(assert) {
+  assert.expect(3);
 
     testController.onmessage = function(event) {
-        ok(true, 'onmessage event was fired and caught by a controller action');
-        equal(event.type, 'message', 'event type is correct');
-        equal(event.data, sampleData, 'the data recieved is correct');
+      assert.ok(true, 'onmessage event was fired and caught by a controller action');
+      assert.equal(event.type, 'message', 'event type is correct');
+      assert.equal(event.data, sampleData, 'the data recieved is correct');
     };
 
     visit('/testing/foo');
 });
 
-test('Onclose event fires correct', function() {
-    expect(2);
+test('Onclose event fires correct', function(assert) {
+  assert.expect(2);
 
     testController.onclose = function(event) {
-        ok(true, 'onclose event was fired and caught by a controller action');
-        equal(event.type, 'close', 'event type is correct');
+      assert.ok(true, 'onclose event was fired and caught by a controller action');
+      assert.equal(event.type, 'close', 'event type is correct');
 
         visit('/');
     };
@@ -73,13 +73,13 @@ test('Onclose event fires correct', function() {
     });
 });
 
-test('Onclose event fires on route resetController', function() {
-    expect(4);
+test('Onclose event fires on route resetController', function(assert) {
+  assert.expect(4);
 
     // the onclose method should be called twice once for both /sockets/test "route resetController"
     testController.onclose = function(event) {
-        ok(true, 'onclose event was fired and caught by a controller action');
-        equal(event.type, 'close', 'event type is correct');
+      assert.ok(true, 'onclose event was fired and caught by a controller action');
+      assert.equal(event.type, 'close', 'event type is correct');
     };
 
     visit('/testing/foo').then(function() {

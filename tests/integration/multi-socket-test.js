@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
 var App;
@@ -33,11 +33,11 @@ module('Onopen, opmessage, and onclose intergration tests for multiple sockets',
     }
 });
 
-test('Onopen will fire for each socket', function() {
-    expect(2);
+test('Onopen will fire for each socket', function(assert) {
+    assert.expect(2);
 
     testMultiController.onopen = function(event) {
-        ok(true, 'onopen event was fired and caught by a controller action');
+        assert.ok(true, 'onopen event was fired and caught by a controller action');
     };
 
     visit('/testing/multi').then(function() {
@@ -45,11 +45,11 @@ test('Onopen will fire for each socket', function() {
     });
 });
 
-test('Onclose will fire for each socket', function() {
-    expect(2);
+test('Onclose will fire for each socket', function(assert) {
+  assert.expect(2);
 
     testMultiController.onclose = function(event) {
-        ok(true, 'onclose event was fired and caught by a controller action');
+      assert.ok(true, 'onclose event was fired and caught by a controller action');
     };
 
     visit('/testing/multi').then(function() {
@@ -57,13 +57,13 @@ test('Onclose will fire for each socket', function() {
     });
 });
 
-test('Can emit to just a single connection', function() {
-    expect(2);
+test('Can emit to just a single connection', function(assert) {
+  assert.expect(2);
 
     mockServerA.on('connection', function(server) {
         server.on('message', function(event) {
-            equal(event.data, sampleData);
-            equal(event.origin, 'ws://localhost:8081/');
+          assert.equal(event.data, sampleData);
+          assert.equal(event.origin, 'ws://localhost:8081/');
         });
     });
 
@@ -72,18 +72,18 @@ test('Can emit to just a single connection', function() {
     });
 });
 
-test('Can close just a single connection', function() {
+test('Can close just a single connection', function(assert) {
     var semaphore = 0;
 
-    expect(2);
+    assert.expect(2);
 
     testMultiController.onclose = function(event) {
         semaphore++;
         if(semaphore === 1) {
-            equal(event.origin, 'ws://localhost:8082/', 'The second socket was closed first so we expect to recieve it first');
+          assert.equal(event.origin, 'ws://localhost:8082/', 'The second socket was closed first so we expect to recieve it first');
         }
         else {
-            equal(event.origin, 'ws://localhost:8081/', 'The first socket was closed second so we expect to recieve it second');
+          assert.equal(event.origin, 'ws://localhost:8081/', 'The first socket was closed second so we expect to recieve it second');
 
             // This will transition away which will fire the deactivate function.
             // It should not call the onclose method as we have closed all of the
