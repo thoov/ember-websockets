@@ -1,4 +1,7 @@
 (function() {
+
+    Ember.deprecate('This file has been deprecated and will be removed in the near future. Please visit: https://github.com/thoov/ember-websockets/issues/24 for more information.', true);
+
     var typeOf       = Ember.typeOf;
     var isEmpty      = Ember.isEmpty;
     var socketEvents = ['onclose', 'onerror', 'onmessage', 'onopen'];
