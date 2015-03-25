@@ -5,7 +5,7 @@ import SocketsService from '../../../services/sockets';
 module('Sockets Service');
 
 test('validation of the socket url happens correctly', assert => {
-  assert.expect(4);
+  assert.expect(3);
   var done = assert.async();
 
   Ember.Component.extend({
@@ -15,23 +15,34 @@ test('validation of the socket url happens correctly', assert => {
       this._super.apply(this, arguments);
       var socket = this.socketService.socketFor('ws://localhost:8080');
 
-      socket.on('open', event => {
-        assert.ok(true);
-      });
+      socket.on('open', this.myOpenHandler);
+      socket.on('message', this.myMessageHandler, this);
+      socket.on('close', this.myCloseHandler);
 
-      socket.on('message', event => {
-        assert.ok(true);
-      });
+      this.socket = socket;
+    },
 
-      socket.on('message', event => {
-        assert.ok(true);
-        socket.close();
-      });
+    willDestroy() {
+      this._super.apply(this, arguments);
 
-      socket.on('close', event => {
-        assert.ok(true);
-        done();
-      });
+      this.socket.off('open', this.myOpenHandler);
+      this.socket.off('message', this.myMessageHandler);
+      this.socket.off('close', this.myCloseHandler);
+    },
+
+    myOpenHandler(event) {
+      assert.ok(true);
+    },
+
+    myMessageHandler(event) {
+      assert.ok(true);
+      this.socket.close();
+    },
+
+    myCloseHandler(event) {
+      assert.ok(true);
+      done();
     }
+
   }).create();
 });

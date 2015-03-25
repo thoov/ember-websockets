@@ -10,7 +10,7 @@ export default Ember.ObjectProxy.extend({
   *
   * {
   *    url: 'String'
-  *    type: 'String' (such as 'open')
+  *    type: 'String' (such as 'open', 'message', 'close', and 'error')
   *    callback: The function to envoke
   *    context: The context of the function
   * }
@@ -50,6 +50,10 @@ export default Ember.ObjectProxy.extend({
     this.listeners = filter(this.listeners, listeners => {
       return !(listeners.callback === callback && listeners.type === type);
     });
+  },
+
+  send(message) {
+    this.socket.send(message);
   },
 
   close() {
