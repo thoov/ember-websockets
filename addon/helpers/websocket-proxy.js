@@ -1,13 +1,12 @@
 import Ember from 'ember';
 
 var events  = ['close', 'error', 'message', 'open'];
-var forEach = Ember.EnumerableUtils.forEach;
 var filter  = Ember.EnumerableUtils.filter;
+var indexOf = Ember.EnumerableUtils.indexOf;
+var forEach = Ember.EnumerableUtils.forEach;
 
 export default Ember.ObjectProxy.extend({
   /*
-  * Each element in the array is of form:
-  *
   * {
   *    url: 'String'
   *    type: 'String' (such as 'open', 'message', 'close', and 'error')
@@ -37,7 +36,16 @@ export default Ember.ObjectProxy.extend({
     });
   },
 
+  /*
+  * Adds a callback function into the listeners array which will
+  * be invoked later whenever a given `type` event happens.
+  *
+  * type: must be either 'open', 'message', 'close', 'error'
+  */
   on(type, callback, context) {
+    Ember.assert(type + ' is not a recognized event name. Please use on of the following: ' + events.join(', '), indexOf(events, type) !== -1);
+    Ember.assert('The second argument must be a function.', Ember.typeOf(callback) === 'function');
+
     this.listeners.push({
       url: this.socket.url,
       type: type,

@@ -61,8 +61,8 @@ test('Can emit to just a single connection', function(assert) {
   assert.expect(2);
 
     mockServerA.on('connection', function(server) {
-        server.on('message', function(event) {
-          assert.equal(event.data, sampleData);
+        server.on('message', function(message, event) {
+          assert.equal(message, sampleData);
           assert.equal(event.origin, 'ws://localhost:8081/');
         });
     });
