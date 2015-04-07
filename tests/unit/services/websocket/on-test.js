@@ -8,7 +8,7 @@ var originalWebSocket;
 var mockServer;
 var service = SocketsService.create();
 
-module('Sockets Service', {
+module('Sockets Service - on(*) tests', {
   setup() {
     originalWebSocket = window.WebSocket;
     window.WebSocket  = MockSocket;
