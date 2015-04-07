@@ -1,6 +1,6 @@
 # Ember WebSockets Changelog
 
-### 0.8.0 (February 17, 2015)
+### 0.8.0 (March 13, 2015)
 - [#25](https://github.com/thoov/ember-websockets/pull/25) Deprecating the standalone file and removing the readme entry
 
 ### 0.7.0 (March 9, 2015)
