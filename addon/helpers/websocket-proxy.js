@@ -51,7 +51,16 @@ export default Ember.ObjectProxy.extend({
     });
   },
 
-  send(message) {
+  /*
+  * Message is the message which will be passed into the native websockets send method
+  * and shouldStringify is a boolean which determines if we should call JSON.stringify on
+  * the message.
+  */
+  send(message, shouldStringify = false) {
+    if(shouldStringify && JSON && JSON.stringify) {
+      message = JSON.stringify(message);
+    }
+
     this.socket.send(message);
   },
 
@@ -74,7 +83,7 @@ export default Ember.ObjectProxy.extend({
             return listener.url === event.currentTarget.url && listener.type === eventName;
           });
 
-          // TODO: filter active listeners for contexts that are not destroyed 
+          // TODO: filter active listeners for contexts that are not destroyed
 
           activeListeners.forEach(item => {
             item.callback.call(item.context, event);

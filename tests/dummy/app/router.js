@@ -10,6 +10,7 @@ Router.map(function() {
     this.route('chatroom');
     this.route('multichat');
     this.route('dynamic', {path: 'dynamic/:room_id'});
+    this.route('services');
   });
 
   // Used for intergration tests

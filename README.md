@@ -73,6 +73,17 @@ export default Ember.Controller.extend({
 });
 ```
 
+## Sending messages to the server
+
+```javascript
+var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+socket.send('Hello Websocket World', true);
+```
+
+The send method takes 2 arguments. A message which is passed into the native websockets send method and an
+optional stringify boolean. This boolean, if set to true, will do a JSON.stringify to the message
+before passing it to the websocket send method. If you are sending strings it is recommended to pass true.
+
 ## Reconnecting
 
 ```javascript
