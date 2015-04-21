@@ -1,9 +1,7 @@
 module.exports = {
-	normalizeEntityName: function () {},
+  normalizeEntityName: function() {}, // no-op since we're just adding dependencies
 
-	afterInstall: function () {
-		return this.addBowerPackagesToProject([
-			{ name: 'uri.js', target: '~1.15.0' }
-		]);
-	}
+  afterInstall: function() {
+    return this.addBowerPackageToProject('uri.js');
+  }
 };
