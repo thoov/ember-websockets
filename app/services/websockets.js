@@ -11,17 +11,22 @@ export default Ember.Service.extend({
   * {
   *    url: 'string'
   *    socket: WebSocket Proxy object
-  *  }
+  * }
   */
   sockets: [],
 
+  /*
+  * socketFor returns a websocket proxy object. On this object there is a property `socket`
+  * which contains the actual websocket object. This websocket object is cached based off of the url meaning
+  * multiple requests for the same socket will return the same object.
+  */
   socketFor(URL) {
-    var proxy = this.get('sockets').findBy('url', URL); // TODO: need to normalize the url
+    var proxy = this.get('sockets').findBy('url', this.normalizeURL(URL));
     if (proxy) { return proxy.socket; }
 
     proxy = WebsocketProxy.create({
       content: this,
-      socket: new WebSocket(URL)
+      socket: new WebSocket(this.normalizeURL(URL))
     });
 
     this.get('sockets').pushObject({
@@ -32,11 +37,14 @@ export default Ember.Service.extend({
     return proxy;
   },
 
+  /*
+  * closeSocketFor closes the socket for a given url.
+  */
   closeSocketFor(URL) {
     var filteredSockets = [];
 
     forEach(this.get('sockets'), item => {
-      if(item.url === URL) { // TODO: need to noramlize this url
+      if(item.url === this.normalizeURL(URL)) {
         item.socket.close();
       }
       else {
@@ -45,5 +53,9 @@ export default Ember.Service.extend({
     });
 
     this.set('sockets', filteredSockets);
+  },
+
+  normalizeURL(URL) {
+    return URL; //TODO: fix this
   }
 });

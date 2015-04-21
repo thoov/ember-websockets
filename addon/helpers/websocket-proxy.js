@@ -19,21 +19,7 @@ export default Ember.ObjectProxy.extend({
   init() {
     this._super.apply(this, arguments);
     this.listeners = Ember.makeArray();
-    var self = this;
-
-    forEach(events, eventName => {
-      this.socket['on' + eventName] = event => {
-        Ember.run(() => {
-          var activeListeners = filter(self.listeners, listener => {
-            return listener.url === event.currentTarget.url && listener.type === eventName;
-          });
-
-          activeListeners.forEach(item => {
-            item.callback.call(item.context, event);
-          });
-        });
-      };
-    });
+    this.setupInternalListeners();
   },
 
   /*
@@ -45,6 +31,7 @@ export default Ember.ObjectProxy.extend({
   on(type, callback, context) {
     Ember.assert(type + ' is not a recognized event name. Please use on of the following: ' + events.join(', '), indexOf(events, type) !== -1);
     Ember.assert('The second argument must be a function.', Ember.typeOf(callback) === 'function');
+    Ember.assert('The third argument must be the context of the surrounding object.', Ember.typeOf(context) !== 'undefined');
 
     this.listeners.push({
       url: this.socket.url,
@@ -54,6 +41,10 @@ export default Ember.ObjectProxy.extend({
     });
   },
 
+  /*
+  * Removes a callback function from the listeners array. This callback
+  * will not longer be invoked when the given `type` event happens.
+  */
   off(type, callback) {
     this.listeners = filter(this.listeners, listeners => {
       return !(listeners.callback === callback && listeners.type === type);
@@ -66,5 +57,30 @@ export default Ember.ObjectProxy.extend({
 
   close() {
     this.socket.close();
+  },
+
+  reconnect() {
+    this.set('socket', new WebSocket(this.socket.url));
+    this.setupInternalListeners();
+  },
+
+  setupInternalListeners() {
+    var self = this;
+
+    forEach(events, eventName => {
+      this.socket['on' + eventName] = event => {
+        Ember.run(() => {
+          var activeListeners = filter(self.listeners, listener => {
+            return listener.url === event.currentTarget.url && listener.type === eventName;
+          });
+
+          // TODO: filter active listeners for contexts that are not destroyed 
+
+          activeListeners.forEach(item => {
+            item.callback.call(item.context, event);
+          });
+        });
+      };
+    });
   }
 });

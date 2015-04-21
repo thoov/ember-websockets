@@ -2,7 +2,7 @@
 
 This addon aims to be a simple and easy way to integrate with any websocket
 backend. It has been designed to be minimalistic, flexible, and lightweight instead of
-forcing certain conventions on the developer.
+forcing certain conventions on the developer. This addon is compatible for EmberJS 2.0!
 
 [![Build Status](https://travis-ci.org/thoov/ember-websockets.svg?branch=master)](https://travis-ci.org/thoov/ember-websockets)
 [![Code Climate](https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg)](https://codeclimate.com/github/thoov/ember-websockets)
@@ -21,17 +21,31 @@ ember install ember-websockets
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  socketService: Ember.inject.service('websocket'),
+
+  /*
+  * First step you need to do is inject the websocket service into your object. You
+  * can inject the service into component, controllers, object, mixins, routes, and views.
+  */
+  socketService: Ember.inject.service('websockets'),
 
   init: function() {
     this._super.apply(this, arguments);
 
+    /*
+    * The next step you need to do is to create your actual websocket. Calling socketFor will
+    * retrieve a cached websocket if one exists or in this case it will create a new one for us.
+    */
     var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
+    /*
+    * The final step is to define your event handlers. All event handlers are added via the `on` method
+    * and take 3 arguments: event name, callback function, and the context in which to invoke the callback.
+    * All 3 of these are required.
+    */
     socket.on('open', this.myOpenHandler, this);
     socket.on('message', this.myMessageHandler, this);
     socket.on('close', function(event) {
-      // anonymous function work as well
+      // anonymous functions work as well
     }, this);
   },
 
@@ -45,8 +59,10 @@ export default Ember.Controller.extend({
 
   actions: {
     sendButtonPressed: function() {
-      // this will return the cached socket and will not create a new one since a socket
-      // with the same url already exists
+      /*
+      * If you need to retrieve your websocket from another function or method you can simply
+      * get the cached version at no penalty
+      */
       var socket = this.get('socketService').socketFor('ws://localhost:7000/');
       socket.send('Hello Websocket World');
     }
@@ -54,15 +70,13 @@ export default Ember.Controller.extend({
 });
 ```
 
-In the above example we are simply injecting a service onto our controller. This is not limited to only controllers but in fact can be injected into: components, views, objects, mixins, routes, and of course controllers.
-
 ## Multiple Websockets
 
 ```javascript
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  socketService: Ember.inject.service('websocket'),
+  socketService: Ember.inject.service('websockets'),
 
   init: function() {
     this._super.apply(this, arguments);
@@ -87,7 +101,7 @@ export default Ember.Controller.extend({
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  socketService: Ember.inject.service('websocket'),
+  socketService: Ember.inject.service('websockets'),
 
   init: function() {
     this._super.apply(this, arguments);
@@ -105,76 +119,90 @@ export default Ember.Controller.extend({
 });
 ```
 
-## On API
-
-Example:
+## Reconnecting
 
 ```javascript
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  socketService: Ember.inject.service('websocket'),
+  socketService: Ember.inject.service('websockets'),
 
   init: function() {
     this._super.apply(this, arguments);
 
     var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
-    socket.on('open', this.myOpenFunction, this);
-  },
+    socket.on('open', function(event) {
+      console.log('This will be called');
+    }, this);
 
-  myOpenFunction: function() {
-    console.log('Hello');
+    socket.on('close', function(event) {
+      Ember.run.later(this, function() {
+        /*
+        * This will remove the old socket and try and connect to a new one on the same url.
+        * NOTE: that this does not need to be in a Ember.run.later this is just an example on
+        * how to reconnect every second.
+        */
+        socket.reconnect();
+      }, 1000);
+    }, this);
   }
 });
 ```
 
-on takes 3 arguments: **event type**, **callback function**, and **context**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. Callback function will be invoked when one of the previous event types occurs. Context is used to set the context of the callback function and also to remove the listeners when the context gets destroyed.
+## Detailed explanations of the APIs
 
-## SocketFor API
+### SocketFor
 
 Example:
 
 ```javascript
-import Ember from 'ember';
-
-export default Ember.Controller.extend({
-  socketService: Ember.inject.service('websocket'),
-
-  init: function() {
-    this._super.apply(this, arguments);
-
-    var socket = this.get('socketService').socketFor('ws://localhost:7000/');
-  }
-});
+var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 ```
 
 socketFor takes a single argument, **a url**, and returns a socket instance from its cache or a new websocket connection if one was not found.
 
-## CloseSocketFor API
+### On
 
 Example:
 
 ```javascript
-import Ember from 'ember';
+var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
-export default Ember.Controller.extend({
-  socketService: Ember.inject.service('websocket'),
+socket.on('open', this.myOpenFunction, this);
+```
 
-  init: function() {
-    this._super.apply(this, arguments);
+on takes 3 arguments: **event type**, **callback function**, and **context**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. Callback function will be invoked when one of the previous event types occurs. Context is used to set the context of the callback function and also to remove the listeners when the context gets destroyed.
 
-    var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+### CloseSocketFor
 
-    ...
+Example:
 
-    this.get('socketService').closeSocketFor('ws://localhost:7000/');
-  }
-});
+```javascript
+var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+
+this.get('socketService').closeSocketFor('ws://localhost:7000/');
 ```
 
 closeSocketFor takes a single argument, **a url**, and closes the websocket connection. It will also remove it from the cache. In normal cases you would not have to call this method.
 
+### Reconnect
+
+Example:
+
+```javascript
+socket.on('close', function(event) {
+  socket.reconnect();
+});
+```
+
+reconnect takes no arguments. It will attempt to create a new websocket connect using the previous url.
+If the connect is not successful the `close` event will be triggered.
+
+## Deprecations
+
+Before v1.0.0 there was a websocket mixin that you would add to your router and you would define your event
+handlers via actions on the controller. If you still need the documentation for this approach [it is here](https://github.com/thoov/ember-websockets/blob/master/docs/deprecated-approach.md).
 
 ## Live Example
 

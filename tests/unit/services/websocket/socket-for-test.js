@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
-import SocketsService from '../../../../services/sockets';
+import SocketsService from '../../../../services/websockets';
 
 var component;
 var ConsumerComponent;

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
-import SocketsService from '../../../../services/sockets';
+import SocketsService from '../../../../services/websockets';
 
 var component;
 var ConsumerComponent;
@@ -43,7 +43,7 @@ test('that on(open) and on(close) work correctly', assert => {
       var socket = this.socketService.socketFor('ws://localhost:7000/');
 
       socket.on('open', this.myOpenHandler, this);
-      socket.on('close', this.myCloseHandler);
+      socket.on('close', this.myCloseHandler, this);
 
       assert.equal(socket.listeners.length, 2);
 
