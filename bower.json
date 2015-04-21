@@ -12,5 +12,8 @@
     "ember-qunit-notifications": "0.0.7",
     "mock-socket": "^0.3.0",
     "qunit": "~1.17.1"
+  },
+  "devDependencies": {
+    "uri.js": "~1.15.0"
   }
 }

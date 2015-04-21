@@ -13,7 +13,12 @@ export default Ember.Service.extend({
   *    socket: WebSocket Proxy object
   * }
   */
-  sockets: [],
+  sockets: null,
+
+  init() {
+    this._super(...arguments);
+    this.sockets = Ember.makeArray();
+  },
 
   /*
   * socketFor returns a websocket proxy object. On this object there is a property `socket`
@@ -22,7 +27,7 @@ export default Ember.Service.extend({
   */
   socketFor(URL) {
     var proxy = this.get('sockets').findBy('url', this.normalizeURL(URL));
-    if (proxy) { return proxy.socket; }
+    if (proxy && this.websocketIsNotClosed(proxy.socket)) { return proxy.socket; }
 
     proxy = WebsocketProxy.create({
       content: this,
@@ -55,7 +60,23 @@ export default Ember.Service.extend({
     this.set('sockets', filteredSockets);
   },
 
+  /*
+  * The native websocket object will transform urls without a pathname to have just a /.
+  * As an example: ws://localhost:8080 would actually be ws://localhost:8080/ but ws://example.com/foo would not
+  * change. This function does this transformation to stay inline with the native websocket implementation.
+  *
+  */
   normalizeURL(URL) {
-    return URL; //TODO: fix this
+    var url = new URI(URL);
+
+    if(url.path() === '/' && URL.slice(-1) !== '/') {
+      return URL + '/';
+    }
+
+    return URL;
+  },
+
+  websocketIsNotClosed(websocket) {
+    return websocket.socket.readyState !== window.WebSocket.CLOSED;
   }
 });

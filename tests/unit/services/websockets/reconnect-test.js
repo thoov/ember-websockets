@@ -3,33 +3,32 @@ import { module, test } from 'qunit';
 import SocketsService from '../../../../services/websockets';
 
 var component;
+var mockServer;
 var ConsumerComponent;
 var originalWebSocket;
-var mockServer;
-var service = SocketsService.create();
 
 module('Sockets Service - reconnect tests', {
   setup() {
     originalWebSocket = window.WebSocket;
     window.WebSocket  = MockSocket;
 
-    // setup the mock server so each test will connect to it
-    mockServer = new MockServer('ws://localhost:7111/');
+    var service       = SocketsService.create();
+    mockServer        = new MockServer('ws://localhost:7000/');
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,
       socket: null,
       willDestroy() {
-        this.socketService.closeSocketFor('ws://localhost:7111/');
+        this.socketService.closeSocketFor('ws://localhost:7000/');
       }
     });
   },
   teardown() {
     window.WebSocket = originalWebSocket;
 
-		Ember.run(() => {
-			component.destroy();
-		});
+    Ember.run(() => {
+      component.destroy();
+    });
   }
 });
 
@@ -42,7 +41,7 @@ test('that you can reopen a socket after it closes', assert => {
   component = ConsumerComponent.extend({
     init() {
       this._super.apply(this, arguments);
-      var socket = this.socketService.socketFor('ws://localhost:7111/');
+      var socket = this.socketService.socketFor('ws://localhost:7000/');
 
       socket.on('open', () => {
         assert.ok(true);

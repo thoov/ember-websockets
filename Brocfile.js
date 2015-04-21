@@ -19,5 +19,6 @@ var app = new EmberAddon();
 // along with the exports of each module as its value.
 
 app.import('bower_components/mock-socket/dist/mock-socket.min.js');
+app.import('bower_components/uri.js/src/URI.min.js');
 
 module.exports = app.toTree();

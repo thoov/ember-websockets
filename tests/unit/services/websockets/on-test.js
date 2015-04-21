@@ -3,18 +3,17 @@ import { module, test } from 'qunit';
 import SocketsService from '../../../../services/websockets';
 
 var component;
+var mockServer;
 var ConsumerComponent;
 var originalWebSocket;
-var mockServer;
-var service = SocketsService.create();
 
 module('Sockets Service - on(*) tests', {
   setup() {
     originalWebSocket = window.WebSocket;
     window.WebSocket  = MockSocket;
 
-    // setup the mock server so each test will connect to it
-    mockServer = new MockServer('ws://localhost:7000/');
+    var service       = SocketsService.create();
+    mockServer        = new MockServer('ws://localhost:7000/');
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,
@@ -27,9 +26,9 @@ module('Sockets Service - on(*) tests', {
   teardown() {
     window.WebSocket = originalWebSocket;
 
-		Ember.run(() => {
-			component.destroy();
-		});
+    Ember.run(() => {
+      component.destroy();
+    });
   }
 });
 
@@ -41,6 +40,7 @@ test('that on(open) and on(close) work correctly', assert => {
     init() {
       this._super.apply(this, arguments);
       var socket = this.socketService.socketFor('ws://localhost:7000/');
+
 
       socket.on('open', this.myOpenHandler, this);
       socket.on('close', this.myCloseHandler, this);
