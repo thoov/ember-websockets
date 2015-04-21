@@ -2,7 +2,7 @@
 
 This addon aims to be a simple and easy way to integrate with any websocket
 backend. It has been designed to be minimalistic, flexible, and lightweight instead of
-forcing certain conventions on the developer. This addon is compatible for EmberJS 2.0!
+forcing certain conventions on the developer. This addon is compatible with EmberJS 2.0!
 
 [![Build Status](https://travis-ci.org/thoov/ember-websockets.svg?branch=master)](https://travis-ci.org/thoov/ember-websockets)
 [![Code Climate](https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg)](https://codeclimate.com/github/thoov/ember-websockets)
