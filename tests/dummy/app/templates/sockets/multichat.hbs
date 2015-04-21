@@ -1,8 +1,8 @@
 <p>This page shows off hitting a stub endpoint which simply returns what you type in.</p>
 
 <div class="message-box">
-  {{#each messages}}
-    <p>{{text}}</p>
+  {{#each message in messages}}
+    <p>{{message.text}}</p>
   {{/each}}
 </div>
 

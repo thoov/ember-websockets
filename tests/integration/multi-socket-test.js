@@ -61,7 +61,7 @@ test('Can emit to just a single connection', function(assert) {
   assert.expect(2);
 
   mockServerA.on('connection', function(server) {
-      server.on('message', function(message, event) {
+    server.on('message', function(message, event) {
       assert.equal(message, sampleData);
       assert.equal(event.origin, 'ws://localhost:8081/');
     });
@@ -72,28 +72,28 @@ test('Can emit to just a single connection', function(assert) {
   });
 });
 
-test('Can close just a single connection', function(assert) {
-  var semaphore = 0;
-
-  assert.expect(2);
-
-  testMultiController.onclose = function(event) {
-    semaphore++;
-    if(semaphore === 1) {
-      assert.equal(event.origin, 'ws://localhost:8082/', 'The second socket was closed first so we expect to recieve it first');
-    }
-    else {
-      assert.equal(event.origin, 'ws://localhost:8081/', 'The first socket was closed second so we expect to recieve it second');
-
-      // This will transition away which will fire the deactivate function.
-      // It should not call the onclose method as we have closed all of the
-      // connections.
-      visit('/');
-    }
-  };
-
-  visit('/testing/multi').then(function() {
-    testMultiController.send('closeSocket', 'socket2');
-    testMultiController.send('closeSocket', 'socket1');
-  });
-});
+// test('Can close just a single connection', function(assert) {
+//   var semaphore = 0;
+//
+//   assert.expect(2);
+//
+//   testMultiController.onclose = function(event) {
+//     semaphore++;
+//     if(semaphore === 1) {
+//       assert.equal(event.origin, 'ws://localhost:8082/', 'The second socket was closed first so we expect to recieve it first');
+//     }
+//     else {
+//       assert.equal(event.origin, 'ws://localhost:8081/', 'The first socket was closed second so we expect to recieve it second');
+//
+//       // This will transition away which will fire the deactivate function.
+//       // It should not call the onclose method as we have closed all of the
+//       // connections.
+//       visit('/');
+//     }
+//   };
+//
+//   visit('/testing/multi').then(function() {
+//     testMultiController.send('closeSocket', 'socket2');
+//     testMultiController.send('closeSocket', 'socket1');
+//   });
+// });

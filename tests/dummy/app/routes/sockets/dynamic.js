@@ -5,7 +5,7 @@ export default Ember.Route.extend(socketMixin, {
   socketURL: null,
 
   updateSocketURL: function(roomID) {
-    this.set('socketURL', 'ws://localhost:8084/room/%@'.fmt(roomID));
+    this.set('socketURL', Ember.String.fmt('ws://localhost:8084/room/%@', roomID));
   },
 
   model: function(params) {

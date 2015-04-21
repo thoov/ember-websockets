@@ -24,7 +24,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 
   /*
-  * First step you need to do is inject the websocket service into your object. You
+  * 1) First step you need to do is inject the websocket service into your object. You
   * can inject the service into component, controllers, object, mixins, routes, and views.
   */
   socketService: Ember.inject.service('websockets'),
@@ -33,15 +33,17 @@ export default Ember.Controller.extend({
     this._super.apply(this, arguments);
 
     /*
-    * The next step you need to do is to create your actual websocket. Calling socketFor will
-    * retrieve a cached websocket if one exists or in this case it will create a new one for us.
+    * 2) The next step you need to do is to create your actual websocket. Calling socketFor
+    * will retrieve a cached websocket if one exists or in this case it
+    * will create a new one for us.
     */
     var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
     /*
-    * The final step is to define your event handlers. All event handlers are added via the `on` method
-    * and take 3 arguments: event name, callback function, and the context in which to invoke the callback.
-    * All 3 of these are required.
+    * 3) The final step is to define your event handlers. All event handlers
+    * are added via the `on` method and take 3 arguments: event name, callback
+    * function, and the context in which to invoke the callback. All 3 arguments
+    * are required..
     */
     socket.on('open', this.myOpenHandler, this);
     socket.on('message', this.myMessageHandler, this);
@@ -67,6 +69,56 @@ export default Ember.Controller.extend({
       var socket = this.get('socketService').socketFor('ws://localhost:7000/');
       socket.send('Hello Websocket World');
     }
+  }
+});
+```
+
+## Reconnecting
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  socketService: Ember.inject.service('websockets'),
+
+  init: function() {
+    this._super.apply(this, arguments);
+
+    var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+
+    socket.on('open', function(event) {
+      console.log('This will be called');
+    }, this);
+
+    socket.on('close', function(event) {
+      Ember.run.later(this, function() {
+        /*
+        * This will remove the old socket and try and connect to a new one on the same url.
+        * NOTE: that this does not need to be in a Ember.run.later this is just an example on
+        * how to reconnect every second.
+        */
+        socket.reconnect();
+      }, 1000);
+    }, this);
+  }
+});
+```
+
+## Closing the connection
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  socketService: Ember.inject.service('websockets'),
+
+  /*
+  * To close a websocket connection simply call the closeSocketFor method. NOTE: it is good
+  * practice to close any connections after you are no longer in need of it. A good
+  * place for this clean up is in the willDestroy method of the object.
+  */
+  willDestroy() {
+    this.get('socketService').closeSocketFor('ws://localhost:7000/');
   }
 });
 ```
@@ -116,56 +168,6 @@ export default Ember.Controller.extend({
     socket.on('open', function(event) {
       console.log('This will also be called');
     }, this);
-  }
-});
-```
-
-## Reconnecting
-
-```javascript
-import Ember from 'ember';
-
-export default Ember.Controller.extend({
-  socketService: Ember.inject.service('websockets'),
-
-  init: function() {
-    this._super.apply(this, arguments);
-
-    var socket = this.get('socketService').socketFor('ws://localhost:7000/');
-
-    socket.on('open', function(event) {
-      console.log('This will be called');
-    }, this);
-
-    socket.on('close', function(event) {
-      Ember.run.later(this, function() {
-        /*
-        * This will remove the old socket and try and connect to a new one on the same url.
-        * NOTE: that this does not need to be in a Ember.run.later this is just an example on
-        * how to reconnect every second.
-        */
-        socket.reconnect();
-      }, 1000);
-    }, this);
-  }
-});
-```
-
-## Closing the connection
-
-```javascript
-import Ember from 'ember';
-
-export default Ember.Controller.extend({
-  socketService: Ember.inject.service('websockets'),
-
-  /*
-  * To close a websocket connection simply call the closeSocketFor method. NOTE: it is good
-  * practice to close any connections after you are no longer in need of it. A good place for this
-  * clean up is in the willDestroy method of the object.
-  */
-  willDestroy() {
-    this.get('socketService').closeSocketFor('ws://localhost:7000/');
   }
 });
 ```
