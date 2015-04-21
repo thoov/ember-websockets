@@ -3,19 +3,19 @@ html, body {
 }
 
 .container {
-    width: 800px;
-    margin: 0 auto;
+  width: 800px;
+  margin: 0 auto;
 }
 
 .message-box {
-    border: 1px solid #EEE;
-    min-height: 50px;
+  border: 1px solid #EEE;
+  min-height: 50px;
 }
 
 .message-inputs {
-    float: right;
+  float: right;
 }
 
 input[type="text"] {
-    width: 200px;
+  width: 200px;
 }

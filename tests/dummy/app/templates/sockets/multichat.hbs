@@ -1,15 +1,15 @@
 <p>This page shows off hitting a stub endpoint which simply returns what you type in.</p>
 
 <div class="message-box">
-	{{#each messages}}
-	<p>{{text}}</p>
-	{{/each}}
+  {{#each messages}}
+    <p>{{text}}</p>
+  {{/each}}
 </div>
 
 <div class="message-inputs">
-	{{input value=messageText}}
+  {{input value=messageText}}
 
-	<button {{action 'submitText'}}>Send Message To Both</button>
-	<button {{action 'submitText' 'socket1'}}>Send Message To Socket 1</button>
-	<button {{action 'submitText' 'socket2'}}>Send Message To Socket 2</button>
+  <button {{action 'submitText'}}>Send Message To Both</button>
+  <button {{action 'submitText' 'socket1'}}>Send Message To Socket 1</button>
+  <button {{action 'submitText' 'socket2'}}>Send Message To Socket 2</button>
 </div>
