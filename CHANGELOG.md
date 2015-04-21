@@ -1,5 +1,9 @@
 # Ember WebSockets Changelog
 
+### 1.0.0 (April 21, 2015)
+- [#29](https://github.com/thoov/ember-websockets/pull/29) Upgrading to ember-cli 0.2.3
+- [#27](https://github.com/thoov/ember-websockets/pull/27) Changing from a mixin approach to a services approach
+
 ### 0.8.0 (March 13, 2015)
 - [#25](https://github.com/thoov/ember-websockets/pull/25) Deprecating the standalone file and removing the readme entry
 
