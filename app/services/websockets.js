@@ -2,6 +2,7 @@ import Ember from 'ember';
 import WebsocketProxy from 'ember-websockets/helpers/websocket-proxy';
 
 var forEach = Ember.EnumerableUtils.forEach;
+var filter = Ember.EnumerableUtils.filter;
 
 export default Ember.Service.extend({
 
@@ -17,7 +18,7 @@ export default Ember.Service.extend({
 
   init() {
     this._super(...arguments);
-    this.sockets = Ember.makeArray();
+    this.sockets = Ember.A();
   },
 
   /*
@@ -25,13 +26,15 @@ export default Ember.Service.extend({
   * which contains the actual websocket object. This websocket object is cached based off of the url meaning
   * multiple requests for the same socket will return the same object.
   */
-  socketFor(URL) {
-    var proxy = this.get('sockets').findBy('url', this.normalizeURL(URL));
+  socketFor(url) {
+    var sockets;
+    var proxy = this.findSocketInCache(this.get('sockets'), url);
+
     if (proxy && this.websocketIsNotClosed(proxy.socket)) { return proxy.socket; }
 
     proxy = WebsocketProxy.create({
       content: this,
-      socket: new WebSocket(this.normalizeURL(URL))
+      socket: new WebSocket(this.normalizeURL(url))
     });
 
     this.get('sockets').pushObject({
@@ -45,11 +48,11 @@ export default Ember.Service.extend({
   /*
   * closeSocketFor closes the socket for a given url.
   */
-  closeSocketFor(URL) {
+  closeSocketFor(url) {
     var filteredSockets = [];
 
     forEach(this.get('sockets'), item => {
-      if(item.url === this.normalizeURL(URL)) {
+      if(item.url === this.normalizeURL(url)) {
         item.socket.close();
       }
       else {
@@ -66,17 +69,30 @@ export default Ember.Service.extend({
   * change. This function does this transformation to stay inline with the native websocket implementation.
   *
   */
-  normalizeURL(URL) {
-    var url = new URI(URL);
+  normalizeURL(url) {
+    var parsedUrl = new URI(url);
 
-    if(url.path() === '/' && URL.slice(-1) !== '/') {
-      return URL + '/';
+    if(parsedUrl.path() === '/' && url.slice(-1) !== '/') {
+      return url + '/';
     }
 
-    return URL;
+    return url;
   },
 
   websocketIsNotClosed(websocket) {
     return websocket.socket.readyState !== window.WebSocket.CLOSED;
+  },
+
+  /*
+  * Returns the socket object from the cache if one matches the url else undefined
+  */
+  findSocketInCache(socketsCache, url) {
+    var cachedResults = filter(socketsCache, websocket => {
+      return websocket['url'] === this.normalizeURL(url);
+    });
+
+    if(cachedResults.length > 0) {
+      return cachedResults[0];
+    }
   }
 });

@@ -4,7 +4,8 @@ import startApp from '../helpers/start-app';
 
 var App;
 var originalWebSocket;
-var mockServer;
+var mockServerA;
+var mockServerB;
 var testFooRoute;
 var testBarRoute;
 var testFooController;
@@ -14,7 +15,8 @@ module('Onopen, opmessage, and onclose intergration tests for multiple routes', 
   setup: function() {
     originalWebSocket = WebSocket;
     window.WebSocket  = MockSocket;
-    mockServer        = new MockServer('ws://localhost:8081/');
+    mockServerA       = new MockServer('ws://localhost:8081/');
+    mockServerB       = new MockServer('ws://localhost:8082/');
 
     App               = startApp();
     testFooRoute      = App.__container__.lookup('route:testing.foo');
@@ -43,15 +45,15 @@ test('Onopen and onclose will fire for each route visited', function(assert) {
   };
 
   testFooController.onclose = function(event) {
-      assert.ok(true, 'onclose event was fired and caught by a controller action');
+    assert.ok(true, 'onclose event was fired and caught by a controller action');
   };
 
   testBarController.onopen = function(event) {
-      assert.ok(true, 'onopen event was fired and caught by a controller action');
+    assert.ok(true, 'onopen event was fired and caught by a controller action');
   };
 
   testBarController.onclose = function(event) {
-      assert.ok(true, 'onclose event was fired and caught by a controller action');
+    assert.ok(true, 'onclose event was fired and caught by a controller action');
   };
 
   visit('/testing/foo').then(function() {
