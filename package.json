@@ -9,7 +9,7 @@
   "scripts": {
     "start": "ember server",
     "build": "ember build",
-    "test": "ember try:testall"
+    "test": "ember test ci"
   },
   "repository": "https://github.com/thoov/ember-websockets",
   "engines": {
