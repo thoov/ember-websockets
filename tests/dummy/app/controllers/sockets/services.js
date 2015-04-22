@@ -12,11 +12,11 @@ export default Ember.Controller.extend({
 
     var socket = this.get('socketService').socketFor('ws://localhost:8080/foo/bar');
 
-    socket.on('open', (event) => {
+    socket.on('open', () => {
       console.log('On open called');
     }, this);
 
-    socket.on('close', (event) => {
+    socket.on('close', () => {
       console.log('On close called');
     }, this);
 
