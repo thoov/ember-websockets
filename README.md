@@ -4,6 +4,8 @@ This addon aims to be a simple and easy way to integrate with any websocket
 backend. It has been designed to be minimalistic, flexible, and lightweight instead of
 forcing certain conventions on the developer. This addon is compatible with EmberJS 2.0!
 
+[http://www.programwitherik.com/getting-started-with-web-sockets-and-ember/](http://www.programwitherik.com/getting-started-with-web-sockets-and-ember/)
+
 [![Build Status](https://travis-ci.org/thoov/ember-websockets.svg?branch=master)](https://travis-ci.org/thoov/ember-websockets)
 [![Code Climate](https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg)](https://codeclimate.com/github/thoov/ember-websockets)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-websockets.svg)](http://emberobserver.com/addons/ember-websockets)
@@ -43,7 +45,7 @@ export default Ember.Controller.extend({
     * 3) The final step is to define your event handlers. All event handlers
     * are added via the `on` method and take 3 arguments: event name, callback
     * function, and the context in which to invoke the callback. All 3 arguments
-    * are required..
+    * are required.
     */
     socket.on('open', this.myOpenHandler, this);
     socket.on('message', this.myMessageHandler, this);
