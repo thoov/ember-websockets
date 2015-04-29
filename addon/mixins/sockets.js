@@ -1,5 +1,10 @@
 import Ember from 'ember';
 
+/*
+* NOTE: This file has been deprecated in favor of using services. Please read the
+* README on how to use the approved approach.
+*/
+
 var typeOf       = Ember.typeOf;
 var isEmpty      = Ember.isEmpty;
 var socketEvents = ['onclose', 'onerror', 'onmessage', 'onopen'];
@@ -15,6 +20,9 @@ export default Ember.Mixin.create({
   socketConfigurations : null,
 
   setupController: function(controller) {
+
+    Ember.deprecate('The Ember Websockets mixin has been deprecated in favor of services. Please visit: https://github.com/thoov/ember-websockets on how to use the new approach.');
+
     var socketURL            = this.get('socketURL');
     var socketContexts       = this.get('socketContexts');
     var socketBinaryType     = this.get('socketBinaryType');
