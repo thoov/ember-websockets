@@ -2,7 +2,7 @@
 <p>Visit <a href="https://github.com/thoov/ember-websockets/tree/master/tests/dummy/app" target="_blank">here</a> to see the code for this example</p>
 
 <div class="message-box">
-  {{#each message in messages}}
+  {{#each messages as |message|}}
     <p>{{message.text}}</p>
   {{/each}}
 </div>
