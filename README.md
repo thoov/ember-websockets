@@ -185,6 +185,49 @@ export default Ember.Controller.extend({
 });
 ```
 
+## Socket.IO Support
+
+First run the socket.IO generator via:
+
+```shell
+ember g socketio
+```
+
+Next include the socket io client library to your Brocfile like so:
+```js
+app.import('bower_components/sio-client/socket.io.js');
+```
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+
+  /*
+  * 1) First step you need to do is inject the socketio service into your object.
+  */
+  socketIOService: Ember.inject.service('socketio'),
+
+  init: function() {
+    this._super.apply(this, arguments);
+
+    /*
+    * 2) The next step you need to do is to create your actual socketIO.
+    */
+    var socket = this.get('socketIOService').socketFor('http://localhost:7000/');
+
+    /*
+    * 3) Define any event handlers
+    */
+    socket.on('connect', this.onConnection, this);
+  },
+
+  onConnection: function(event) {
+    // This is executed within the ember run loop
+  }
+});
+```
+
 ## Detailed explanations of the APIs
 
 ### SocketFor
