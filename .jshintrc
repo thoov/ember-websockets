@@ -3,7 +3,8 @@
     "document",
     "window",
     "-Promise",
-    "URI"
+    "URI",
+    "io"
   ],
   "browser": true,
   "boss": true,

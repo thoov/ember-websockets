@@ -15,5 +15,6 @@ var app = new EmberAddon();
 
 app.import('bower_components/mock-socket/dist/mock-socket.min.js');
 app.import('bower_components/uri.js/src/URI.min.js');
+app.import('bower_components/sio-client/socket.io.js');
 
 module.exports = app.toTree();
