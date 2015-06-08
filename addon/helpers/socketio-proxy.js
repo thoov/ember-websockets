@@ -1,18 +1,23 @@
 import Ember from 'ember';
 
 export default Ember.ObjectProxy.extend({
-
-  init() {
-    this._super.apply(this, arguments);
+  /*
+  * socket.on('connect', this.onConnection, this);
+  */
+  on(type, callbackFn, context) {
+    this.socket.on(type, Ember.run.bind(context, callbackFn));
   },
 
   /*
-  * Adds a callback function into the listeners array which will
-  * be invoked later whenever a given `type` event happens.
-  *
-  * type: must be either 'open', 'message', 'close', 'error'
+  * socket.emit('connect', {foo: 'bar'});
+  * socket.emit('connect', {foo: 'bar'}, function() {}, this);
   */
-  on(type, callback, context) {
-    this.socket.on(type, Ember.run.bind(context, callback));
+  emit(channel, data, acknowledgementFn, context) {
+    if(acknowledgementFn && context) {
+      this.socket.emit(channel, data, Ember.run.bind(context, acknowledgementFn));
+    }
+    else {
+      this.socket.emit(channel, data);
+    }
   }
 });
