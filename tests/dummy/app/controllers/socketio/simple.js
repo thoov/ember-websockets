@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
-  socketService: Ember.inject.service('socketio'),
+  socketService: Ember.inject.service('socket-io'),
 
   init: function() {
     this._super.apply(this, arguments);

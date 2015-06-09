@@ -1,6 +1,6 @@
 # EmberJS WebSockets Addon
 
-This addon aims to be a simple and easy way to integrate with any websocket
+This addon aims to be a simple and easy way to integrate with any websocket or socket.io
 backend. It has been designed to be minimalistic, flexible, and lightweight instead of
 forcing certain conventions on the developer. This addon is compatible with EmberJS 2.0!
 
@@ -187,15 +187,10 @@ export default Ember.Controller.extend({
 
 ## Socket.IO Support
 
-First run the socket.IO generator via:
+First run the socket.io generator via:
 
 ```shell
-ember g socketio
-```
-
-Next include the socket io client library to your Brocfile like so:
-```js
-app.import('bower_components/sio-client/socket.io.js');
+ember g socket-io
 ```
 
 ```javascript
@@ -206,7 +201,7 @@ export default Ember.Controller.extend({
   /*
   * 1) First step you need to do is inject the socketio service into your object.
   */
-  socketIOService: Ember.inject.service('socketio'),
+  socketIOService: Ember.inject.service('socket-io'),
 
   init: function() {
     this._super.apply(this, arguments);
@@ -219,10 +214,15 @@ export default Ember.Controller.extend({
     /*
     * 3) Define any event handlers
     */
-    socket.on('connect', this.onConnection, this);
+    socket.on('connect', function() {
+
+      socket.send('Hello World');
+
+      socket.on('message', this.onMessage, this);
+    }, this);
   },
 
-  onConnection: function(event) {
+  onMessage: function(data) {
     // This is executed within the ember run loop
   }
 });
@@ -321,12 +321,13 @@ If you have any feedback, encounter any bugs, or just have a question, please fe
 
 ## FAQ
 
-* **Recommended backend library/framework**: The only requirement for this mixin to work is a service that can handle ws or wss protocols.
-For this reason socket.io will not work as it does not use the standard ws protocol. Instead, I would look at [ws](https://github.com/einaros/ws)
-which is a great package.
+### Recommended backend library/framework
+* [ws](https://github.com/einaros/ws)
+* [socket.io](http://socket.io)
 
-* **Browser Support**: Current support for browsers is fairly good with all modern browsers and most mobile browsers
-supporting websockets in their current and previously stable versions. It goes without saying that older versions of IE are
-not supported. For a more detailed [break down](http://caniuse.com/#feat=websockets)
+### Browser Support
+Current support for browsers is fairly good with all modern browsers and most mobile browsers
+supporting websockets in their current and previously stable versions. It goes without saying that older versions of IE are not supported. For a more detailed [break down](http://caniuse.com/#feat=websockets)
 
-* **License**: This addon falls under the [MIT license](https://github.com/thoov/ember-websockets/blob/master/LICENSE.md)
+### License
+This addon falls under the [MIT license](https://github.com/thoov/ember-websockets/blob/master/LICENSE.md)
