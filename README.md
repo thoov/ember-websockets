@@ -207,7 +207,7 @@ var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 socket.on('open', this.myOpenFunction, this);
 ```
 
-on takes 3 arguments: **event type**, **callback function**, and **context**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. Callback function will be invoked when one of the previous event types occurs. Context is used to set the context of the callback function and also to remove the listeners when the context gets destroyed.
+on takes 3 arguments: **event type**, **callback function**, and **context**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. Callback function will be invoked when one of the event types occurs. Context is used to set the context of the callback function and also to remove the listeners when the context gets destroyed.
 
 ### Off
 
@@ -220,7 +220,7 @@ socket.on('open', this.myOpenFunction, this);
 socket.off('open', this.myOpenFunction);
 ```
 
-off takes 3 arguments: **event type**, **callback function**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. The callback will be removed from the event pool and will no longer be invoked.
+off takes 2 arguments: **event type**, **callback function**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. The callback will be removed from the event pool and will no longer be invoked.
 
 ### CloseSocketFor
 
