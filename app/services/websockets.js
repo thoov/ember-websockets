@@ -5,9 +5,8 @@ var forEach = Ember.EnumerableUtils.forEach;
 var filter = Ember.EnumerableUtils.filter;
 
 export default Ember.Service.extend({
-
   /*
-  * Each element in the array is of form:
+  * Each element in the array is of the form:
   *
   * {
   *    url: 'string'
@@ -27,7 +26,6 @@ export default Ember.Service.extend({
   * multiple requests for the same socket will return the same object.
   */
   socketFor(url) {
-    var sockets;
     var proxy = this.findSocketInCache(this.get('sockets'), url);
 
     if (proxy && this.websocketIsNotClosed(proxy.socket)) { return proxy.socket; }

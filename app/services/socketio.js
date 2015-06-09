@@ -4,13 +4,12 @@ import SocketIOProxy from 'ember-websockets/helpers/socketio-proxy';
 var filter = Ember.EnumerableUtils.filter;
 
 export default Ember.Service.extend({
-
   /*
-  * Each element in the array is of form:
+  * Each element in the array is of the form:
   *
   * {
   *    url: 'string'
-  *    socket: WebSocket Proxy object
+  *    socket: SocketIO Proxy object
   * }
   */
   sockets: null,
@@ -21,18 +20,18 @@ export default Ember.Service.extend({
   },
 
   /*
-  * socketFor returns a websocket proxy object. On this object there is a property `socket`
-  * which contains the actual websocket object. This websocket object is cached based off of the url meaning
-  * multiple requests for the same socket will return the same object.
+  * socketFor returns a socketio proxy object. On this object there is a property `socket`
+  * which contains the actual socketio object. This socketio object is cached based off of the
+  * url meaning multiple requests for the same socket will return the same object.
   */
-  socketFor(url) {
+  socketFor(url, options = {}) {
     var proxy = this.findSocketInCache(this.get('sockets'), url);
 
-    if (proxy && this.websocketIsNotClosed(proxy.socket)) { return proxy.socket; }
+    if (proxy && this.socketIsNotClosed(proxy.socket)) { return proxy.socket; }
 
     proxy = SocketIOProxy.create({
       content: this,
-      socket: io(this.normalizeURL(url))
+      socket: io(this.normalizeURL(url), options)
     });
 
     this.get('sockets').pushObject({
@@ -59,8 +58,8 @@ export default Ember.Service.extend({
     return url;
   },
 
-  websocketIsNotClosed(websocket) {
-    return websocket.socket.readyState !== window.WebSocket.CLOSED;
+  socketIsNotClosed(socket) {
+    return socket.socket.io.readyState !== 'closed';
   },
 
   /*
