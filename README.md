@@ -219,6 +219,11 @@ export default Ember.Controller.extend({
       socket.send('Hello World');
 
       socket.on('message', this.onMessage, this);
+
+      socket.on('myCustomNamespace', function() {
+        socket.emit('anotherNamespace', 'some data');
+      }, this);
+
     }, this);
   },
 
@@ -227,6 +232,8 @@ export default Ember.Controller.extend({
   }
 });
 ```
+
+**Please visit**: [socket.io docs](https://github.com/thoov/ember-websockets/blob/master/docs/socket-io.md) for more details on ember-websocket + socket.io
 
 ## Detailed explanations of the APIs
 

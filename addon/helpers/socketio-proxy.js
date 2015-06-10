@@ -21,10 +21,15 @@ export default Ember.ObjectProxy.extend({
     }
   },
 
-  /*
-  * A pass through method for the underlining send method.
-  */
   send() {
     this.socket.send.apply(this.socket, arguments);
+  },
+
+  close() {
+    this.socket.close.apply(this.socket, arguments);
+  },
+
+  connect() {
+    this.socket.connect.apply(this.socket, arguments);
   }
 });
