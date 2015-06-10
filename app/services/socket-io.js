@@ -35,7 +35,7 @@ export default Ember.Service.extend({
     });
 
     this.get('sockets').pushObject({
-      url: proxy.socket.io.uri,
+      url: this.normalizeURL(url),
       socket: proxy
     });
 

@@ -14,10 +14,10 @@ export default Ember.ObjectProxy.extend({
   */
   emit(channel, data, acknowledgementFn, context) {
     if(acknowledgementFn && context) {
-      this.socket.emit(channel, data, Ember.run.bind(context, acknowledgementFn));
+      this.socket.emit.call(this.socket, channel, data, Ember.run.bind(context, acknowledgementFn));
     }
     else {
-      this.socket.emit.apply(null, arguments);
+      this.socket.emit.apply(this.socket, arguments);
     }
   },
 
@@ -25,6 +25,6 @@ export default Ember.ObjectProxy.extend({
   * A pass through method for the underlining send method.
   */
   send() {
-    this.socket.apply(null, arguments);
+    this.socket.send.apply(this.socket, arguments);
   }
 });
