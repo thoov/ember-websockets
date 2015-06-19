@@ -2,6 +2,7 @@ import Ember from 'ember';
 import SocketIOProxy from 'ember-websockets/helpers/socketio-proxy';
 
 var filter = Array.prototype.filter;
+var forEach = Array.prototype.forEach;
 
 export default Ember.Service.extend({
   /*
@@ -60,6 +61,24 @@ export default Ember.Service.extend({
 
   socketIsNotClosed(socket) {
     return socket.socket.io.readyState !== 'closed';
+  },
+
+  /*
+  * closeSocketFor closes the socket for a given url.
+  */
+  closeSocketFor(url) {
+    var filteredSockets = [];
+
+    forEach.call(this.get('sockets'), item => {
+      if(item.url === this.normalizeURL(url)) {
+        item.socket.close();
+      }
+      else {
+        filteredSockets.push(item);
+      }
+    });
+
+    this.set('sockets', filteredSockets);
   },
 
   /*

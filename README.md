@@ -216,6 +216,9 @@ export default Ember.Controller.extend({
     */
     socket.on('connect', function() {
 
+      /*
+      * There are 2 ways to send messages to the server: send and emit
+      */
       socket.send('Hello World');
 
       socket.on('message', this.onMessage, this);
@@ -223,7 +226,6 @@ export default Ember.Controller.extend({
       socket.on('myCustomNamespace', function() {
         socket.emit('anotherNamespace', 'some data');
       }, this);
-
     }, this);
   },
 

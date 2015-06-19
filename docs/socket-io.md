@@ -40,7 +40,6 @@ export default Ember.Controller.extend({
       socket.on('myCustomNamespace', function() {
         socket.emit('anotherNamespace', 'some data');
       }, this);
-
     }, this);
   },
 
@@ -70,11 +69,39 @@ Example:
 ```javascript
 var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
-socket.on('connection', this.myOpenFunction, this);
+socket.on('connect', this.myOpenFunction, this);
 ```
 
 on takes 3 arguments: **event type**, **callback function**, and **context**. Event type can be any string. Callback function will be invoked once that event types occurs. Context is used to set the context of the callback
 function.
+
+### Send
+
+Example:
+
+```javascript
+var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+
+socket.on('connect', function() {
+  socket.send('My message');
+}, this);
+```
+
+send takes 1 argument: **message**.
+
+### Emit
+
+Example:
+
+```javascript
+var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+
+socket.on('connect', function() {
+  socket.emit('myCustomNamespace', 'My message');
+}, this);
+```
+
+emit takes 2 arguments: **namespace**, **message**. Emit will send the message to the given namespace.
 
 ### CloseSocketFor
 
@@ -83,7 +110,13 @@ Example:
 ```javascript
 var socket = this.get('socketService').socketFor('localhost:7000/');
 
-this.get('socketService').closeSocketFor('localhost:7000/');
+socket.on('message', function() {
+  this.get('socketService').closeSocketFor('localhost:7000/');
+}, this);
+
+socket.on('disconnect', function() {
+  console.log('We have disconnected');
+}, this);
 ```
 
 closeSocketFor takes a single argument, **a url**, and closes the socket.io connection. It will also remove it from the cache. In normal cases you would not have to call this method.
