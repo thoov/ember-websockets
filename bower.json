@@ -11,7 +11,7 @@
     "ember-resolver": "~0.1.15",
     "jquery": "^1.11.1",
     "loader.js": "ember-cli/loader.js#3.2.0",
-    "mock-socket": "^0.4.0",
+    "mock-socket": "^0.5.1",
     "qunit": "~1.17.1",
     "uri.js": "~1.15.0"
   },
