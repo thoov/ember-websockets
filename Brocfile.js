@@ -13,7 +13,8 @@ var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 var app = new EmberAddon();
 
-app.import('bower_components/mock-socket/dist/mock-socket.min.js');
+app.import('bower_components/mock-socket/dist/mock-socket.js');
 app.import('bower_components/uri.js/src/URI.min.js');
+app.import('bower_components/socket.io-client/socket.io.js');
 
 module.exports = app.toTree();
