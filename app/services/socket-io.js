@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import SocketIOProxy from 'ember-websockets/helpers/socketio-proxy';
 
-var filter = Ember.EnumerableUtils.filter;
+var filter = Array.prototype.filter;
 
 export default Ember.Service.extend({
   /*
@@ -66,7 +66,7 @@ export default Ember.Service.extend({
   * Returns the socket object from the cache if one matches the url else undefined
   */
   findSocketInCache(socketsCache, url) {
-    var cachedResults = filter(socketsCache, websocket => {
+    var cachedResults = filter.call(socketsCache, websocket => {
       return websocket['url'] === this.normalizeURL(url);
     });
 
