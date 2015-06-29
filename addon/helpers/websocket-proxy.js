@@ -16,6 +16,8 @@ export default Ember.ObjectProxy.extend({
   */
   listeners: null,
 
+  protocols: null,
+
   init() {
     this._super.apply(this, arguments);
     this.listeners = Ember.makeArray();
@@ -61,6 +63,8 @@ export default Ember.ObjectProxy.extend({
       message = JSON.stringify(message);
     }
 
+    Ember.assert('Cannot send message to the websocket while it is not open.', this.readyState() === WebSocket.OPEN);
+
     this.socket.send(message);
   },
 
@@ -69,7 +73,7 @@ export default Ember.ObjectProxy.extend({
   },
 
   reconnect() {
-    this.set('socket', new WebSocket(this.socket.url));
+    this.set('socket', new WebSocket(this.socket.url, this.get('protocols')));
     this.setupInternalListeners();
   },
 

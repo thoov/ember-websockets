@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import WebsocketProxy from 'ember-websockets/helpers/websocket-proxy';
 
-var forEach = Array.prototype.forEach;
-var filter = Array.prototype.filter;
-var isArray = Ember.isArray;
+const forEach = Array.prototype.forEach;
+const filter  = Array.prototype.filter;
+const isArray = Ember.isArray;
 
 export default Ember.Service.extend({
   /*
@@ -38,13 +38,23 @@ export default Ember.Service.extend({
 
     proxy = WebsocketProxy.create({
       content: this,
+      protocols: protocols,
       socket: new WebSocket(this.normalizeURL(url), protocols)
     });
 
-    this.get('sockets').pushObject({
-      url: proxy.socket.url,
-      socket: proxy
-    });
+    // If there is an existing socket in place we simply update the websocket object and not
+    // the whole proxy as we dont want to destroy the previous listeners.
+    var existingSocket = this.findSocketInCache(this.get('sockets'), url);
+    if(existingSocket) {
+      existingSocket.socket.socket = proxy.socket;
+      return existingSocket.socket;
+    }
+    else {
+      this.get('sockets').pushObject({
+        url: proxy.socket.url,
+        socket: proxy
+      });
+    }
 
     return proxy;
   },
@@ -71,7 +81,6 @@ export default Ember.Service.extend({
   * The native websocket object will transform urls without a pathname to have just a /.
   * As an example: ws://localhost:8080 would actually be ws://localhost:8080/ but ws://example.com/foo would not
   * change. This function does this transformation to stay inline with the native websocket implementation.
-  *
   */
   normalizeURL(url) {
     var parsedUrl = new URI(url);
