@@ -244,10 +244,10 @@ export default Ember.Controller.extend({
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+var socket = this.get('socketService').socketFor('ws://localhost:7000/', ['myOptionalProtocol']);
 ```
 
-socketFor takes a single argument, **a url**, and returns a socket instance from its cache or a new websocket connection if one was not found.
+socketFor takes two arguments: **a url**, **a protocol array** (optional), and returns a socket instance from its cache or a new websocket connection if one was not found.
 
 ### On
 

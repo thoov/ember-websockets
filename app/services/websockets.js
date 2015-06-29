@@ -3,6 +3,7 @@ import WebsocketProxy from 'ember-websockets/helpers/websocket-proxy';
 
 var forEach = Array.prototype.forEach;
 var filter = Array.prototype.filter;
+var isArray = Ember.isArray;
 
 export default Ember.Service.extend({
   /*
@@ -25,14 +26,19 @@ export default Ember.Service.extend({
   * which contains the actual websocket object. This websocket object is cached based off of the url meaning
   * multiple requests for the same socket will return the same object.
   */
-  socketFor(url) {
+  socketFor(url, protocols = []) {
     var proxy = this.findSocketInCache(this.get('sockets'), url);
 
     if (proxy && this.websocketIsNotClosed(proxy.socket)) { return proxy.socket; }
 
+    // Websockets allows either a string or array of strings to be passed as the second argument.
+    // This normalizes both cases into one where they are all arrays of strings and if you just pass
+    // a single string it becomes an array of one.
+    if(!isArray(protocols)) { protocols = [protocols]; }
+
     proxy = WebsocketProxy.create({
       content: this,
-      socket: new WebSocket(this.normalizeURL(url))
+      socket: new WebSocket(this.normalizeURL(url), protocols)
     });
 
     this.get('sockets').pushObject({
