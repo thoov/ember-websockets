@@ -1,9 +1,12 @@
 # Ember WebSockets Changelog
 
+### 1.2.0 (Jun 29, 2015)
+- [#41](https://github.com/thoov/ember-websockets/pull/41) Adding protocol support to socketFor method
+
 ### 1.1.0 (Jun 23, 2015)
 - [#36](https://github.com/thoov/ember-websockets/pull/36) Removing the old mixin and the tests that went along with it
 - [#34](https://github.com/thoov/ember-websockets/pull/34) Socket.IO intergration
-- [#33](https://github.com/thoov/ember-websockets/pull/33) Fixing deprecations warning in ember-canary 
+- [#33](https://github.com/thoov/ember-websockets/pull/33) Fixing deprecations warning in ember-canary
 - [#31](https://github.com/thoov/ember-websockets/pull/29) Upgrading to ember-cli 0.2.6
 
 ### 1.0.0 (April 21, 2015)
