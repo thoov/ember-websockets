@@ -13,12 +13,12 @@ module.exports = {
 
     app.import(app.bowerDirectory + '/uri.js/src/URI.min.js');
 
-    /*
-    * Only import the socket.io file if one is found
-    */
     try {
       stats = fs.lstatSync(socketIOPath);
 
+      /*
+      * Only import the socket.io file if one is found
+      */
       if(stats.isFile()) {
         app.import(socketIOPath);
       }
