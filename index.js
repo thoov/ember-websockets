@@ -13,6 +13,9 @@ module.exports = {
 
     app.import(app.bowerDirectory + '/uri.js/src/URI.min.js');
 
+    /*
+    * Only import the socket.io file if one is found
+    */
     try {
       stats = fs.lstatSync(socketIOPath);
 
@@ -20,8 +23,6 @@ module.exports = {
         app.import(socketIOPath);
       }
     }
-    catch(e) {
-      throw new Error('Error reading socket.io file. Please run `ember g socket-io` first');
-    }
+    catch(e) {}
   }
 };
