@@ -16,12 +16,13 @@ module.exports = {
     try {
       stats = fs.lstatSync(socketIOPath);
 
+      /*
+      * Only import the socket.io file if one is found
+      */
       if(stats.isFile()) {
         app.import(socketIOPath);
       }
     }
-    catch(e) {
-      throw new Error('Error reading socket.io file. Please run `ember g socket-io` first');
-    }
+    catch(e) {}
   }
 };
