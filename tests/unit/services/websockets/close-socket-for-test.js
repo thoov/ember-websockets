@@ -12,7 +12,7 @@ module('Sockets Service - closeSocketFor', {
     window.WebSocket  = MockSocket;
 
     var service       = SocketsService.create();
-    var mockSockets   = [new MockServer('ws://localhost:7000/'), new MockServer('ws://localhost:7001/')];
+    var mockSockets   = [new MockServer('ws://localhost:7000/'), new MockServer('ws://localhost:7001/')]; // jshint ignore:line
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,

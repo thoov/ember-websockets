@@ -50,12 +50,12 @@ test('that on(open) and on(close) work correctly', assert => {
       this.socket = socket;
     },
 
-    myOpenHandler(event) {
+    myOpenHandler() {
       assert.ok(true);
       this.socket.close();
     },
 
-    myCloseHandler(event) {
+    myCloseHandler() {
       assert.ok(true);
       done();
     }
