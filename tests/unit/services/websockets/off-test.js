@@ -51,13 +51,13 @@ test('that off(close) works correctly', assert => {
       }, 250);
     },
 
-    myOpenHandler(event) {
+    myOpenHandler() {
       assert.ok(true);
       this.socket.off('close', this.myCloseHandler);
       this.socket.close();
     },
 
-    myCloseHandler(event) {
+    myCloseHandler() {
       assert.ok(false); // this should not be called
     }
   }).create();
