@@ -25,6 +25,7 @@ module('Sockets Service - on(*) tests', {
   },
   teardown() {
     window.WebSocket = originalWebSocket;
+    mockServer.close();
 
     Ember.run(() => {
       component.destroy();
