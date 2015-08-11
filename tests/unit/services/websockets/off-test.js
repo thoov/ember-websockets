@@ -28,6 +28,7 @@ module('Sockets Service - off(*) tests', {
 
     Ember.run(() => {
       component.destroy();
+      mockServer.close();
     });
   }
 });

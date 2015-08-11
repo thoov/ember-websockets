@@ -5,6 +5,8 @@ import SocketsService from 'dummy/services/websockets';
 var component;
 var ConsumerComponent;
 var originalWebSocket;
+var mockServerFoo;
+var mockServerBar;
 
 module('Sockets Service - closeSocketFor', {
   setup() {
@@ -12,7 +14,7 @@ module('Sockets Service - closeSocketFor', {
     window.WebSocket  = MockSocket;
 
     var service       = SocketsService.create();
-    var mockSockets   = [new MockServer('ws://localhost:7000/'), new MockServer('ws://localhost:7001/')]; // jshint ignore:line
+    [mockServerFoo, mockServerBar] = [new MockServer('ws://localhost:7000/'), new MockServer('ws://localhost:7001/')]; // jshint ignore:line
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,
@@ -28,6 +30,8 @@ module('Sockets Service - closeSocketFor', {
 
     Ember.run(() => {
       component.destroy();
+      mockServerFoo.close();
+      mockServerBar.close();
     });
   }
 });
