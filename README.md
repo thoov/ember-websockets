@@ -12,8 +12,6 @@ forcing certain conventions on the developer. This addon is compatible with Embe
 [![npm version](https://badge.fury.io/js/ember-websockets.svg)](http://badge.fury.io/js/ember-websockets)
 
 ## Installation
-
-To install as an Ember CLI addon (v0.2.3 or greater):
 ```
 ember install ember-websockets
 ```
