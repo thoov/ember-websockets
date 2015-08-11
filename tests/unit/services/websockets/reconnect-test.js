@@ -28,6 +28,7 @@ module('Sockets Service - reconnect tests', {
 
     Ember.run(() => {
       component.destroy();
+      mockServer.close();
     });
   }
 });
