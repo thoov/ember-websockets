@@ -213,17 +213,20 @@ export default Ember.Controller.extend({
     * 3) Define any event handlers
     */
     socket.on('connect', function() {
-
       /*
       * There are 2 ways to send messages to the server: send and emit
       */
       socket.send('Hello World');
+      socket.emit('Hello server')
+    }, this);
 
-      socket.on('message', this.onMessage, this);
+    /*
+    * 4) It is also possible to set event handlers on specific events
+    */
+    socket.on('message', this.onMessage, this);
 
-      socket.on('myCustomNamespace', function() {
-        socket.emit('anotherNamespace', 'some data');
-      }, this);
+    socket.on('myCustomNamespace', function() {
+      socket.emit('anotherNamespace', 'some data');
     }, this);
   },
 
