@@ -35,6 +35,8 @@ export default Ember.Service.extend({
       socket: io(this.normalizeURL(url), options)
     });
 
+    proxy.socket.connect();
+
     this.get('sockets').pushObject({
       url: this.normalizeURL(url),
       socket: proxy
@@ -72,13 +74,14 @@ export default Ember.Service.extend({
     forEach.call(this.get('sockets'), item => {
       if(item.url === this.normalizeURL(url)) {
         item.socket.close();
+        item.socket.socket.removeAllListeners();
       }
       else {
         filteredSockets.push(item);
       }
     });
 
-    this.set('sockets', filteredSockets);
+    this.set('sockets', Ember.A(filteredSockets));
   },
 
   /*
