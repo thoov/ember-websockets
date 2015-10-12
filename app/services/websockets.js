@@ -74,7 +74,7 @@ export default Ember.Service.extend({
       }
     });
 
-    this.set('sockets', filteredSockets);
+    this.set('sockets', Ember.A(filteredSockets));
   },
 
   /*
