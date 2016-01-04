@@ -11,7 +11,6 @@
     "jquery": "^1.11.3",
     "loader.js": "ember-cli/loader.js#3.2.1",
     "qunit": "~1.18.0",
-    "mock-socket": "^0.6.0",
     "uri.js": "~1.15.0"
   },
   "devDependencies": {

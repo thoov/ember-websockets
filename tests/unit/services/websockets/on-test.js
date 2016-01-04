@@ -10,10 +10,10 @@ var originalWebSocket;
 module('Sockets Service - on(*) tests', {
   setup() {
     originalWebSocket = window.WebSocket;
-    window.WebSocket  = MockSocket;
+    window.WebSocket = window.MockWebSocket;
 
-    var service       = SocketsService.create();
-    mockServer        = new MockServer('ws://localhost:7000/');
+    var service = SocketsService.create();
+    mockServer = new window.MockServer('ws://localhost:7000/');
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,
@@ -25,7 +25,6 @@ module('Sockets Service - on(*) tests', {
   },
   teardown() {
     window.WebSocket = originalWebSocket;
-    mockServer.close();
 
     Ember.run(() => {
       component.destroy();
@@ -65,7 +64,7 @@ test('that on(open) and on(close) work correctly', assert => {
 });
 
 test('that on(message) works correctly', assert => {
-  var done          = assert.async();
+  var done = assert.async();
   var sampleMessage = 'SamepleData';
 
   assert.expect(2);

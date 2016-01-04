@@ -10,10 +10,10 @@ var originalWebSocket;
 module('Sockets Service - off(*) tests', {
   setup() {
     originalWebSocket = window.WebSocket;
-    window.WebSocket  = MockSocket;
+    window.WebSocket = window.MockWebSocket;
 
-    var service       = SocketsService.create();
-    mockServer        = new MockServer('ws://localhost:7000/');
+    var service = SocketsService.create();
+    mockServer = new window.MockServer('ws://localhost:7000/');
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,
