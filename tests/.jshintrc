@@ -23,9 +23,7 @@
     "currentPath",
     "currentRouteName",
     "URI",
-    "WebSocket",
-    "MockSocket",
-    "MockServer"
+    "WebSocket"
   ],
   "node": false,
   "browser": false,
