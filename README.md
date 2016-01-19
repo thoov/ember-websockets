@@ -309,7 +309,7 @@ handlers via actions on the controller. If you still need the documentation for 
 
 * `git clone git@github.com:thoov/ember-websockets.git`
 * `cd ember-websockets`
-* `npm install`
+* `npm install; bower install`
 * `ember s`
 * Then visit http://localhost:4200/sockets/chatroom to view a very simple example.
 
@@ -319,7 +319,7 @@ The source code for the live example lives in `ember-websockets/tests/dummy`
 
 * `git clone git@github.com:thoov/ember-websockets.git`
 * `cd ember-websockets`
-* `npm install`
+* `npm install; bower install`
 * `ember t`
 * or `ember s` then visit http://localhost:4200/tests to view the tests.
 
