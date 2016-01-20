@@ -83,13 +83,21 @@ export default Ember.Service.extend({
   * change. This function does this transformation to stay inline with the native websocket implementation.
   */
   normalizeURL(url) {
-    return url; // FIXME: make a real fix when able to run tests.
     var parsedUrl = new URI(url);
-    if(parsedUrl.path() === '/' && url.slice(-1) !== '/') {
-      return url + '/';
+
+    if (parsedUrl.path() !== '/') {
+      return url;
     }
 
-    return url;
+    var normalizedURL = url;
+
+    if (parsedUrl.query() === '' && url.slice(-1) !== '/') {
+      normalizedURL = url + '/';
+    } else if (url.indexOf('/?') == -1) {
+      normalizedURL = url.replace('?', '/?');
+    }
+
+    return normalizedURL;
   },
 
   websocketIsNotClosed(websocket) {
