@@ -1,8 +1,7 @@
 import Ember from 'ember';
 import WebsocketProxy from 'ember-websockets/helpers/websocket-proxy';
 
-const forEach = Array.prototype.forEach;
-const filter  = Array.prototype.filter;
+const { forEach, filter } = Array.prototype;
 const isArray = Ember.isArray;
 
 export default Ember.Service.extend({
@@ -38,7 +37,7 @@ export default Ember.Service.extend({
 
     proxy = WebsocketProxy.create({
       content: this,
-      protocols: protocols,
+      protocols,
       socket: new WebSocket(this.normalizeURL(url), protocols)
     });
 

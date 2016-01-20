@@ -1,8 +1,7 @@
 import Ember from 'ember';
 import PrimusProxy from 'ember-websockets/helpers/primus-proxy';
 
-const forEach = Array.prototype.forEach;
-const filter  = Array.prototype.filter;
+const { filter, forEach } = Array.prototype;
 const isArray = Ember.isArray;
 
 export default Ember.Service.extend({
