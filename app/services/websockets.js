@@ -85,15 +85,15 @@ export default Ember.Service.extend({
   normalizeURL(url) {
     var parsedUrl = new URI(url);
 
-    if (parsedUrl.path() !== '/') {
+    if(parsedUrl.path() !== '/') {
       return url;
     }
 
     var normalizedURL = url;
 
-    if (parsedUrl.query() === '' && url.slice(-1) !== '/') {
+    if(parsedUrl.query() === '' && url.slice(-1) !== '/') {
       normalizedURL = url + '/';
-    } else if (url.indexOf('/?') == -1) {
+    } else if(url.indexOf('/?') == -1) {
       normalizedURL = url.replace('?', '/?');
     }
 
