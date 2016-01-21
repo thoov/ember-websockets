@@ -38,3 +38,25 @@ test('that normalizeURL works correctly', assert => {
     }
   }).create();
 });
+
+test('that normalizeURL works correctly if url contains query params', assert => {
+  var done = assert.async();
+
+  assert.expect(6);
+
+  component = ConsumerComponent.extend({
+    init() {
+      this._super.apply(this, arguments);
+      var socketService = this.socketService;
+
+      assert.equal(socketService.normalizeURL('ws://example.com/?param=value'), 'ws://example.com/?param=value');
+      assert.equal(socketService.normalizeURL('ws://example.com?param=value'), 'ws://example.com/?param=value');
+      assert.equal(socketService.normalizeURL('ws://example.com:8000/?param=value'), 'ws://example.com:8000/?param=value');
+      assert.equal(socketService.normalizeURL('ws://example.com:8000?param=value'), 'ws://example.com:8000/?param=value');
+      assert.equal(socketService.normalizeURL('ws://example.com:8000/foo?param=value'), 'ws://example.com:8000/foo?param=value');
+      assert.equal(socketService.normalizeURL('ws://example.com:8000/foo/?param=value'), 'ws://example.com:8000/foo/?param=value');
+
+      done();
+    }
+  }).create();
+});
