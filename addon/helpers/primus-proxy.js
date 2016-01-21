@@ -20,9 +20,11 @@ var invert = function (obj) {
   return new_obj;
 };
 
-var filter  = Array.prototype.filter;
-var indexOf = Array.prototype.indexOf;
-var forEach = Array.prototype.forEach;
+const {
+  filter,
+  indexOf,
+  forEach
+} = Array.prototype;
 
 export default Ember.ObjectProxy.extend({
   /*
@@ -38,7 +40,7 @@ export default Ember.ObjectProxy.extend({
   protocols: null,
 
   init() {
-    this._super.apply(this, arguments);
+    this._super(...arguments);
     this.listeners = Ember.makeArray();
     this.setupInternalListeners();
   },
@@ -56,9 +58,9 @@ export default Ember.ObjectProxy.extend({
 
     this.listeners.push({
       url: this.socket.url,
-      type: type,
-      callback: callback,
-      context: context
+      type,
+      callback,
+      context
     });
   },
 

@@ -29,8 +29,8 @@ export default Ember.Controller.extend({
   */
   socketService: Ember.inject.service('websockets'),
 
-  init: function() {
-    this._super.apply(this, arguments);
+  init() {
+    this._super(...arguments);
 
     /*
     * 2) The next step you need to do is to create your actual websocket. Calling socketFor
@@ -52,11 +52,11 @@ export default Ember.Controller.extend({
     }, this);
   },
 
-  myOpenHandler: function(event) {
+  myOpenHandler(event) {
     console.log('On open event has been called: ' + event);
   },
 
-  myMessageHandler: function(event) {
+  myMessageHandler(event) {
     console.log('Message: ' + event.data);
   },
 
@@ -92,17 +92,17 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   socketService: Ember.inject.service('websockets'),
 
-  init: function() {
-    this._super.apply(this, arguments);
+  init() {
+    this._super(...arguments);
 
     var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
-    socket.on('open', function(event) {
+    socket.on('open', event => {
       console.log('This will be called');
-    }, this);
+    });
 
-    socket.on('close', function(event) {
-      Ember.run.later(this, function() {
+    socket.on('close', event => {
+      Ember.run.later(this, () => {
         /*
         * This will remove the old socket and try and connect to a new one on the same url.
         * NOTE: that this does not need to be in a Ember.run.later this is just an example on
@@ -110,7 +110,7 @@ export default Ember.Controller.extend({
         */
         socket.reconnect();
       }, 1000);
-    }, this);
+    });
   }
 });
 ```
@@ -142,19 +142,19 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   socketService: Ember.inject.service('websockets'),
 
-  init: function() {
-    this._super.apply(this, arguments);
+  init() {
+    this._super(...arguments);
 
     var socketOne = this.get('socketService').socketFor('ws://localhost:7000/');
     var socketTwo = this.get('socketService').socketFor('ws://localhost:7001/');
 
-    socketOne.on('open', function(event) {
+    socketOne.on('open', event => {
       console.log('Hello from socket one');
-    }, this);
+    });
 
-    socketTwo.on('open', function(event) {
+    socketTwo.on('open', event => {
       console.log('Hello from socket two');
-    }, this);
+    });
   }
 });
 ```
@@ -167,18 +167,18 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   socketService: Ember.inject.service('websockets'),
 
-  init: function() {
-    this._super.apply(this, arguments);
+  init() {
+    this._super(...arguments);
 
     var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
-    socket.on('open', function(event) {
+    socket.on('open', event => {
       console.log('This will be called');
-    }, this);
+    });
 
-    socket.on('open', function(event) {
+    socket.on('open', event => {
       console.log('This will also be called');
-    }, this);
+    });
   }
 });
 ```
@@ -201,8 +201,8 @@ export default Ember.Controller.extend({
   */
   socketIOService: Ember.inject.service('socket-io'),
 
-  init: function() {
-    this._super.apply(this, arguments);
+  init() {
+    this._super(...arguments);
 
     /*
     * 2) The next step you need to do is to create your actual socketIO.
@@ -212,25 +212,25 @@ export default Ember.Controller.extend({
     /*
     * 3) Define any event handlers
     */
-    socket.on('connect', function() {
+    socket.on('connect', () => {
       /*
       * There are 2 ways to send messages to the server: send and emit
       */
       socket.send('Hello World');
       socket.emit('Hello server')
-    }, this);
+    });
 
     /*
     * 4) It is also possible to set event handlers on specific events
     */
     socket.on('message', this.onMessage, this);
 
-    socket.on('myCustomNamespace', function() {
+    socket.on('myCustomNamespace', () => {
       socket.emit('anotherNamespace', 'some data');
-    }, this);
+    });
   },
 
-  onMessage: function(data) {
+  onMessage(data) {
     // This is executed within the ember run loop
   }
 });
@@ -292,7 +292,7 @@ closeSocketFor takes a single argument, **a url**, and closes the websocket conn
 Example:
 
 ```javascript
-socket.on('close', function(event) {
+socket.on('close', event => {
   socket.reconnect();
 });
 ```
@@ -309,7 +309,7 @@ handlers via actions on the controller. If you still need the documentation for 
 
 * `git clone git@github.com:thoov/ember-websockets.git`
 * `cd ember-websockets`
-* `npm install; bower install`
+* `npm i; bower i`
 * `ember s`
 * Then visit http://localhost:4200/sockets/chatroom to view a very simple example.
 
@@ -319,7 +319,7 @@ The source code for the live example lives in `ember-websockets/tests/dummy`
 
 * `git clone git@github.com:thoov/ember-websockets.git`
 * `cd ember-websockets`
-* `npm install; bower install`
+* `npm i; bower i`
 * `ember t`
 * or `ember s` then visit http://localhost:4200/tests to view the tests.
 

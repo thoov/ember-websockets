@@ -2,8 +2,7 @@ import Ember from 'ember';
 import SocketIOProxy from 'ember-websockets/helpers/socketio-proxy';
 import NormalizeUrlMixin from 'ember-websockets/mixins/normalize-url';
 
-var filter = Array.prototype.filter;
-var forEach = Array.prototype.forEach;
+const { filter, forEach } = Array.prototype;
 
 export default Ember.Service.extend(NormalizeUrlMixin, {
   /*
