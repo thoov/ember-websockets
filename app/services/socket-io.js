@@ -1,10 +1,11 @@
 import Ember from 'ember';
 import SocketIOProxy from 'ember-websockets/helpers/socketio-proxy';
+import NormalizeUrlMixin from 'ember-websockets/mixins/normalize-url';
 
 var filter = Array.prototype.filter;
 var forEach = Array.prototype.forEach;
 
-export default Ember.Service.extend({
+export default Ember.Service.extend(NormalizeUrlMixin, {
   /*
   * Each element in the array is of the form:
   *
@@ -43,22 +44,6 @@ export default Ember.Service.extend({
     });
 
     return proxy;
-  },
-
-  /*
-  * The native websocket object will transform urls without a pathname to have just a /.
-  * As an example: ws://localhost:8080 would actually be ws://localhost:8080/ but ws://example.com/foo would not
-  * change. This function does this transformation to stay inline with the native websocket implementation.
-  *
-  */
-  normalizeURL(url) {
-    var parsedUrl = new URI(url);
-
-    if(parsedUrl.path() === '/' && url.slice(-1) !== '/') {
-      return url + '/';
-    }
-
-    return url;
   },
 
   socketIsNotClosed(socket) {
