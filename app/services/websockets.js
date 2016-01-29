@@ -2,8 +2,7 @@ import Ember from 'ember';
 import { normalizeURL } from 'ember-websockets/helpers';
 import WebsocketProxy from 'ember-websockets/helpers/websocket-proxy';
 
-const { Service, isArray, A } = Ember;
-const { forEach, filter } = Array.prototype;
+const { Service, isArray } = Ember;
 
 function isWebSocketOpen(websocket) {
   return websocket.socket.readyState !== window.WebSocket.CLOSED;
@@ -45,7 +44,7 @@ export default Service.extend({
       // If there is an existing socket in place we simply update the websocket object and not
       // the whole proxy as we dont want to destroy the previous listeners.
 
-      existingSocket.socket.socket = newWebSocket;
+      existingProxy.socket.socket = newWebSocket;
       return newWebSocket;
     }
 

@@ -2,8 +2,7 @@ import Ember from 'ember';
 import SocketIOProxy from 'ember-websockets/helpers/socketio-proxy';
 import { normalizeURL } from 'ember-websockets/helpers';
 
-const { filter, forEach } = Array.prototype;
-const { Service, isArray } = Ember;
+const { Service } = Ember;
 
 function isWebSocketOpen(socket) {
   return socket.socket.io.readyState !== 'closed';
