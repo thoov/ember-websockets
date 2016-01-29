@@ -45,7 +45,7 @@ export default Ember.Component.extend({
     */
     socket.on('open', this.myOpenHandler);
     socket.on('message', this.myMessageHandler.bind(this));
-    socket.on('close', event => { // anonymous functions work as well });
+    socket.on('close', event => { /* anonymous functions work as well */ });
   },
 
   myOpenHandler: function(event) {
