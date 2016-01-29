@@ -1,26 +1,25 @@
 import Ember from 'ember';
+import { normalizeURL } from 'ember-websockets/helpers';
 import WebsocketProxy from 'ember-websockets/helpers/websocket-proxy';
-import NormalizeUrlMixin from 'ember-websockets/mixins/normalize-url';
 
-const forEach = Array.prototype.forEach;
-const filter  = Array.prototype.filter;
-const isArray = Ember.isArray;
+const { Service, isArray, A } = Ember;
+const { forEach, filter } = Array.prototype;
 
-export default Ember.Service.extend(NormalizeUrlMixin, {
+function isWebSocketOpen(websocket) {
+  return websocket.socket.readyState !== window.WebSocket.CLOSED;
+}
+
+export default Service.extend({
+
   /*
-  * Each element in the array is of the form:
+  * A hash of open websocket connections. This
+  * allows multiple components to share the same connection.
   *
   * {
-  *    url: 'string'
-  *    socket: WebSocket Proxy object
+  *    'websocket-url': WebSocket Proxy object
   * }
   */
-  sockets: null,
-
-  init() {
-    this._super(...arguments);
-    this.sockets = Ember.A();
-  },
+  sockets: {},
 
   /*
   * socketFor returns a websocket proxy object. On this object there is a property `socket`
@@ -28,70 +27,44 @@ export default Ember.Service.extend(NormalizeUrlMixin, {
   * multiple requests for the same socket will return the same object.
   */
   socketFor(url, protocols = []) {
-    var proxy = this.findSocketInCache(this.get('sockets'), url);
-
-    if (proxy && this.websocketIsNotClosed(proxy.socket)) { return proxy.socket; }
-
     // Websockets allows either a string or array of strings to be passed as the second argument.
-    // This normalizes both cases into one where they are all arrays of strings and if you just pass
-    // a single string it becomes an array of one.
+    // Normalize both cases into an array of strings so we can just deal with arrays.
     if(!isArray(protocols)) { protocols = [protocols]; }
 
-    proxy = WebsocketProxy.create({
-      content: this,
-      protocols: protocols,
-      socket: new WebSocket(this.normalizeURL(url), protocols)
-    });
+    let existingProxy = this.get(`sockets.${normalizeURL(url)}`);
 
-    // If there is an existing socket in place we simply update the websocket object and not
-    // the whole proxy as we dont want to destroy the previous listeners.
-    var existingSocket = this.findSocketInCache(this.get('sockets'), url);
-    if(existingSocket) {
-      existingSocket.socket.socket = proxy.socket;
-      return existingSocket.socket;
-    }
-    else {
-      this.get('sockets').pushObject({
-        url: proxy.socket.url,
-        socket: proxy
-      });
+    if (existingProxy && isWebSocketOpen(existingProxy.socket)) {
+      return existingProxy.socket;
     }
 
-    return proxy;
+    // we can get to this place if the websocket has been closed and we are trying to reopen
+    // or we are creating a proxy for the first time
+    const newWebSocket = new WebSocket(normalizeURL(url), protocols);
+
+    if (existingProxy) {
+      // If there is an existing socket in place we simply update the websocket object and not
+      // the whole proxy as we dont want to destroy the previous listeners.
+
+      existingSocket.socket.socket = newWebSocket;
+      return newWebSocket;
+    }
+
+    const newProxy = WebsocketProxy.create({ content: this, protocols, socket: new WebSocket(normalizeURL(url), protocols) });
+
+    this.set(`sockets.${normalizeURL(url)}`, { url: newProxy.socket.url, socket: newProxy });
+
+    return newProxy;
   },
 
   /*
   * closeSocketFor closes the socket for a given url.
   */
   closeSocketFor(url) {
-    var filteredSockets = [];
+    const sockets = this.get('sockets');
+    const socket = sockets[normalizeURL(url)];
+    socket.socket.close();
+    delete sockets[normalizeURL(url)];
 
-    forEach.call(this.get('sockets'), item => {
-      if(item.url === this.normalizeURL(url)) {
-        item.socket.close();
-      }
-      else {
-        filteredSockets.push(item);
-      }
-    });
-
-    this.set('sockets', Ember.A(filteredSockets));
-  },
-
-  websocketIsNotClosed(websocket) {
-    return websocket.socket.readyState !== window.WebSocket.CLOSED;
-  },
-
-  /*
-  * Returns the socket object from the cache if one matches the url else undefined
-  */
-  findSocketInCache(socketsCache, url) {
-    var cachedResults = filter.call(socketsCache, websocket => {
-      return websocket['url'] === this.normalizeURL(url);
-    });
-
-    if(cachedResults.length > 0) {
-      return cachedResults[0];
-    }
+    this.set('sockets', sockets);
   }
 });
