@@ -234,10 +234,12 @@ Example:
 ```javascript
 var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
-socket.on('open', this.myOpenFunction, this);
+socket.on('open', this.myOpenFunction.bind(this));
+socket.on('open', this.myOtherOpenFunction);
+socket.on('open', event => { console.log('here'); });
 ```
 
-on takes 3 arguments: **event type**, **callback function**, and **context**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. Callback function will be invoked when one of the event types occurs. Context is used to set the context of the callback function and also to remove the listeners when the context gets destroyed.
+on takes 2 arguments: **event type** and **callback function**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. Callback function will be invoked when one of the event types occurs.
 
 ### Off
 
