@@ -43,7 +43,7 @@ export default Ember.Component.extend({
     * function, and the context in which to invoke the callback. All 3 arguments
     * are required.
     */
-    socket.on('open', this.myOpenHandler.bind(this));
+    socket.on('open', this.myOpenHandler);
     socket.on('message', this.myMessageHandler.bind(this));
     socket.on('close', event => { // anonymous functions work as well });
   },
@@ -142,7 +142,6 @@ export default Ember.Component.extend({
     var socketTwo = this.get('socketService').socketFor('ws://localhost:7001/');
 
     socketOne.on('open', event => { console.log('Hello from socket one'); });
-
     socketTwo.on('open', event => { console.log('Hello from socket two'); });
   }
 });
@@ -160,7 +159,6 @@ export default Ember.Component.extend({
     var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
     socket.on('open', event => { console.log('This will be called'); });
-
     socket.on('open', event => { console.log('This will also be called'); });
   }
 });
@@ -246,10 +244,12 @@ on takes 3 arguments: **event type**, **callback function**, and **context**. Ev
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
-socket.on('open', this.myOpenFunction.bind(this));
-socket.off('open', this.myOpenFunction);
+let openFunctionReference = this.myOpenFunction.bind(this);
+
+socket.on('open', openFunctionReference);
+socket.off('open', openFunctionReference);
 ```
 
 off takes 2 arguments: **event type**, **callback function**. Event type can be one of the following: 'open', 'message', 'close', and 'error'. The callback will be removed from the event pool and will no longer be invoked.
