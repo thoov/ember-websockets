@@ -13,7 +13,7 @@ module('Sockets Service - closeSocketFor', {
     originalWebSocket = window.WebSocket;
     window.WebSocket = window.MockWebSocket;
 
-    var service = SocketsService.create();
+    const service = SocketsService.create();
     [mockServerFoo, mockServerBar] = [new window.MockServer('ws://localhost:7000/'), new window.MockServer('ws://localhost:7001/')]; // jshint ignore:line
 
     ConsumerComponent = Ember.Component.extend({
@@ -29,7 +29,6 @@ module('Sockets Service - closeSocketFor', {
     window.WebSocket = originalWebSocket;
 
     Ember.run(() => {
-      component.destroy();
       mockServerFoo.close();
       mockServerBar.close();
     });
@@ -37,26 +36,26 @@ module('Sockets Service - closeSocketFor', {
 });
 
 test('that closeSocketFor works correctly', assert => {
-  var done = assert.async();
+  const done = assert.async();
   assert.expect(5);
 
   component = ConsumerComponent.extend({
     init() {
-      this._super.apply(this, arguments);
-      var socketService = this.socketService;
+      this._super(...arguments);
+      const socketService = this.socketService;
 
-      assert.equal(socketService.sockets.length, 0);
+      assert.equal(Object.keys(socketService.sockets).length, 0);
       socketService.socketFor('ws://localhost:7000/');
-      assert.equal(socketService.sockets.length, 1);
+      assert.equal(Object.keys(socketService.sockets).length, 1);
 
       socketService.socketFor('ws://localhost:7001/');
-      assert.equal(socketService.sockets.length, 2);
+      assert.equal(Object.keys(socketService.sockets).length, 2);
 
       socketService.closeSocketFor('ws://localhost:7000/');
-      assert.equal(socketService.sockets.length, 1);
+      assert.equal(Object.keys(socketService.sockets).length, 1);
 
       socketService.closeSocketFor('ws://localhost:7001/');
-      assert.equal(socketService.sockets.length, 0);
+      assert.equal(Object.keys(socketService.sockets).length, 0);
 
       done();
     }

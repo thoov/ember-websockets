@@ -37,13 +37,16 @@ test('that off(close) works correctly', assert => {
   var done = assert.async();
   assert.expect(1);
 
+  let myCloseHandlerRef;
+
   component = ConsumerComponent.extend({
     init() {
-      this._super.apply(this, arguments);
+      this._super(...arguments);
       var socket = this.socketService.socketFor('ws://localhost:7000/');
 
-      socket.on('open', this.myOpenHandler, this);
-      socket.on('close', this.myCloseHandler, this);
+      myCloseHandlerRef = this.myCloseHandler.bind(this);
+      socket.on('open', this.myOpenHandler.bind(this));
+      socket.on('close', myCloseHandlerRef);
 
       this.socket = socket;
 
@@ -54,7 +57,7 @@ test('that off(close) works correctly', assert => {
 
     myOpenHandler() {
       assert.ok(true);
-      this.socket.off('close', this.myCloseHandler);
+      this.socket.off('close', myCloseHandlerRef);
       this.socket.close();
     },
 

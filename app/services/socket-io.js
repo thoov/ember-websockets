@@ -1,11 +1,15 @@
 import Ember from 'ember';
 import SocketIOProxy from 'ember-websockets/helpers/socketio-proxy';
-import NormalizeUrlMixin from 'ember-websockets/mixins/normalize-url';
+import { normalizeURL } from 'ember-websockets/helpers';
 
-var filter = Array.prototype.filter;
-var forEach = Array.prototype.forEach;
+const { Service } = Ember;
 
-export default Ember.Service.extend(NormalizeUrlMixin, {
+function isWebSocketOpen(socket) {
+  return socket.socket.io.readyState !== 'closed';
+}
+
+export default Service.extend({
+
   /*
   * Each element in the array is of the form:
   *
@@ -14,12 +18,7 @@ export default Ember.Service.extend(NormalizeUrlMixin, {
   *    socket: SocketIO Proxy object
   * }
   */
-  sockets: null,
-
-  init() {
-    this._super(...arguments);
-    this.sockets = Ember.A();
-  },
+  sockets: {},
 
   /*
   * socketFor returns a socketio proxy object. On this object there is a property `socket`
@@ -27,58 +26,31 @@ export default Ember.Service.extend(NormalizeUrlMixin, {
   * url meaning multiple requests for the same socket will return the same object.
   */
   socketFor(url, options = {}) {
-    var proxy = this.findSocketInCache(this.get('sockets'), url);
+    const existingProxy = this.get(`sockets.${normalizeURL(url)}`);
 
-    if (proxy && this.socketIsNotClosed(proxy.socket)) { return proxy.socket; }
+    if (existingProxy && isWebSocketOpen(existingProxy.socket)) {
+      return existingProxy.socket;
+    }
 
-    proxy = SocketIOProxy.create({
-      content: this,
-      socket: io(this.normalizeURL(url), options)
-    });
+    const newProxy = SocketIOProxy.create({ content: this, socket: io(normalizeURL(url), options) });
 
-    proxy.socket.connect();
+    newProxy.socket.connect();
 
-    this.get('sockets').pushObject({
-      url: this.normalizeURL(url),
-      socket: proxy
-    });
+    this.set(`sockets.${normalizeURL(url)}`, { url: normalizeURL(url), socket: newProxy });
 
-    return proxy;
-  },
-
-  socketIsNotClosed(socket) {
-    return socket.socket.io.readyState !== 'closed';
+    return newProxy;
   },
 
   /*
   * closeSocketFor closes the socket for a given url.
   */
   closeSocketFor(url) {
-    var filteredSockets = [];
+    const sockets = this.get('sockets');
+    const socket = sockets[normalizeURL(url)];
+    socket.socket.close();
+    socket.socket.removeAllListeners();
+    delete sockets[normalizeURL(url)];
 
-    forEach.call(this.get('sockets'), item => {
-      if(item.url === this.normalizeURL(url)) {
-        item.socket.close();
-        item.socket.socket.removeAllListeners();
-      }
-      else {
-        filteredSockets.push(item);
-      }
-    });
-
-    this.set('sockets', Ember.A(filteredSockets));
-  },
-
-  /*
-  * Returns the socket object from the cache if one matches the url else undefined
-  */
-  findSocketInCache(socketsCache, url) {
-    var cachedResults = filter.call(socketsCache, websocket => {
-      return websocket['url'] === this.normalizeURL(url);
-    });
-
-    if(cachedResults.length > 0) {
-      return cachedResults[0];
-    }
+    this.set('sockets', sockets);
   }
 });
