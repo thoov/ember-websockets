@@ -48,7 +48,7 @@ export default Service.extend({
       return newWebSocket;
     }
 
-    const newProxy = WebsocketProxy.create({ content: this, protocols, socket: new WebSocket(normalizeURL(url), protocols) });
+    const newProxy = WebsocketProxy.create({ content: this, protocols, socket: newWebSocket });
 
     this.set(`sockets.${normalizeURL(url)}`, { url: newProxy.socket.url, socket: newProxy });
 
