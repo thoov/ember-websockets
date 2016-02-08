@@ -14,14 +14,14 @@ module('Sockets Service - closeSocketFor', {
     window.WebSocket = window.MockWebSocket;
 
     const service = SocketsService.create();
-    [mockServerFoo, mockServerBar] = [new window.MockServer('ws://localhost:7000/'), new window.MockServer('ws://localhost:7001/')]; // jshint ignore:line
+    [mockServerFoo, mockServerBar] = [new window.MockServer('ws://example.com:7000/'), new window.MockServer('ws://example.com:7001/')]; // jshint ignore:line
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,
       socket: null,
       willDestroy() {
-        this.socketService.closeSocketFor('ws://localhost:7000/');
-        this.socketService.closeSocketFor('ws://localhost:7001/');
+        this.socketService.closeSocketFor('ws://example.com:7000/');
+        this.socketService.closeSocketFor('ws://example.com:7001/');
       }
     });
   },
@@ -45,16 +45,16 @@ test('that closeSocketFor works correctly', assert => {
       const socketService = this.socketService;
 
       assert.equal(Object.keys(socketService.sockets).length, 0);
-      socketService.socketFor('ws://localhost:7000/');
+      socketService.socketFor('ws://example.com:7000/');
       assert.equal(Object.keys(socketService.sockets).length, 1);
 
-      socketService.socketFor('ws://localhost:7001/');
+      socketService.socketFor('ws://example.com:7001/');
       assert.equal(Object.keys(socketService.sockets).length, 2);
 
-      socketService.closeSocketFor('ws://localhost:7000/');
+      socketService.closeSocketFor('ws://example.com:7000/');
       assert.equal(Object.keys(socketService.sockets).length, 1);
 
-      socketService.closeSocketFor('ws://localhost:7001/');
+      socketService.closeSocketFor('ws://example.com:7001/');
       assert.equal(Object.keys(socketService.sockets).length, 0);
 
       done();

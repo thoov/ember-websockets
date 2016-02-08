@@ -30,7 +30,10 @@ export default Service.extend({
     // Normalize both cases into an array of strings so we can just deal with arrays.
     if(!isArray(protocols)) { protocols = [protocols]; }
 
-    let existingProxy = this.get(`sockets.${normalizeURL(url)}`);
+    const normalizedUrl = normalizeURL(url);
+    const cleanedUrl = normalizedUrl.replace('.', '', 'g');
+
+    let existingProxy = this.get(`sockets.${cleanedUrl}`);
 
     if (existingProxy && isWebSocketOpen(existingProxy.socket)) {
       return existingProxy.socket;
@@ -38,7 +41,7 @@ export default Service.extend({
 
     // we can get to this place if the websocket has been closed and we are trying to reopen
     // or we are creating a proxy for the first time
-    const newWebSocket = new WebSocket(normalizeURL(url), protocols);
+    const newWebSocket = new WebSocket(normalizedUrl, protocols);
 
     if (existingProxy) {
       // If there is an existing socket in place we simply update the websocket object and not
@@ -50,7 +53,7 @@ export default Service.extend({
 
     const newProxy = WebsocketProxy.create({ content: this, protocols, socket: newWebSocket });
 
-    this.set(`sockets.${normalizeURL(url)}`, { url: newProxy.socket.url, socket: newProxy });
+    this.set(`sockets.${cleanedUrl}`, { url: newProxy.socket.url, socket: newProxy });
 
     return newProxy;
   },
@@ -60,9 +63,11 @@ export default Service.extend({
   */
   closeSocketFor(url) {
     const sockets = this.get('sockets');
-    const socket = sockets[normalizeURL(url)];
+    const normalizedUrl = normalizeURL(url);
+    const cleanedUrl = normalizedUrl.replace('.', '', 'g');
+    const socket = sockets[cleanedUrl];
     socket.socket.close();
-    delete sockets[normalizeURL(url)];
+    delete sockets[cleanedUrl];
 
     this.set('sockets', sockets);
   }
