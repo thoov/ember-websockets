@@ -14,14 +14,14 @@ module('Sockets Service - socketFor', {
     window.WebSocket = window.MockWebSocket;
 
     var service = SocketsService.create();
-    [mockServerFoo, mockServerBar] = [new window.MockServer('ws://localhost:7000/'), new window.MockServer('ws://localhost:7001/')]; // jshint ignore:line
+    [mockServerFoo, mockServerBar] = [new window.MockServer('ws://example.com:7000/'), new window.MockServer('ws://example.com:7001/')]; // jshint ignore:line
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,
       socket: null,
       willDestroy() {
-        this.socketService.closeSocketFor('ws://localhost:7000/');
-        this.socketService.closeSocketFor('ws://localhost:7001/');
+        this.socketService.closeSocketFor('ws://example.com:7000/');
+        this.socketService.closeSocketFor('ws://example.com:7001/');
       }
     });
   },
@@ -45,8 +45,8 @@ test('that socketFor works correctly', assert => {
       this._super.apply(this, arguments);
       var socketService = this.socketService;
 
-      assert.deepEqual(socketService.socketFor('ws://localhost:7000/'), socketService.socketFor('ws://localhost:7000/'));
-      assert.notDeepEqual(socketService.socketFor('ws://localhost:7000/'), socketService.socketFor('ws://localhost:7001/'));
+      assert.deepEqual(socketService.socketFor('ws://example.com:7000/'), socketService.socketFor('ws://example.com:7000/'));
+      assert.notDeepEqual(socketService.socketFor('ws://example.com:7000/'), socketService.socketFor('ws://example.com:7001/'));
       done();
     }
   }).create();

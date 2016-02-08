@@ -6,11 +6,11 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-   this.resource('sockets', function() {
+   this.route('sockets', function() {
     this.route('example');
   });
 
-  this.resource('socketio', function() {
+  this.route('socketio', function() {
     this.route('simple');
   });
 });

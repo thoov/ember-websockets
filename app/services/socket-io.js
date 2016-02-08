@@ -26,17 +26,19 @@ export default Service.extend({
   * url meaning multiple requests for the same socket will return the same object.
   */
   socketFor(url, options = {}) {
-    const existingProxy = this.get(`sockets.${normalizeURL(url)}`);
+    const normalizedUrl = normalizeURL(url);
+    const cleanedUrl = normalizedUrl.replace('.', '', 'g');
+    const existingProxy = this.get(`sockets.${cleanedUrl}`);
 
     if (existingProxy && isWebSocketOpen(existingProxy.socket)) {
       return existingProxy.socket;
     }
 
-    const newProxy = SocketIOProxy.create({ content: this, socket: io(normalizeURL(url), options) });
+    const newProxy = SocketIOProxy.create({ content: this, socket: io(normalizedUrl, options) });
 
     newProxy.socket.connect();
 
-    this.set(`sockets.${normalizeURL(url)}`, { url: normalizeURL(url), socket: newProxy });
+    this.set(`sockets.${cleanedUrl}`, { url: normalizedUrl, socket: newProxy });
 
     return newProxy;
   },
@@ -45,11 +47,13 @@ export default Service.extend({
   * closeSocketFor closes the socket for a given url.
   */
   closeSocketFor(url) {
+    const normalizedUrl = normalizeURL(url);
+    const cleanedUrl = normalizedUrl.replace('.', '', 'g');
     const sockets = this.get('sockets');
-    const socket = sockets[normalizeURL(url)];
+    const socket = sockets[cleanedUrl];
     socket.socket.close();
     socket.socket.removeAllListeners();
-    delete sockets[normalizeURL(url)];
+    delete sockets[cleanedUrl];
 
     this.set('sockets', sockets);
   }
