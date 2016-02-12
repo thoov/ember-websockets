@@ -31,7 +31,7 @@ export default Service.extend({
     if(!isArray(protocols)) { protocols = [protocols]; }
 
     const normalizedUrl = normalizeURL(url);
-    const cleanedUrl = normalizedUrl.replace('.', '', 'g');
+    const cleanedUrl = normalizedUrl.replace(/\./g, '');
 
     let existingProxy = this.get(`sockets.${cleanedUrl}`);
 
@@ -64,7 +64,7 @@ export default Service.extend({
   closeSocketFor(url) {
     const sockets = this.get('sockets');
     const normalizedUrl = normalizeURL(url);
-    const cleanedUrl = normalizedUrl.replace('.', '', 'g');
+    const cleanedUrl = normalizedUrl.replace(/\./g, '');
     const socket = sockets[cleanedUrl];
     socket.socket.close();
     delete sockets[cleanedUrl];
