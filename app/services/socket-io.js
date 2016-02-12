@@ -27,7 +27,7 @@ export default Service.extend({
   */
   socketFor(url, options = {}) {
     const normalizedUrl = normalizeURL(url);
-    const cleanedUrl = normalizedUrl.replace('.', '', 'g');
+    const cleanedUrl = normalizedUrl.replace(/\./g, '');
     const existingProxy = this.get(`sockets.${cleanedUrl}`);
 
     if (existingProxy && isWebSocketOpen(existingProxy.socket)) {
@@ -48,7 +48,7 @@ export default Service.extend({
   */
   closeSocketFor(url) {
     const normalizedUrl = normalizeURL(url);
-    const cleanedUrl = normalizedUrl.replace('.', '', 'g');
+    const cleanedUrl = normalizedUrl.replace(/\./g, '');
     const sockets = this.get('sockets');
     const socket = sockets[cleanedUrl];
     socket.socket.close();
