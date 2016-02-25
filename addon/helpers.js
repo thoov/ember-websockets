@@ -20,3 +20,11 @@ export function normalizeURL(url) {
 
   return url;
 }
+
+/*
+* Since the url will be used as a key will need to make sure that it does not
+* contain '.' as it will throw ember off
+*/
+export function cleanURL(url) {
+  return url.replace(/\./g, '');
+}

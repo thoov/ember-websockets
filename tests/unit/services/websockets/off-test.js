@@ -2,17 +2,18 @@ import Ember from 'ember';
 import { module, test } from 'qunit';
 import SocketsService from 'dummy/services/websockets';
 
-var component;
-var mockServer;
-var ConsumerComponent;
-var originalWebSocket;
+let component;
+let mockServer;
+let ConsumerComponent;
+let originalWebSocket;
+let service;
 
 module('Sockets Service - off(*) tests', {
   setup() {
     originalWebSocket = window.WebSocket;
     window.WebSocket = window.MockWebSocket;
 
-    var service = SocketsService.create();
+    service = SocketsService.create();
     mockServer = new window.MockServer('ws://example.com:7000/');
 
     ConsumerComponent = Ember.Component.extend({
@@ -28,6 +29,7 @@ module('Sockets Service - off(*) tests', {
 
     Ember.run(() => {
       component.destroy();
+      service.destroy();
       mockServer.close();
     });
   }

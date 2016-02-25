@@ -2,23 +2,24 @@ import Ember from 'ember';
 import { module, test } from 'qunit';
 import SocketsService from 'dummy/services/websockets';
 
-var component;
-var mockServer;
-var ConsumerComponent;
-var originalWebSocket;
+let component;
+let mockServer;
+let ConsumerComponent;
+let originalWebSocket;
+let service;
 
 module('Sockets Service - on(*) tests', {
   setup() {
     originalWebSocket = window.WebSocket;
     window.WebSocket = window.MockWebSocket;
 
-    var service = SocketsService.create();
+    service = SocketsService.create();
     mockServer = new window.MockServer('ws://example.com:7000/');
 
     ConsumerComponent = Ember.Component.extend({
       socketService: service,
       socket: null,
-      willDestroy() {
+      willDestroyElement() {
         this.socketService.closeSocketFor('ws://example.com:7000/');
       }
     });
@@ -28,6 +29,7 @@ module('Sockets Service - on(*) tests', {
 
     Ember.run(() => {
       component.destroy();
+      service.destroy();
       mockServer.close();
     });
   }
@@ -39,21 +41,18 @@ test('that on(open) and on(close) work correctly', assert => {
 
   component = ConsumerComponent.extend({
     init() {
-      this._super.apply(this, arguments);
-      var socket = this.socketService.socketFor('ws://example.com:7000/');
-
+      this._super(...arguments);
+      const socket = this.socketService.socketFor('ws://example.com:7000/');
 
       socket.on('open', this.myOpenHandler, this);
       socket.on('close', this.myCloseHandler, this);
 
       assert.equal(socket.listeners.length, 2);
-
-      this.socket = socket;
     },
 
     myOpenHandler() {
       assert.ok(true);
-      this.socket.close();
+      this.socketService.socketFor('ws://example.com:7000/').close();
     },
 
     myCloseHandler() {
