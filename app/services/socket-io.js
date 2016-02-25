@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import WebSocketService from './websockets';
 import SocketIOProxy from 'ember-websockets/helpers/socketio-proxy';
 
