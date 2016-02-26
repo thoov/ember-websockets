@@ -20,7 +20,7 @@ export default Ember.ObjectProxy.extend({
 
   init() {
     this._super(...arguments);
-    this.listeners = Ember.makeArray();
+    this.listeners = [];
     this.setupInternalListeners();
   },
 
@@ -32,7 +32,7 @@ export default Ember.ObjectProxy.extend({
   */
   on(type, callback, context) {
     assert(`${type} is not a recognized event name. Please use on of the following: ${events.join(', ')}`, indexOf.call(events, type) !== -1);
-    assert('The second argument must be a function.', typeof(callback) === 'function');
+    assert('The second argument must be a function.', typeof callback === 'function');
 
     this.listeners.push({ url: this.socket.url, type, callback, context });
   },

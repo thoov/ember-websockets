@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
-import { normalizeURL } from 'ember-websockets/helpers';
+import { normalizeURL, cleanURL } from 'ember-websockets/helpers';
 
-module('Sockets Service - normalizeURL');
+module('Sockets Service - Helper URL Functions');
 
 test('that normalizeURL works correctly', assert => {
   assert.expect(5);
@@ -22,4 +22,11 @@ test('that normalizeURL works correctly if url contains query params', assert =>
   assert.equal(normalizeURL('ws://example.com:8000?param=value'), 'ws://example.com:8000/?param=value');
   assert.equal(normalizeURL('ws://example.com:8000/foo?param=value'), 'ws://example.com:8000/foo?param=value');
   assert.equal(normalizeURL('ws://example.com:8000/foo/?param=value'), 'ws://example.com:8000/foo/?param=value');
+});
+
+test('that cleanURL works correctly', assert => {
+  assert.expect(2);
+
+  assert.equal(cleanURL('ws://example.com'), 'ws://examplecom');
+  assert.equal(cleanURL('ws://example.com?param=foo.bar'), 'ws://examplecom?param=foobar');
 });
