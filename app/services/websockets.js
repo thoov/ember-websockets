@@ -2,7 +2,7 @@ import Ember from 'ember';
 import { normalizeURL, cleanURL } from 'ember-websockets/helpers';
 import WebsocketProxy from 'ember-websockets/helpers/websocket-proxy';
 
-const { Service, isArray, get, set } = Ember;
+const { Service, get, set } = Ember;
 
 export default Service.extend({
   /*
@@ -30,7 +30,7 @@ export default Service.extend({
       Websockets allows either a string or array of strings to be passed as the second argument.
       Normalize both cases into an array of strings so we can just deal with arrays.
     */
-    if(!isArray(protocols)) { protocols = [protocols]; }
+    if(typeof protocols === 'string') { protocols = [protocols]; }
 
     /*
       Normalize the url as native websockets add a / to the end of the url:

@@ -140,7 +140,7 @@ export default Ember.Component.extend({
   /*
   * To close a websocket connection simply call the closeSocketFor method. NOTE: it is good
   * practice to close any connections after you are no longer in need of it. A good
-  * place for this clean up is in the willDestroy method of the object.
+  * place for this clean up is in the willDestroyElement method of the object.
   */
   willDestroyElement() {
     this.get('socketService').closeSocketFor('ws://localhost:7000/');

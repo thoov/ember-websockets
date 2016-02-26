@@ -6,7 +6,7 @@ export default WebSocketService.extend({
     return socket.io.readyState !== 'closed';
   },
 
-  createSocket(url, options) {
+  createSocket(url, options = {}) {
     const newSocketIO = io(url, options);
     newSocketIO.connect();
     return newSocketIO;
