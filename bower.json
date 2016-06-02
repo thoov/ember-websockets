@@ -1,12 +1,11 @@
 {
   "name": "ember-websockets",
   "dependencies": {
-    "ember": "~2.3.1",
-    "ember-cli-shims": "0.1.0",
+    "ember": "~2.5.0",
+    "ember-cli-shims": "0.1.1",
     "ember-cli-test-loader": "0.2.2",
     "ember-qunit-notifications": "0.1.0",
-    "mock-socket": "^2.0.0",
-    "socket.io-client": "^1.4.4",
-    "uri.js": "^1.17.0"
+    "urijs": "uri.js#^1.18.1",
+    "socket.io-client": "^1.4.6"
   }
 }
