@@ -21,12 +21,14 @@ ember install ember-websockets
 ```javascript
 import Ember from 'ember';
 
+const { get, inject } = Ember;
+
 export default Ember.Component.extend({
 
   /*
-  * 1) First step you need to do is inject the websocket service into your object.
+  * 1) First step you need to do is inject the websockets service into your object.
   */
-  socketService: Ember.inject.service('websockets'),
+  websockets: inject.service(),
   socketRef: null,
 
   willRender() {
@@ -35,7 +37,7 @@ export default Ember.Component.extend({
     * will retrieve a cached websocket if one exists or in this case it
     * will create a new one for us.
     */
-    const socket = this.get('socketService').socketFor('ws://localhost:7000/');
+    const socket = get(this, 'websockets').socketFor('ws://localhost:7000/');
 
     /*
     * 3) The next step is to define your event handlers. All event handlers
@@ -46,7 +48,7 @@ export default Ember.Component.extend({
     socket.on('open', this.myOpenHandler, this);
     socket.on('message', this.myMessageHandler, this);
     socket.on('close', this.myCloseHandler, this);
-    
+
     this.set('socketRef', socket);
   },
 

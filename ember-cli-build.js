@@ -14,8 +14,7 @@ module.exports = function(defaults) {
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
 
-  app.import('bower_components/mock-socket/dist/mock-socket.min.js');
-  app.import('bower_components/uri.js/src/URI.min.js');
+  app.import('bower_components/urijs/src/URI.min.js');
   app.import('bower_components/socket.io-client/socket.io.js');
 
   return app.toTree();

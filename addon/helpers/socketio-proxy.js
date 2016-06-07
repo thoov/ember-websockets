@@ -35,7 +35,7 @@ export default ObjectProxy.extend({
 
   off(type, callback) {
     assert('The second argument must be a function.', typeof(callback) === 'function');
-    const listeners = this.listeners.filter(listener => listener.callback === callback && listener.url === this.socket.io.url && listener.type === type);
+    const listeners = this.listeners.filter(listener => listener.callback === callback && listener.url === this.socket.io.uri && listener.type === type);
 
     if (listeners) {
       listeners.forEach(item => this.socket.off(type, item.ref));
@@ -58,7 +58,7 @@ export default ObjectProxy.extend({
   },
 
   close() {
-    this.listeners = this.listeners.filter(listener => listener.url === this.socket.io.url);
+    this.listeners = this.listeners.filter(listener => listener.url === this.socket.io.uri);
     this.socket.close.apply(this.socket, arguments);
   },
 
