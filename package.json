@@ -1,6 +1,6 @@
 {
   "name": "ember-websockets",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "EmberJS WebSockets addon for Ember-CLI apps.",
   "directories": {
     "doc": "doc",
