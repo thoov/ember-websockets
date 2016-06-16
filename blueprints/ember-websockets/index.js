@@ -2,6 +2,10 @@ module.exports = {
   normalizeEntityName: function() {},
 
   afterInstall: function() {
-    return this.addBowerPackageToProject('uri.js');
+    var installContext = this;
+
+    return this.addPackageToProject('mock-socket').then(function() {
+      return installContext.addBowerPackageToProject('urijs');
+    });
   }
 };
