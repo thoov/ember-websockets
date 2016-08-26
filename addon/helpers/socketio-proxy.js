@@ -45,16 +45,10 @@ export default ObjectProxy.extend({
   },
 
   /*
-  * This method passes the argument to the socketio emit method. If an acknowledgement function is passed then
-  * we bind that in a run loop.
+  * This method passes the argument to the socketio emit method.
   */
-  emit(channel, data, acknowledgementFn, context) {
-    if(acknowledgementFn && context) {
-      this.socket.emit.call(this.socket, channel, data, bind(context, acknowledgementFn));
-    }
-    else {
-      this.socket.emit.apply(this.socket, arguments);
-    }
+  emit() {
+    this.socket.emit.apply(this.socket, arguments);
   },
 
   close() {
