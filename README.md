@@ -28,16 +28,16 @@ export default Ember.Component.extend({
   /*
   * 1) First step you need to do is inject the websockets service into your object.
   */
-  websockets: inject.service(),
+  websockets: Ember.inject.service(),
   socketRef: null,
 
-  willRender() {
+  didInsertElement() {
     /*
     * 2) The next step you need to do is to create your actual websocket. Calling socketFor
     * will retrieve a cached websocket if one exists or in this case it
     * will create a new one for us.
     */
-    const socket = get(this, 'websockets').socketFor('ws://localhost:7000/');
+    const socket = this.get('websockets').socketFor('ws://localhost:7000/');
 
     /*
     * 3) The next step is to define your event handlers. All event handlers
@@ -106,7 +106,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   socketService: Ember.inject.service('websockets'),
 
-  willRender() {
+  didInsertElement() {
     const socket = this.get('socketService').socketFor('ws://localhost:7000/');
     socket.on('close', this.myOnClose, this);
   },
@@ -157,7 +157,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   socketService: Ember.inject.service('websockets'),
 
-  willRender() {
+  didInsertElement() {
     const socketOne = this.get('socketService').socketFor('ws://localhost:7000/');
     const socketTwo = this.get('socketService').socketFor('ws://localhost:7001/');
 
@@ -190,7 +190,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   socketService: Ember.inject.service('websockets'),
 
-  willRender() {
+  didInsertElement() {
     var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
     socket.on('open', this.myOpenFirst, this);
@@ -231,7 +231,7 @@ export default Ember.Component.extend({
   */
   socketIOService: Ember.inject.service('socket-io'),
 
-  willRender() {
+  didInsertElement() {
     /*
     * 2) The next step you need to do is to create your actual socketIO.
     */
