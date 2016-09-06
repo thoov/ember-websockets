@@ -21,8 +21,6 @@ ember install ember-websockets
 ```javascript
 import Ember from 'ember';
 
-const { get, inject } = Ember;
-
 export default Ember.Component.extend({
 
   /*
