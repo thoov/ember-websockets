@@ -28,7 +28,7 @@ export default Ember.Component.extend({
   /*
   * 1) First step you need to do is inject the websockets service into your object.
   */
-  websockets: inject.service(),
+  websockets: Ember.inject.service(),
   socketRef: null,
 
   willRender() {
@@ -37,7 +37,7 @@ export default Ember.Component.extend({
     * will retrieve a cached websocket if one exists or in this case it
     * will create a new one for us.
     */
-    const socket = get(this, 'websockets').socketFor('ws://localhost:7000/');
+    const socket = this.get('websockets').socketFor('ws://localhost:7000/');
 
     /*
     * 3) The next step is to define your event handlers. All event handlers
