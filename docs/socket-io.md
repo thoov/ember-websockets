@@ -59,7 +59,7 @@ Example:
 var socket = this.get('socketService').socketFor('localhost:7100');
 ```
 
-socketFor takes a 2 arguments, **a url** and an optional proerties **object**, and
+socketFor takes a 2 arguments, **a url** and an optional properties **object**, and
 returns a socket.io instance from its cache or a new socket.io object if one was not found.
 
 ### On
