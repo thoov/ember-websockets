@@ -11,7 +11,7 @@ module.exports = {
 
   /**
   * https://github.com/ember-cli/ember-cli/issues/2949#issuecomment-85634073
-  * 
+  *
   * The addon tree is augmented with the impagination modules. This
   * makes them available not only to `ember-impagination` as a whole,
   * but also to the application if they want to embed it. It'll look
@@ -59,7 +59,7 @@ module.exports = {
       /*
       * Only import the socket.io file if one is found
       */
-      if(stats.isFile()) {
+      if(stats.isFile() && !process.env.EMBER_CLI_FASTBOOT) {
         app.import(socketIOPath);
       }
     }

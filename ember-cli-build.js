@@ -15,7 +15,10 @@ module.exports = function(defaults) {
   */
 
   app.import('bower_components/urijs/src/URI.min.js');
-  app.import('bower_components/socket.io-client/socket.io.js');
+  
+  if (!process.env.EMBER_CLI_FASTBOOT) {
+    app.import('bower_components/socket.io-client/socket.io.js');
+  }
 
   return app.toTree();
 };
