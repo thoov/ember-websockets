@@ -27,10 +27,8 @@ test('visiting /websockets', function(assert) {
   andThen(function() {
     fillIn('input[type=text]', 'this is a test');
     click('button');
-
-    andThen(function() {
-      fillIn('input[type=text]', 'this is a test 2');
-      click('button');
-    });
+    
+    fillIn('input[type=text]', 'this is a test 2');
+    click('button');
   });
 });
