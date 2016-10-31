@@ -1,18 +1,14 @@
 import Ember from 'ember';
-import MockServer from 'mock-socket/server';
-import MockWebSocket from 'mock-socket/websocket';
 import { moduleFor, test } from 'ember-qunit';
+
+import {
+  WebSocket as MockWebSocket,
+  Server as MockServer
+} from 'mock-socket';
 
 const { keys } = Object;
 
 moduleFor('service:websockets', 'Unit | Service | Websocket', { unit: true });
-
-test('that the service has no connections to start', function(assert) {
-  const service = this.subject();
-
-  assert.expect(1);
-  assert.deepEqual(service.get('sockets'), {});
-});
 
 test('that calling socketFor will correctly create a connection', function(assert) {
   const service = this.subject({ sockets: {} });

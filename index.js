@@ -35,14 +35,14 @@ module.exports = {
     });
 
 
-    // take the transpiled impagination sources and put them into
-    // `modules/impagination/{dataset|record|page}.js` so that the
+    // take the transpiled mock-socket sources and put them into
+    // `modules/mock-socket/{server|websocket}.js` so that the
     // ember-cli build will pick them up.
-    var impagination = new Funnel(transpiled, {
+    var mockSocket = new Funnel(transpiled, {
       destDir: 'modules/mock-socket'
     });
 
-    return new MergeTrees([addonTree, impagination]);
+    return new MergeTrees([addonTree, mockSocket]);
   },
 
   included: function(app) {
