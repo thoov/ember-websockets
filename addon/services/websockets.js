@@ -13,7 +13,9 @@ export default Service.extend({
       'websocket-url': WebSocket Proxy object
     }
   */
-  sockets: {},
+  sockets: Ember.computed(function() {
+    return {};
+  }),
 
   /*
     socketFor returns a websocket proxy object. On this object there is a property `socket`
