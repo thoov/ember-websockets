@@ -12,28 +12,21 @@ module.exports = {
   /**
   * https://github.com/ember-cli/ember-cli/issues/2949#issuecomment-85634073
   *
-  * The addon tree is augmented with the impagination modules. This
-  * makes them available not only to `ember-impagination` as a whole,
-  * but also to the application if they want to embed it. It'll look
-  * like:
-  *    ember-impagination/components/impagination-dataset.js
-  *    ember-impagination/templates/components/impagination-dataset.js
-  *    impagination/dataset.js
-  *    impagination/record.js
-  *    impagination/page.js
+  * The addon tree is augmented with the mock-socket modules. This
+  * makes them available not only to `ember-websocket` as a whole,
+  * but also to the application if they want to embed it.
   */
   treeForAddon: function() {
     // get the base addon tree
     var addonTree = this._super.treeForAddon.apply(this, arguments);
 
-    // transpile the impagination sources into ES5. However, we want
+    // transpile the mock-socket sources into ES5. However, we want
     // to leave the ES6 module declaration in place because they'll be
     // handled later by ember-cli.
     var transpiled = new BabelTranspiler('node_modules/mock-socket/src', {
       loose: true,
       blacklist: ['es6.modules']
     });
-
 
     // take the transpiled mock-socket sources and put them into
     // `modules/mock-socket/{server|websocket}.js` so that the
@@ -45,24 +38,25 @@ module.exports = {
     return new MergeTrees([addonTree, mockSocket]);
   },
 
-  included: function(app) {
-    this._super.included(app);
+  included: function() {
+    this._super.included.apply(this, arguments);
 
-    var stats;
-    var socketIOPath = app.bowerDirectory + '/socket.io-client/socket.io.js';
+    if (!process.env.EMBER_CLI_FASTBOOT) {
+      var host = this._findHost();
+      var socketIOPath = host.bowerDirectory + '/socket.io-client/socket.io.js';
+      var uriPath = host.bowerDirectory + '/urijs/src/URI.min.js';
 
-    app.import(app.bowerDirectory + '/urijs/src/URI.min.js');
+      this.import(uriPath);
 
-    try {
-      stats = fs.lstatSync(socketIOPath);
+      // Only import the socket.io file if one is found
+      try {
+        var stats = fs.lstatSync(socketIOPath);
 
-      /*
-      * Only import the socket.io file if one is found
-      */
-      if(stats.isFile() && !process.env.EMBER_CLI_FASTBOOT) {
-        app.import(socketIOPath);
+        if(stats.isFile()) {
+          this.import(socketIOPath);
+        }
       }
+      catch(e) {}
     }
-    catch(e) {}
   }
 };
