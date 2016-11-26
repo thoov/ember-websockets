@@ -344,7 +344,7 @@ reconnect takes no arguments. It will attempt to create a new websocket connect 
 * `cd ember-websockets`
 * `npm i; bower i`
 * `ember s`
-* Then visit http://localhost:4200/sockets/chatroom to view a very simple example.
+* Then visit http://localhost:4200/sockets/example to view a very simple example.
 
 The source code for the live example lives in `ember-websockets/tests/dummy`
 
