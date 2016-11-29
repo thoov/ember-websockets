@@ -36,7 +36,7 @@
     "ember-data": "^2.9.0",
     "ember-disable-prototype-extensions": "^1.1.0",
     "ember-export-application-global": "^1.0.5",
-    "ember-load-initializers": "^0.5.1",
+    "ember-load-initializers": "^0.6.0",
     "ember-resolver": "^2.0.3",
     "glob": "^7.0.3",
     "loader.js": "^4.0.10",
