@@ -1,6 +1,6 @@
 {
   "name": "ember-websockets",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "EmberJS WebSockets addon for Ember-CLI apps.",
   "keywords": [
     "ember-addon",
