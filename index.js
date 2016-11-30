@@ -43,7 +43,7 @@ module.exports = {
 
     if (!process.env.EMBER_CLI_FASTBOOT) {
       var host = this._findHost();
-      var socketIOPath = host.bowerDirectory + '/dist/socket.io-client/socket.io.js';
+      var socketIOPath = host.bowerDirectory + '/socket.io-client/dist/socket.io.js';
       var uriPath = host.bowerDirectory + '/urijs/src/URI.min.js';
 
       this.import(uriPath);
