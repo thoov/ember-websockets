@@ -24,24 +24,26 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   /*
-  * 1) First step you need to do is inject the websockets service into your object.
+    1. First step you need to do is inject the websockets service into your object.
   */
   websockets: Ember.inject.service(),
   socketRef: null,
 
   didInsertElement() {
+    this._super(...arguments);
+
     /*
-    * 2) The next step you need to do is to create your actual websocket. Calling socketFor
-    * will retrieve a cached websocket if one exists or in this case it
-    * will create a new one for us.
+      2. The next step you need to do is to create your actual websocket. Calling socketFor
+      will retrieve a cached websocket if one exists or in this case it
+      will create a new one for us.
     */
     const socket = this.get('websockets').socketFor('ws://localhost:7000/');
 
     /*
-    * 3) The next step is to define your event handlers. All event handlers
-    * are added via the `on` method and take 3 arguments: event name, callback
-    * function, and the context in which to invoke the callback. All 3 arguments
-    * are required.
+      3. The next step is to define your event handlers. All event handlers
+      are added via the `on` method and take 3 arguments: event name, callback
+      function, and the context in which to invoke the callback. All 3 arguments
+      are required.
     */
     socket.on('open', this.myOpenHandler, this);
     socket.on('message', this.myMessageHandler, this);
@@ -51,10 +53,12 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
+    this._super(...arguments);
+
     const socket = this.get('socketRef');
 
     /*
-    * 4) The final step is to remove all of the listeners you have setup.
+      4. The final step is to remove all of the listeners you have setup.
     */
     socket.off('open', this.myOpenHandler);
     socket.off('message', this.myMessageHandler);
@@ -105,6 +109,8 @@ export default Ember.Component.extend({
   socketService: Ember.inject.service('websockets'),
 
   didInsertElement() {
+    this._super(...arguments);
+
     const socket = this.get('socketService').socketFor('ws://localhost:7000/');
     socket.on('close', this.myOnClose, this);
   },
@@ -113,15 +119,17 @@ export default Ember.Component.extend({
     const socket = this.get('socketService').socketFor('ws://localhost:7000/');
     Ember.run.later(this, () => {
       /*
-      * This will remove the old socket and try and connect to a new one on the same url.
-      * NOTE: that this does not need to be in a Ember.run.later this is just an example on
-      * how to reconnect every second.
+        This will remove the old socket and try and connect to a new one on the same url.
+        NOTE: that this does not need to be in a Ember.run.later this is just an example on
+        how to reconnect every second.
       */
       socket.reconnect();
     }, 1000);
   },
 
   willDestroyElement() {
+    this._super(...arguments);
+
     const socket = this.get('socketService').socketFor('ws://localhost:7000/');
     socket.off('close', this.myOnClose);
   }
@@ -137,11 +145,12 @@ export default Ember.Component.extend({
   socketService: Ember.inject.service('websockets'),
 
   /*
-  * To close a websocket connection simply call the closeSocketFor method. NOTE: it is good
-  * practice to close any connections after you are no longer in need of it. A good
-  * place for this clean up is in the willDestroyElement method of the object.
+    To close a websocket connection simply call the closeSocketFor method. NOTE: it is good
+    practice to close any connections after you are no longer in need of it. A good
+    place for this clean up is in the willDestroyElement method of the object.
   */
   willDestroyElement() {
+    this._super(...arguments);
     this.get('socketService').closeSocketFor('ws://localhost:7000/');
   }
 });
@@ -156,6 +165,8 @@ export default Ember.Component.extend({
   socketService: Ember.inject.service('websockets'),
 
   didInsertElement() {
+    this._super(...arguments);
+
     const socketOne = this.get('socketService').socketFor('ws://localhost:7000/');
     const socketTwo = this.get('socketService').socketFor('ws://localhost:7001/');
 
@@ -172,6 +183,8 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
+    this._super(...arguments);
+
     const socket = this.get('socketService').socketFor('ws://localhost:7000/');
     const socketTwo = this.get('socketService').socketFor('ws://localhost:7001/');
     socketOne.off('open', this.myOpenFirst);
@@ -189,6 +202,7 @@ export default Ember.Component.extend({
   socketService: Ember.inject.service('websockets'),
 
   didInsertElement() {
+    this._super(...arguments);
     var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
     socket.on('open', this.myOpenFirst, this);
@@ -204,6 +218,8 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
+    this._super(...arguments);
+
     const socket = this.get('socketService').socketFor('ws://localhost:7000/');
     socket.off('open', this.myOpenFirst);
     socket.off('open', this.myOpenSecond);
@@ -225,24 +241,26 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   /*
-  * 1) First step you need to do is inject the socketio service into your object.
+    1. First step you need to do is inject the socketio service into your object.
   */
   socketIOService: Ember.inject.service('socket-io'),
 
   didInsertElement() {
+    this._super(...arguments);
+
     /*
-    * 2) The next step you need to do is to create your actual socketIO.
+      2. The next step you need to do is to create your actual socketIO.
     */
     const socket = this.get('socketIOService').socketFor('http://localhost:7000/');
 
     /*
-    * 3) Define any event handlers
+    * 3. Define any event handlers
     */
     socket.on('connect', this.onConnect, this);
     socket.on('message', this.onMessage, this);
 
     /*
-    * 4) It is also possible to set event handlers on specific events
+      4. It is also possible to set event handlers on specific events
     */
     socket.on('myCustomNamespace', () => { socket.emit('anotherNamespace', 'some data'); });
   },
@@ -251,7 +269,7 @@ export default Ember.Component.extend({
     const socket = this.get('socketIOService').socketFor('http://localhost:7000/');
 
     /*
-    * There are 2 ways to send messages to the server: send and emit
+      There are 2 ways to send messages to the server: send and emit
     */
     socket.send('Hello World');
     socket.emit('Hello server');
@@ -267,6 +285,8 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
+    this._super(...arguments);
+
     const socket = this.get('socketService').socketFor('http://localhost:7000/');
     socket.off('connect', this.onConnect);
     socket.off('message', this.onMessage);
