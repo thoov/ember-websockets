@@ -43,7 +43,7 @@ module.exports = {
 
     if (!process.env.EMBER_CLI_FASTBOOT) {
       var host;
-      
+
       // If the addon has the _findHost() method (in ember-cli >= 2.7.0), we'll just
       // use that.
       if (typeof this._findHost === 'function') {
@@ -60,14 +60,14 @@ module.exports = {
       var socketIOPath = host.bowerDirectory + '/socket.io-client/dist/socket.io.js';
       var uriPath = host.bowerDirectory + '/urijs/src/URI.min.js';
 
-      this.import(uriPath);
+      host.import(uriPath);
 
       // Only import the socket.io file if one is found
       try {
         var stats = fs.lstatSync(socketIOPath);
 
         if(stats.isFile()) {
-          this.import(socketIOPath);
+          host.import(socketIOPath);
         }
       }
       catch(e) {}
