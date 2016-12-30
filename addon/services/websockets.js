@@ -73,7 +73,6 @@ export default Service.extend({
   closeSocketFor(url) {
     const cleanedUrl = cleanURL(normalizeURL(url));
     get(this, `sockets.${cleanedUrl}`).socket.close();
-    delete get(this, 'sockets')[cleanedUrl];
   },
 
   isWebSocketOpen(websocket) {

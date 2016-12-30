@@ -183,20 +183,23 @@ test('that closeSocketFor works correctly', function(assert) {
   const service = this.subject({ sockets: {} });
   const server = new MockServer('ws://example.com:7000/');
   const socket = service.socketFor('ws://example.com:7000/');
-  const done = assert.async();
+  const done1 = assert.async();
+  const done2 = assert.async();
   assert.expect(2);
 
   const mock = {
     openHandler() {
       service.closeSocketFor('ws://example.com:7000/');
-      assert.equal(service.get('sockets').length, 0);
+      assert.equal(Object.keys(service.get('sockets')).length, 0);
+
+      done1();
     },
 
     closeHandler() {
       assert.ok(true);
 
       server.stop();
-      done();
+      done2();
     }
   };
 
