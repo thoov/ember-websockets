@@ -59,7 +59,7 @@ export default Service.extend({
         If there is an existing socket in place we simply update the websocket object and not
         the whole proxy as we dont want to destroy the previous listeners.
       */
-      existingProxy.socket = newWebSocket;
+      set(existingProxy, 'socket', newWebSocket);
       return existingProxy;
     }
 
