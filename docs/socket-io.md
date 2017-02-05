@@ -20,13 +20,19 @@ export default Ember.Controller.extend({
   */
   socketIOService: Ember.inject.service('socket-io'),
 
+  /*
+    Important note: The namespace is an implementation detail of the Socket.IO protocol...
+    http://socket.io/docs/rooms-and-namespaces/#custom-namespaces
+  */
+  namespace: '/myCustomNamespace',
+
   init: function() {
     this._super.apply(this, arguments);
 
     /*
     * 2) The next step you need to do is to create your actual socketIO.
     */
-    var socket = this.get('socketIOService').socketFor('http://localhost:7000/');
+    var socket = this.get('socketIOService').socketFor('http://localhost:7000/' + this.get('namespace'));
 
     /*
     * 3) Define any event handlers
@@ -37,8 +43,8 @@ export default Ember.Controller.extend({
 
       socket.on('message', this.onMessage, this);
 
-      socket.on('myCustomNamespace', function() {
-        socket.emit('anotherNamespace', 'some data');
+      socket.on('myCustomEvent', function() {
+        socket.emit('anotherCustomEvent', 'some data');
       }, this);
     }, this);
   },
@@ -56,11 +62,17 @@ export default Ember.Controller.extend({
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('localhost:7100');
+var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 ```
 
 socketFor takes a 2 arguments, **a url** and an optional properties **object**, and
 returns a socket.io instance from its cache or a new socket.io object if one was not found.
+
+To use a custom namespace, append the namespace to the end of the url.
+
+```javascript
+var socket = this.get('socketService').socketFor('ws://localhost:7000/' + namespace);
+```
 
 ### On
 
@@ -97,11 +109,11 @@ Example:
 var socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
 socket.on('connect', function() {
-  socket.emit('myCustomNamespace', 'My message');
+  socket.emit('myCustomEvent', 'My message');
 }, this);
 ```
 
-emit takes 2 arguments: **namespace**, **message**. Emit will send the message to the given namespace.
+emit takes 2 arguments: **event type**, **message**. Emit will send the message via the event type.
 
 ### CloseSocketFor
 
