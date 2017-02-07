@@ -245,13 +245,19 @@ export default Ember.Component.extend({
   */
   socketIOService: Ember.inject.service('socket-io'),
 
+  /*
+    Important note: The namespace is an implementation detail of the Socket.IO protocol...
+    http://socket.io/docs/rooms-and-namespaces/#custom-namespaces
+  */
+  namespace: 'myCustomNamespace',
+
   didInsertElement() {
     this._super(...arguments);
 
     /*
       2. The next step you need to do is to create your actual socketIO.
     */
-    const socket = this.get('socketIOService').socketFor('http://localhost:7000/');
+    const socket = this.get('socketIOService').socketFor('http://localhost:7000/' + this.get('namespace'));
 
     /*
     * 3. Define any event handlers
@@ -262,11 +268,11 @@ export default Ember.Component.extend({
     /*
       4. It is also possible to set event handlers on specific events
     */
-    socket.on('myCustomNamespace', () => { socket.emit('anotherNamespace', 'some data'); });
+    socket.on('myCustomEvent', () => { socket.emit('anotherCustomEvent', 'some data'); });
   },
 
   onConnect() {
-    const socket = this.get('socketIOService').socketFor('http://localhost:7000/');
+    const socket = this.get('socketIOService').socketFor('http://localhost:7000/' + this.get('namespace'));
 
     /*
       There are 2 ways to send messages to the server: send and emit
@@ -279,18 +285,18 @@ export default Ember.Component.extend({
     // This is executed within the ember run loop
   },
 
-  myCustomNamespace(data) {
-    const socket = this.get('socketIOService').socketFor('http://localhost:7000/');
-    socket.emit('anotherNamespace', 'some data');
+  myCustomEvent(data) {
+    const socket = this.get('socketIOService').socketFor('http://localhost:7000/' + this.get('namespace'));
+    socket.emit('anotherCustomEvent', 'some data');
   },
 
   willDestroyElement() {
     this._super(...arguments);
 
-    const socket = this.get('socketService').socketFor('http://localhost:7000/');
+    const socket = this.get('socketService').socketFor('http://localhost:7000/' + this.get('namespace'));
     socket.off('connect', this.onConnect);
     socket.off('message', this.onMessage);
-    socket.off('myCustomNamespace', this.myCustomNamespace);
+    socket.off('myCustomEvent', this.myCustomEvent);
   }
 });
 ```
@@ -308,6 +314,12 @@ var socket = this.get('socketService').socketFor('ws://localhost:7000/', ['myOpt
 ```
 
 socketFor takes two arguments: **a url**, **a protocol array** (optional), and returns a socket instance from its cache or a new websocket connection if one was not found.
+
+To use a custom namespace, append the namespace to the end of the url.
+
+```javascript
+var socket = this.get('socketService').socketFor('ws://localhost:7000/' + namespace);
+```
 
 ### On
 
