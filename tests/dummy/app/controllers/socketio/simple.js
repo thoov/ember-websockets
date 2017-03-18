@@ -9,7 +9,7 @@ export default Ember.Controller.extend({
     var socketIO = this.get('socketService').socketFor('http://localhost:7100/');
 
     socketIO.on('connect', function() {
-      console.log('We have a connection');
+      console.log('We have a connection'); // eslint-disable-line no-console
     }, this);
   }
 });
