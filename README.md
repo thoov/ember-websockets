@@ -229,10 +229,14 @@ export default Ember.Component.extend({
 
 ## Socket.IO Support
 
-First run the socket.io generator via:
+First set socketIO to be true in your `config/environment.js` file:
 
-```shell
-ember g socket-io
+```js
+var ENV = {
+  'ember-websockets': {
+    socketIO: true
+  }
+};
 ```
 
 ```javascript
@@ -310,7 +314,7 @@ export default Ember.Component.extend({
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/', ['myOptionalProtocol']);
+const socket = this.get('socketService').socketFor('ws://localhost:7000/', ['myOptionalProtocol']);
 ```
 
 socketFor takes two arguments: **a url**, **a protocol array** (optional), and returns a socket instance from its cache or a new websocket connection if one was not found.
@@ -318,7 +322,7 @@ socketFor takes two arguments: **a url**, **a protocol array** (optional), and r
 To use a custom namespace, append the namespace to the end of the url.
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/' + namespace);
+const socket = this.get('socketService').socketFor('ws://localhost:7000/' + namespace);
 ```
 
 ### On
@@ -326,7 +330,7 @@ var socket = this.get('socketService').socketFor('ws://localhost:7000/' + namesp
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
 socket.on('open', this.myOtherOpenFunction);
 ```

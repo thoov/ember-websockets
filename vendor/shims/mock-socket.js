@@ -9,5 +9,5 @@
     };
   }
 
-  define('mock-socket', [], vendorModule);
+  define('mock-socket', [], vendorModule); // eslint-disable-line no-undef
 })();

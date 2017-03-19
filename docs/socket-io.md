@@ -2,10 +2,14 @@
 
 ### Setup
 
-To install the socket.io client library run the socket.io generator via:
+To install the socket.io client library set socketIO to be true in your `config/environment.js` file:
 
-```shell
-ember g socket-io
+```js
+var ENV = {
+  'ember-websockets': {
+    socketIO: true
+  }
+};
 ```
 
 ### Usage
@@ -62,7 +66,7 @@ export default Ember.Controller.extend({
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.get('socketService').socketFor('ws://localhost:7000/');
 ```
 
 socketFor takes a 2 arguments, **a url** and an optional properties **object**, and
@@ -71,7 +75,7 @@ returns a socket.io instance from its cache or a new socket.io object if one was
 To use a custom namespace, append the namespace to the end of the url.
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/' + namespace);
+const socket = this.get('socketService').socketFor('ws://localhost:7000/' + namespace);
 ```
 
 ### On
@@ -79,7 +83,7 @@ var socket = this.get('socketService').socketFor('ws://localhost:7000/' + namesp
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
 socket.on('connect', this.myOpenFunction, this);
 ```
@@ -92,7 +96,7 @@ function.
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
 socket.on('connect', function() {
   socket.send('My message');
@@ -106,7 +110,7 @@ send takes 1 argument: **message**.
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.get('socketService').socketFor('ws://localhost:7000/');
 
 socket.on('connect', function() {
   socket.emit('myCustomEvent', 'My message');
@@ -120,7 +124,7 @@ emit takes 2 arguments: **event type**, **message**. Emit will send the message 
 Example:
 
 ```javascript
-var socket = this.get('socketService').socketFor('localhost:7000/');
+const socket = this.get('socketService').socketFor('localhost:7000/');
 
 socket.on('message', function() {
   this.get('socketService').closeSocketFor('localhost:7000/');

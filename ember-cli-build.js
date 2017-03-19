@@ -1,4 +1,4 @@
-/*jshint node:true*/
+/* eslint-env node */
 /* global require, module */
 var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
@@ -13,12 +13,5 @@ module.exports = function(defaults) {
     This build file does *not* influence how the addon or the app using it
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
-
-  app.import('bower_components/urijs/src/URI.min.js');
-
-  if (!process.env.EMBER_CLI_FASTBOOT) {
-    app.import('bower_components/socket.io-client/dist/socket.io.js');
-  }
-
   return app.toTree();
 };
