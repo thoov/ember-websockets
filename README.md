@@ -1,10 +1,20 @@
-# EmberJS WebSockets Addon
+# <p align="center"><img src="https://i.imgur.com/ugtysv0.png" width="600"></p>
 
-This addon aims to be a simple and easy way to integrate with any websocket or socket.io
-backend. It has been designed to be minimalistic, flexible, and lightweight instead of
-forcing certain conventions on the developer.
+<p align="center">
+  <a href="https://travis-ci.org/thoov/ember-websockets">
+    <img src="https://travis-ci.org/thoov/ember-websockets.svg?branch=master" alt="Build Status">
+  </a>
+  <a href="https://codeclimate.com/github/thoov/ember-websockets">
+    <img src="https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg" alt="Code GPA">
+  </a>
+  <a href="http://emberobserver.com/addons/ember-websockets">
+    <img src="http://emberobserver.com/badges/ember-websockets.svg" alt="Ember Observer Score">
+  </a>
+  <a href="http://badge.fury.io/js/ember-websockets">
+    <img src="https://badge.fury.io/js/ember-websockets.svg" alt="NPM Version">
+  </a>
+</p>
 
-[http://www.programwitherik.com/getting-started-with-web-sockets-and-ember/](http://www.programwitherik.com/getting-started-with-web-sockets-and-ember/)
 
 [![Build Status](https://travis-ci.org/thoov/ember-websockets.svg?branch=master)](https://travis-ci.org/thoov/ember-websockets)
 [![Code Climate](https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg)](https://codeclimate.com/github/thoov/ember-websockets)
