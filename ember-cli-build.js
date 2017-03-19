@@ -1,5 +1,4 @@
 /* eslint-env node */
-/* global require, module */
 var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
@@ -13,5 +12,9 @@ module.exports = function(defaults) {
     This build file does *not* influence how the addon or the app using it
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
+
+  app.import(`vendor/ember-websockets/shims/mock-socket.js`);
+  app.import(`vendor/ember-websockets/mock-socket/mock-socket.js`);
+
   return app.toTree();
 };

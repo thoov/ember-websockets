@@ -15,8 +15,6 @@ module.exports = {
 
     if (!this._isFastbootBuild()) {
       this.import(`vendor/${this.name}/urijs/URI.min.js`);
-      this.import(`vendor/${this.name}/shims/mock-socket.js`); // TODO: only for testing
-      this.import(`vendor/${this.name}/mock-socket/mock-socket.js`); // TODO: only for testing
 
       if (this._readConfigProp('socketIO') === true) {
         this.import(`vendor/${this.name}/socket.io-client/socket.io.min.js`);
@@ -53,7 +51,9 @@ module.exports = {
       return require(config)(environment);
     }
 
-    return {}; // TODO: return defatult values if non found
+    return {
+      'ember-websockets': {}
+    };
   },
 
   _readConfigProp(prop) {
