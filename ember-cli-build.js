@@ -1,5 +1,4 @@
-/*jshint node:true*/
-/* global require, module */
+/* eslint-env node */
 var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
@@ -14,11 +13,8 @@ module.exports = function(defaults) {
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
 
-  app.import('bower_components/urijs/src/URI.min.js');
-
-  if (!process.env.EMBER_CLI_FASTBOOT) {
-    app.import('bower_components/socket.io-client/dist/socket.io.js');
-  }
+  app.import(`vendor/ember-websockets/shims/mock-socket.js`);
+  app.import(`vendor/ember-websockets/mock-socket/mock-socket.js`);
 
   return app.toTree();
 };

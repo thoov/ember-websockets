@@ -1,21 +1,22 @@
-module.exports = function(app) {
-  var intervalFunction;
-  var WebSocketServer = require('ws').Server;
-  var socketServer = new WebSocketServer({port: 8080});
+/* eslint-env node */
+
+module.exports = function() {
+  const WebSocketServer = require('ws').Server;
+  const socketServer = new WebSocketServer({port: 8080});
 
   socketServer.on('connection', function(ws) {
-    console.log('Someone has connected. ' + ws.upgradeReq.url);
+    console.log('Someone has connected. ' + ws.upgradeReq.url); // eslint-disable-line no-console
 
     ws.on('message', function(message) {
-      var messageFromClient = JSON.parse(message);
+      const messageFromClient = JSON.parse(message);
       ws.send('Recieved ' + messageFromClient + ' from the server');
     });
 
-    ws.on('close', function(message) {
+    ws.on('close', function() {
       clearInterval(intervalFunction);
     });
 
-    intervalFunction = setInterval(function(){
+    const intervalFunction = setInterval(function(){
       ws.send('Every 5 seconds the backend is sending a message.');
     }, 5000);
   });

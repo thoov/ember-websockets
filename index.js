@@ -1,76 +1,89 @@
-/* jshint node: true */
+/* eslint-env node */
 'use strict';
 
-var fs = require('fs');
-var BabelTranspiler = require('broccoli-babel-transpiler');
-var Funnel = require('broccoli-funnel');
-var MergeTrees = require('broccoli-merge-trees');
+const path = require('path');
+const exists = require('exists-sync');
+const Funnel = require('broccoli-funnel');
+const Merge = require('broccoli-merge-trees');
 
 module.exports = {
   name: 'ember-websockets',
 
-  /**
-  * https://github.com/ember-cli/ember-cli/issues/2949#issuecomment-85634073
-  *
-  * The addon tree is augmented with the mock-socket modules. This
-  * makes them available not only to `ember-websocket` as a whole,
-  * but also to the application if they want to embed it.
-  */
-  treeForAddon: function() {
-    // get the base addon tree
-    var addonTree = this._super.treeForAddon.apply(this, arguments);
+  included() {
+    this._super.included.apply(this, arguments);
+    this._shimImport();
 
-    // transpile the mock-socket sources into ES5. However, we want
-    // to leave the ES6 module declaration in place because they'll be
-    // handled later by ember-cli.
-    var transpiled = new BabelTranspiler('node_modules/mock-socket/src', {
-      loose: true,
-      blacklist: ['es6.modules']
-    });
+    if (!this._isFastbootBuild()) {
+      this.import(`vendor/${this.name}/urijs/URI.min.js`);
 
-    // take the transpiled mock-socket sources and put them into
-    // `modules/mock-socket/{server|websocket}.js` so that the
-    // ember-cli build will pick them up.
-    var mockSocket = new Funnel(transpiled, {
-      destDir: 'modules/mock-socket'
-    });
-
-    return new MergeTrees([addonTree, mockSocket]);
+      if (this._readConfigProp('socketIO') === true) {
+        this.import(`vendor/${this.name}/socket.io-client/socket.io.min.js`);
+      }
+    }
   },
 
-  included: function() {
-    this._super.included.apply(this, arguments);
+  treeForVendor() {
+    const urijsPath = require.resolve('urijs');
+    const mockSocketPath = require.resolve('mock-socket');
 
-    if (!process.env.EMBER_CLI_FASTBOOT) {
-      var host;
+    return new Merge([
+      new Funnel(__dirname + '/vendor', { destDir: this.name }),
+      new Funnel(path.dirname(urijsPath), { destDir: this.name + '/urijs' }),
+      new Funnel(path.dirname(mockSocketPath), { destDir: this.name + '/mock-socket' }),
+      new Funnel(__dirname + '/node_modules/socket.io-client/dist', { destDir: this.name + '/socket.io-client' })
+    ]);
+  },
 
-      // If the addon has the _findHost() method (in ember-cli >= 2.7.0), we'll just
-      // use that.
-      if (typeof this._findHost === 'function') {
-        host = this._findHost();
-      } else {
-        // Otherwise, we'll use this implementation borrowed from the _findHost()
-        // method in ember-cli.
-        var current = this;
+  // https://github.com/ember-intl/ember-intl/blob/dd2a90b2ccf94000a92394565d048c42089aef9b/index.js#L144-L161
+  _readConfig(environment) {
+    const project = this.app.project;
+
+    // NOTE: For ember-cli >= 2.6.0-beta.3, project.configPath() returns absolute path
+    // while older ember-cli versions return path relative to project root
+    const configPath = path.dirname(project.configPath());
+    let config = path.join(configPath, 'environment.js');
+
+    if (!path.isAbsolute(config)) {
+      config = path.join(project.root, config);
+    }
+
+    if (exists(config)) {
+      return require(config)(environment);
+    }
+
+    return {
+      'ember-websockets': {}
+    };
+  },
+
+  _readConfigProp(prop) {
+    this._shimImport();
+    const config = this._readConfig(this._findHost().env);
+
+    if (config['ember-websockets'] && config['ember-websockets'][prop]) {
+      return config['ember-websockets'][prop];
+    }
+  },
+
+  _isFastbootBuild() {
+    return !!process.env.EMBER_CLI_FASTBOOT;
+  },
+
+  // https://github.com/simplabs/ember-simple-auth/blob/1ca4ae678b7be9905076762220dcd9fcb0f27ac0/index.js#L24-L39
+  _shimImport() {
+    if (!this.import) {
+      this._findHost = function findHostShim() {
+        let current = this;
+        let app;
         do {
-          host = current.app || host;
+          app = current.app || app;
         } while (current.parent.parent && (current = current.parent));
-      }
-
-      var socketIOPath = host.bowerDirectory + '/socket.io-client/dist/socket.io.js';
-      var uriPath = host.bowerDirectory + '/urijs/src/URI.min.js';
-
-      host.import(uriPath);
-
-      // Only import the socket.io file if one is found
-      try {
-        var stats = fs.lstatSync(socketIOPath);
-
-        if(stats.isFile()) {
-          host.import(socketIOPath);
-        }
-      }
-      catch(e) {}
+        return app;
+      };
+      this.import = function importShim(asset, options) {
+        const app = this._findHost();
+        app.import(asset, options);
+      };
     }
   }
 };

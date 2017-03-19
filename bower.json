@@ -1,7 +1,4 @@
 {
   "name": "ember-websockets",
-  "dependencies": {
-    "urijs": "^1.18.3",
-    "socket.io-client": "^1.7.1"
-  }
+  "dependencies": {}
 }
