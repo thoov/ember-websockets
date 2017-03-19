@@ -1,4 +1,4 @@
-# <p align="center"><img src="https://i.imgur.com/ugtysv0.png" width="600"></p>
+# <p align="center"><img src="https://i.imgur.com/pFNxqZH.png" width="600"></p>
 
 <p align="center">
   <a href="https://travis-ci.org/thoov/ember-websockets">
