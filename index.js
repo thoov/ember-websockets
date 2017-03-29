@@ -31,7 +31,7 @@ module.exports = {
       new Funnel(__dirname + '/vendor', { destDir: this.name }),
       new Funnel(path.dirname(urijsPath), { destDir: this.name + '/urijs' }),
       new Funnel(path.dirname(mockSocketPath), { destDir: this.name + '/mock-socket' }),
-      new Funnel(path.dirname(socketIOClientPath), { destDir: this.name + '/socket.io-client' })
+      new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), { destDir: this.name + '/socket.io-client' })
     ]);
   },
 
