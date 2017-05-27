@@ -189,7 +189,7 @@ export default Ember.Component.extend({
   willDestroyElement() {
     this._super(...arguments);
 
-    const socket = this.get('socketService').socketFor('ws://localhost:7000/');
+    const socketOne = this.get('socketService').socketFor('ws://localhost:7000/');
     const socketTwo = this.get('socketService').socketFor('ws://localhost:7001/');
     socketOne.off('open', this.myOpenFirst);
     socketTwo.off('open', this.myOpenSecond);
