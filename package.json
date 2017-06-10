@@ -29,6 +29,7 @@
     "broccoli-merge-trees": "^2.0.0",
     "ember-cli-babel": "^5.1.7",
     "exists-sync": "0.0.4",
+    "fastboot-transform": "^0.1.0",
     "mock-socket": "^6.0.1",
     "socket.io-client": "^1.7.3",
     "urijs": "^1.18.9"
