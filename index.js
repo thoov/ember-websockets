@@ -5,6 +5,7 @@ const path = require('path');
 const exists = require('exists-sync');
 const Funnel = require('broccoli-funnel');
 const Merge = require('broccoli-merge-trees');
+const fastbootTransform = require('fastboot-transform');
 
 module.exports = {
   name: 'ember-websockets',
@@ -13,12 +14,10 @@ module.exports = {
     this._super.included.apply(this, arguments);
     this._shimImport();
 
-    if (!this._isFastbootBuild()) {
-      this.import(`vendor/${this.name}/urijs/URI.min.js`);
+    this.import(`vendor/${this.name}/urijs/URI.min.js`);
 
-      if (this._readConfigProp('socketIO') === true) {
-        this.import(`vendor/${this.name}/socket.io-client/socket.io.min.js`);
-      }
+    if (this._readConfigProp('socketIO') === true) {
+      this.import(`vendor/${this.name}/socket.io-client/socket.io.min.js`);
     }
   },
 
@@ -29,9 +28,9 @@ module.exports = {
 
     return new Merge([
       new Funnel(__dirname + '/vendor', { destDir: this.name }),
-      new Funnel(path.dirname(urijsPath), { destDir: this.name + '/urijs' }),
+      fastbootTransform(new Funnel(path.dirname(urijsPath), { destDir: this.name + '/urijs' })),
       new Funnel(path.dirname(mockSocketPath), { destDir: this.name + '/mock-socket' }),
-      new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), { destDir: this.name + '/socket.io-client' })
+      fastbootTransform(new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), { destDir: this.name + '/socket.io-client' }))
     ]);
   },
 
@@ -64,10 +63,6 @@ module.exports = {
     if (config['ember-websockets'] && config['ember-websockets'][prop]) {
       return config['ember-websockets'][prop];
     }
-  },
-
-  _isFastbootBuild() {
-    return !!process.env.EMBER_CLI_FASTBOOT;
   },
 
   // https://github.com/simplabs/ember-simple-auth/blob/1ca4ae678b7be9905076762220dcd9fcb0f27ac0/index.js#L24-L39
