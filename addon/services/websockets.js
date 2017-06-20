@@ -72,7 +72,11 @@ export default Service.extend({
 
   closeSocketFor(url) {
     const cleanedUrl = cleanURL(normalizeURL(url));
-    get(this, `sockets.${cleanedUrl}`).socket.close();
+    const existingSocket = get(this, `sockets.${cleanedUrl}`);
+    if (existingSocket)
+    {
+      existingSocket.socket.close();
+    }
     delete get(this, 'sockets')[cleanedUrl];
   },
 
