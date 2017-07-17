@@ -36,7 +36,7 @@ module.exports = {
 
   // https://github.com/ember-intl/ember-intl/blob/dd2a90b2ccf94000a92394565d048c42089aef9b/index.js#L144-L161
   _readConfig(environment) {
-    const project = this.app.project;
+    const project = this.project || this.app.project;
 
     // NOTE: For ember-cli >= 2.6.0-beta.3, project.configPath() returns absolute path
     // while older ember-cli versions return path relative to project root
