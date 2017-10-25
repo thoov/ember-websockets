@@ -1,10 +1,11 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import ObjectProxy from '@ember/object/proxy';
+import { assert } from '@ember/debug';
 
 const events  = ['close', 'error', 'message', 'open'];
 const { filter, indexOf, forEach } = Array.prototype;
-const { assert } = Ember;
 
-export default Ember.ObjectProxy.extend({
+export default ObjectProxy.extend({
 
   /*
   * {
@@ -72,7 +73,7 @@ export default Ember.ObjectProxy.extend({
   setupInternalListeners() {
     forEach.call(events, eventName => {
       this.socket[`on${eventName}`] = event => {
-        Ember.run(() => {
+        run(() => {
           var activeListeners = filter.call(this.listeners, listener => {
             return listener.url === event.currentTarget.url && listener.type === eventName;
           });

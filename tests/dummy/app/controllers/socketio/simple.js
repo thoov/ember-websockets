@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({
-  socketService: Ember.inject.service('socket-io'),
+export default Controller.extend({
+  socketService: service('socket-io'),
 
   init: function() {
     this._super.apply(this, arguments);

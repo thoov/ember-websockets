@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { later } from '@ember/runloop';
 import { moduleFor, test } from 'ember-qunit';
 
 import {
@@ -162,7 +162,7 @@ test('that off(close) works correctly', function(assert) {
       socket.off('close', mock.closeHandler);
       socket.close();
 
-      Ember.run.later(() => {
+      later(() => {
         server.stop();
         done();
       }, 100);
