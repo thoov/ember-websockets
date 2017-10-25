@@ -1,8 +1,7 @@
-import Ember from 'ember';
+import Service from '@ember/service';
+import { set, get, computed } from '@ember/object';
 import WebsocketProxy from '../helpers/websocket-proxy';
 import { normalizeURL, cleanURL } from '../helpers';
-
-const { Service, get, set } = Ember;
 
 export default Service.extend({
   /*
@@ -13,7 +12,7 @@ export default Service.extend({
       'websocket-url': WebSocket Proxy object
     }
   */
-  sockets: Ember.computed(function() {
+  sockets: computed(function() {
     return {};
   }),
 
