@@ -1,7 +1,6 @@
-import Ember from 'ember';
-
-const { bind } = Ember.run;
-const { assert, ObjectProxy } = Ember;
+import { assert } from '@ember/debug';
+import ObjectProxy from '@ember/object/proxy';
+import { bind } from '@ember/runloop';
 
 export default ObjectProxy.extend({
 

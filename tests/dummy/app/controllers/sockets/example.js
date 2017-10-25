@@ -1,14 +1,16 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import { inject as service } from '@ember/service';
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   messageText: null,
   messages: null,
 
-  socketService: Ember.inject.service('websockets'),
+  socketService: service('websockets'),
 
   init() {
     this._super(...arguments);
-    this.messages = Ember.A();
+    this.messages = A();
 
     var socket = this.get('socketService').socketFor('ws://localhost:8080/foo/bar');
 
