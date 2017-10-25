@@ -1,4 +1,9 @@
 {
-  "name": "ember-websockets",
-  "dependencies": {}
+  "name": "ember-try-placeholder",
+  "dependencies": {
+    "ember": "components/ember#lts-2-8"
+  },
+  "resolutions": {
+    "ember": "lts-2-8"
+  }
 }
