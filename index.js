@@ -30,7 +30,7 @@ module.exports = {
       new Funnel(__dirname + '/vendor', { destDir: this.name }),
       fastbootTransform(new Funnel(path.dirname(urijsPath), { destDir: this.name + '/urijs' })),
       new Funnel(path.dirname(mockSocketPath), { destDir: this.name + '/mock-socket' }),
-      fastbootTransform(new Funnel(path.join(path.dirname(socketIOClientPath), '../'), { destDir: this.name + '/socket.io-client' }))
+      fastbootTransform(new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), { destDir: this.name + '/socket.io-client' }))
     ]);
   },
 
