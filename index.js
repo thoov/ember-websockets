@@ -17,7 +17,7 @@ module.exports = {
     this.import(`vendor/${this.name}/urijs/URI.min.js`);
 
     if (this._readConfigProp('socketIO') === true) {
-      this.import(`vendor/${this.name}/socket.io-client/socket.io.min.js`);
+      this.import(`vendor/${this.name}/socket.io-client/socket.io.slim.js`);
     }
   },
 
