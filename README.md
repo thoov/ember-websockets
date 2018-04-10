@@ -23,14 +23,15 @@ ember install ember-websockets
 ## Simple example of using it in your app
 
 ```javascript
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   /*
-    1. First step you need to do is inject the websockets service into your object.
-  */
-  websockets: Ember.inject.service(),
+   * 1. Inject the websockets service
+   */
+  websockets: inject.service(),
   socketRef: null,
 
   didInsertElement() {
@@ -107,10 +108,11 @@ before passing it to the websocket send method. If you are sending strings it is
 ## Reconnecting
 
 ```javascript
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
 
-export default Ember.Component.extend({
-  socketService: Ember.inject.service('websockets'),
+export default Component.extend({
+  socketService: inject.service('websockets'),
 
   didInsertElement() {
     this._super(...arguments);
@@ -143,10 +145,11 @@ export default Ember.Component.extend({
 ## Closing the connection
 
 ```javascript
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
 
-export default Ember.Component.extend({
-  socketService: Ember.inject.service('websockets'),
+export default Component.extend({
+  socketService: inject.service('websockets'),
 
   /*
     To close a websocket connection simply call the closeSocketFor method. NOTE: it is good
@@ -163,10 +166,11 @@ export default Ember.Component.extend({
 ## Multiple Websockets
 
 ```javascript
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
 
-export default Ember.Component.extend({
-  socketService: Ember.inject.service('websockets'),
+export default Component.extend({
+  socketService: inject.service('websockets'),
 
   didInsertElement() {
     this._super(...arguments);
@@ -200,10 +204,11 @@ export default Ember.Component.extend({
 ## Multiple Event Handlers
 
 ```javascript
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
 
-export default Ember.Component.extend({
-  socketService: Ember.inject.service('websockets'),
+export default Component.extend({
+  socketService: inject.service('websockets'),
 
   didInsertElement() {
     this._super(...arguments);
@@ -244,14 +249,15 @@ var ENV = {
 ```
 
 ```javascript
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   /*
-    1. First step you need to do is inject the socketio service into your object.
+    1. Inject the socketio service
   */
-  socketIOService: Ember.inject.service('socket-io'),
+  socketIOService: inject.service('socket-io'),
 
   /*
     Important note: The namespace is an implementation detail of the Socket.IO protocol...
@@ -382,7 +388,7 @@ reconnect takes no arguments. It will attempt to create a new websocket connect 
 
 * `git clone git@github.com:thoov/ember-websockets.git`
 * `cd ember-websockets`
-* `npm i; bower i`
+* `yarn`
 * `ember s`
 * Then visit http://localhost:4200/sockets/example to view a very simple example.
 
@@ -392,7 +398,7 @@ The source code for the live example lives in `ember-websockets/tests/dummy`
 
 * `git clone git@github.com:thoov/ember-websockets.git`
 * `cd ember-websockets`
-* `npm i; bower i`
+* `yarn`
 * `ember t`
 * or `ember s` then visit http://localhost:4200/tests to view the tests.
 
