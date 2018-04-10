@@ -4,8 +4,8 @@ import Controller from '@ember/controller';
 export default Controller.extend({
   socketService: service('socket-io'),
 
-  init: function() {
-    this._super.apply(this, arguments);
+  init() {
+    this._super(...arguments);
 
     var socketIO = this.get('socketService').socketFor('http://localhost:7100/');
 
