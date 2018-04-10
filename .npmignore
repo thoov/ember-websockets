@@ -1,16 +1,14 @@
-/coverage
 /bower_components
 /config/ember-try.js
 /dist
 /tests
 /tmp
-/docs
 **/.gitkeep
 .bowerrc
 .editorconfig
 .ember-cli
-.gitignore
 .eslintrc.js
+.gitignore
 .watchmanconfig
 .travis.yml
 bower.json
