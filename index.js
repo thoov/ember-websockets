@@ -2,7 +2,7 @@
 'use strict';
 
 const path = require('path');
-const exists = require('exists-sync');
+const fs = require('fs');
 const Funnel = require('broccoli-funnel');
 const Merge = require('broccoli-merge-trees');
 const fastbootTransform = require('fastboot-transform');
@@ -47,7 +47,7 @@ module.exports = {
       config = path.join(project.root, config);
     }
 
-    if (exists(config)) {
+    if (fs.existsSync(config)) {
       return require(config)(environment);
     }
 

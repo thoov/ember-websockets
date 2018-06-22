@@ -27,7 +27,6 @@
     "broccoli-funnel": "^2.0.1",
     "broccoli-merge-trees": "^2.0.0",
     "ember-cli-babel": "^6.6.0",
-    "exists-sync": "^0.0.4",
     "fastboot-transform": "^0.1.2",
     "glob": "^7.1.2",
     "mock-socket": "^7.1.0",
