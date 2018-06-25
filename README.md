@@ -24,14 +24,14 @@ ember install ember-websockets
 
 ```javascript
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
 
   /*
    * 1. Inject the websockets service
    */
-  websockets: inject.service(),
+  websockets: service(),
   socketRef: null,
 
   didInsertElement() {
@@ -42,7 +42,7 @@ export default Component.extend({
       will retrieve a cached websocket if one exists or in this case it
       will create a new one for us.
     */
-    const socket = this.get('websockets').socketFor('ws://localhost:7000/');
+    const socket = this.websockets.socketFor('ws://localhost:7000/');
 
     /*
       3. The next step is to define your event handlers. All event handlers
@@ -60,7 +60,7 @@ export default Component.extend({
   willDestroyElement() {
     this._super(...arguments);
 
-    const socket = this.get('socketRef');
+    const socket = this.socketRef;
 
     /*
       4. The final step is to remove all of the listeners you have setup.
@@ -84,8 +84,7 @@ export default Component.extend({
 
   actions: {
     sendButtonPressed() {
-      const socket = this.get('socketRef');
-      socket.send('Hello Websocket World');
+      this.socketRef.send('Hello Websocket World');
     }
   }
 });
@@ -94,7 +93,7 @@ export default Component.extend({
 ## Sending messages to the server
 
 ```javascript
-var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.socketService.socketFor('ws://localhost:7000/');
 socket.send({username: 'foo', didSomeAction: 'pressedAButton'}, true);
 
 // the above line is the same as this:
@@ -109,21 +108,22 @@ before passing it to the websocket send method. If you are sending strings it is
 
 ```javascript
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
+import { later } from '@ember/runloop';
 
 export default Component.extend({
-  socketService: inject.service('websockets'),
+  socketService: service('websockets'),
 
   didInsertElement() {
     this._super(...arguments);
 
-    const socket = this.get('socketService').socketFor('ws://localhost:7000/');
+    const socket = this.socketService.socketFor('ws://localhost:7000/');
     socket.on('close', this.myOnClose, this);
   },
 
   myOnClose() {
-    const socket = this.get('socketService').socketFor('ws://localhost:7000/');
-    Ember.run.later(this, () => {
+    const socket = this.socketService.socketFor('ws://localhost:7000/');
+    later(this, () => {
       /*
         This will remove the old socket and try and connect to a new one on the same url.
         NOTE: that this does not need to be in a Ember.run.later this is just an example on
@@ -136,7 +136,7 @@ export default Component.extend({
   willDestroyElement() {
     this._super(...arguments);
 
-    const socket = this.get('socketService').socketFor('ws://localhost:7000/');
+    const socket = this.socketService.socketFor('ws://localhost:7000/');
     socket.off('close', this.myOnClose);
   }
 });
@@ -146,10 +146,10 @@ export default Component.extend({
 
 ```javascript
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
-  socketService: inject.service('websockets'),
+  socketService: service('websockets'),
 
   /*
     To close a websocket connection simply call the closeSocketFor method. NOTE: it is good
@@ -158,7 +158,7 @@ export default Component.extend({
   */
   willDestroyElement() {
     this._super(...arguments);
-    this.get('socketService').closeSocketFor('ws://localhost:7000/');
+    this.socketService.closeSocketFor('ws://localhost:7000/');
   }
 });
 ```
@@ -167,16 +167,16 @@ export default Component.extend({
 
 ```javascript
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
-  socketService: inject.service('websockets'),
+  socketService: service('websockets'),
 
   didInsertElement() {
     this._super(...arguments);
 
-    const socketOne = this.get('socketService').socketFor('ws://localhost:7000/');
-    const socketTwo = this.get('socketService').socketFor('ws://localhost:7001/');
+    const socketOne = this.socketService.socketFor('ws://localhost:7000/');
+    const socketTwo = this.socketService.socketFor('ws://localhost:7001/');
 
     socketOne.on('open', this.myOpenFirst, this);
     socketTwo.on('open', this.myOpenSeconds, this);
@@ -193,8 +193,8 @@ export default Component.extend({
   willDestroyElement() {
     this._super(...arguments);
 
-    const socketOne = this.get('socketService').socketFor('ws://localhost:7000/');
-    const socketTwo = this.get('socketService').socketFor('ws://localhost:7001/');
+    const socketOne = this.socketService.socketFor('ws://localhost:7000/');
+    const socketTwo = this.socketService.socketFor('ws://localhost:7001/');
     socketOne.off('open', this.myOpenFirst);
     socketTwo.off('open', this.myOpenSecond);
   }
@@ -205,14 +205,14 @@ export default Component.extend({
 
 ```javascript
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
-  socketService: inject.service('websockets'),
+  socketService: service('websockets'),
 
   didInsertElement() {
     this._super(...arguments);
-    var socket = this.get('socketService').socketFor('ws://localhost:7000/');
+    const socket = this.socketService.socketFor('ws://localhost:7000/');
 
     socket.on('open', this.myOpenFirst, this);
     socket.on('open', this.myOpenSecond, this);
@@ -229,7 +229,7 @@ export default Component.extend({
   willDestroyElement() {
     this._super(...arguments);
 
-    const socket = this.get('socketService').socketFor('ws://localhost:7000/');
+    const socket = this.socketService.socketFor('ws://localhost:7000/');
     socket.off('open', this.myOpenFirst);
     socket.off('open', this.myOpenSecond);
   }
@@ -250,14 +250,14 @@ var ENV = {
 
 ```javascript
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
 
   /*
     1. Inject the socketio service
   */
-  socketIOService: inject.service('socket-io'),
+  socketIOService: service('socket-io'),
 
   /*
     Important note: The namespace is an implementation detail of the Socket.IO protocol...
@@ -271,7 +271,7 @@ export default Component.extend({
     /*
       2. The next step you need to do is to create your actual socketIO.
     */
-    const socket = this.get('socketIOService').socketFor('http://localhost:7000/' + this.get('namespace'));
+    const socket = this.socketIOService.socketFor(`http://localhost:7000/${this.namespace}`);
 
     /*
     * 3. Define any event handlers
@@ -286,7 +286,7 @@ export default Component.extend({
   },
 
   onConnect() {
-    const socket = this.get('socketIOService').socketFor('http://localhost:7000/' + this.get('namespace'));
+    const socket = this.socketIOService.socketFor(`http://localhost:7000/${this.namespace}`);
 
     /*
       There are 2 ways to send messages to the server: send and emit
@@ -300,14 +300,14 @@ export default Component.extend({
   },
 
   myCustomEvent(data) {
-    const socket = this.get('socketIOService').socketFor('http://localhost:7000/' + this.get('namespace'));
+    const socket = this.socketIOService.socketFor(`http://localhost:7000/${this.namespace}`);
     socket.emit('anotherCustomEvent', 'some data');
   },
 
   willDestroyElement() {
     this._super(...arguments);
 
-    const socket = this.get('socketService').socketFor('http://localhost:7000/' + this.get('namespace'));
+    const socket = this.socketIOService.socketFor(`http://localhost:7000/${this.namespace}`);
     socket.off('connect', this.onConnect);
     socket.off('message', this.onMessage);
     socket.off('myCustomEvent', this.myCustomEvent);
@@ -324,7 +324,7 @@ export default Component.extend({
 Example:
 
 ```javascript
-const socket = this.get('socketService').socketFor('ws://localhost:7000/', ['myOptionalProtocol']);
+const socket = this.socketService.socketFor('ws://localhost:7000/', ['myOptionalProtocol']);
 ```
 
 socketFor takes two arguments: **a url**, **a protocol array** (optional), and returns a socket instance from its cache or a new websocket connection if one was not found.
@@ -332,7 +332,7 @@ socketFor takes two arguments: **a url**, **a protocol array** (optional), and r
 To use a custom namespace, append the namespace to the end of the url.
 
 ```javascript
-const socket = this.get('socketService').socketFor('ws://localhost:7000/' + namespace);
+const socket = this.socketService.socketFor(`ws://localhost:7000/${namespace}`);
 ```
 
 ### On
@@ -340,7 +340,7 @@ const socket = this.get('socketService').socketFor('ws://localhost:7000/' + name
 Example:
 
 ```javascript
-const socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.socketService.socketFor('ws://localhost:7000/');
 
 socket.on('open', this.myOtherOpenFunction);
 ```
@@ -352,7 +352,7 @@ on takes 3 arguments: **event type**, **callback function**, and **context**. Ev
 Example:
 
 ```javascript
-const socket = this.get('socketService').socketFor('ws://localhost:7000/');
+const socket = this.socketService.socketFor('ws://localhost:7000/');
 
 let openFunctionReference = this.myOpenFunction.bind(this);
 
@@ -367,7 +367,7 @@ off takes 2 arguments: **event type**, **callback function**. Event type can be 
 Example:
 
 ```javascript
-this.get('socketService').closeSocketFor('ws://localhost:7000/');
+this.socketService.closeSocketFor('ws://localhost:7000/');
 ```
 
 closeSocketFor takes a single argument, **a url**, and closes the websocket connection. It will also remove it from the cache. In normal cases you would not have to call this method.
