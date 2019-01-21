@@ -8,7 +8,7 @@ const Merge = require('broccoli-merge-trees');
 const fastbootTransform = require('fastboot-transform');
 
 module.exports = {
-  name: 'ember-websockets',
+  name: require('./package').name,
 
   included() {
     this._super.included.apply(this, arguments);
