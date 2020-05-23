@@ -14,21 +14,17 @@ module.exports = {
     this._super.included.apply(this, arguments);
     this._shimImport();
 
-    this.import(`vendor/${this.name}/urijs/URI.min.js`);
-
     if (this._readConfigProp('socketIO') === true) {
       this.import(`vendor/${this.name}/socket.io-client/socket.io.slim.js`);
     }
   },
 
   treeForVendor() {
-    const urijsPath = require.resolve('urijs');
     const mockSocketPath = require.resolve('mock-socket');
     const socketIOClientPath = require.resolve('socket.io-client');
 
     return new Merge([
       new Funnel(__dirname + '/vendor', { destDir: this.name }),
-      fastbootTransform(new Funnel(path.dirname(urijsPath), { destDir: this.name + '/urijs' })),
       new Funnel(path.dirname(mockSocketPath), { destDir: this.name + '/mock-socket' }),
       fastbootTransform(new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), { destDir: this.name + '/socket.io-client' }))
     ]);

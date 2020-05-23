@@ -4,21 +4,7 @@
 * change. This function does this transformation to stay inline with the native websocket implementation.
 */
 export function normalizeURL(url) {
-  const parsedUrl = new URI(url);
-  const path = parsedUrl.path();
-  const query = parsedUrl.query();
-
-  if (path === '/') {
-    if(query === '' && url.slice(-1) !== '/') {
-      return url + '/';
-    }
-
-    if(query !== '' && url.indexOf('/?') === -1) {
-      return url.replace('?', '/?');
-    }
-  }
-
-  return url;
+  return new URL(url).toString();
 }
 
 /*
