@@ -27,7 +27,6 @@ jobs:
          - ember-release
          - ember-beta
          - ember-canary
-         - ember-default
          - ember-default-with-jquery
 
     steps:
