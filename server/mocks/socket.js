@@ -5,7 +5,7 @@ module.exports = function() {
   const socketServer = new WebSocketServer({port: 8080});
 
   socketServer.on('connection', function(ws) {
-    console.log('Someone has connected. ' + ws.upgradeReq.url); // eslint-disable-line no-console
+    console.log('Someone has connected. '); // eslint-disable-line no-console
 
     ws.on('message', function(message) {
       const messageFromClient = JSON.parse(message);

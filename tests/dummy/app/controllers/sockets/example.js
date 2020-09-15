@@ -5,13 +5,12 @@ import { action } from '@ember/object';
 
 export default class ExampleController extends Controller {
   messageText = null;
-  messages = null;
+  messages = A();
 
   @service('websockets') socketService;
 
   constructor() {
     super(...arguments);
-    this.messages = A();
 
     let socket = this.socketService.socketFor('ws://localhost:8080/foo/bar');
 

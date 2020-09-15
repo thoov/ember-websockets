@@ -13,6 +13,6 @@ export default class SocketIOService extends WebSocketService {
   }
 
   createProxy(socket) {
-    return SocketIOProxy.create({ content: this, socket });
+    return new SocketIOProxy({ content: this, socket });
   }
 }

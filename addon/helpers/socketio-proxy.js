@@ -14,9 +14,13 @@ export default class SocketIOProxy extends ObjectProxy {
   */
   listeners = null;
 
-  constructor() {
+  socket = null;
+
+  constructor({ content, socket }) {
     super(...arguments);
     this.listeners = [];
+    this.content = content;
+    this.socket = socket;
   }
 
   /*

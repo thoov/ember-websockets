@@ -18,9 +18,16 @@ export default class WebSocketProxy extends ObjectProxy {
 
   protocols = null;
 
-  constructor() {
+  socket = null;
+
+  constructor({ content, protocols, socket }) {
     super(...arguments);
     this.listeners = [];
+
+    this.content = content;
+    this.protocols = protocols;
+    this.socket = socket;
+
     this.setupInternalListeners();
   }
 

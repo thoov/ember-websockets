@@ -13,7 +13,7 @@ export default class WebSocketService extends Service {
       'websocket-url': WebSocket Proxy object
     }
   */
-  @computed('firstName', 'lastName')
+  @computed()
   get sockets() {
     return {};
   }
@@ -90,6 +90,6 @@ export default class WebSocketService extends Service {
   }
 
   createProxy(socket, protocols) {
-    return WebsocketProxy.create({ content: this, protocols, socket });
+    return new WebsocketProxy({ content: this, protocols, socket });
   }
 }
