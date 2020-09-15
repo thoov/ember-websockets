@@ -1,0 +1,40 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: rwjblue/setup-volta@v1
+    - run: yarn
+    - run: yarn lint
+    - run: yarn test:ember
+
+  try-scenarios:
+    name: ${{ matrix.ember-try-scenario }}
+    runs-on: ubuntu-latest
+    needs: test
+
+    strategy:
+      matrix:
+        ember-try-scenario:
+         - ember-lts-3.12
+         - ember-lts-3.16
+         - ember-lts-3.20
+         - ember-release
+         - ember-beta
+         - ember-canary
+         - ember-default
+         - ember-default-with-jquery
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: rwjblue/setup-volta@v1
+    - run: yarn
+      env:
+        EMBER_TRY_SCENARIO: ${{ matrix.ember-try-scenario }}
+      run: node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO
