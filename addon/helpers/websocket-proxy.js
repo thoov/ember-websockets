@@ -5,8 +5,7 @@ import { assert } from '@ember/debug';
 const events  = ['close', 'error', 'message', 'open'];
 const { filter, indexOf, forEach } = Array.prototype;
 
-export default ObjectProxy.extend({
-
+export default class WebSocketProxy extends ObjectProxy {
   /*
   * {
   *    url: 'String'
@@ -15,15 +14,15 @@ export default ObjectProxy.extend({
   *    context: The context of the function
   * }
   */
-  listeners: null,
+  listeners = null;
 
-  protocols: null,
+  protocols = null;
 
-  init() {
-    this._super(...arguments);
+  constructor() {
+    super(...arguments);
     this.listeners = [];
     this.setupInternalListeners();
-  },
+  }
 
   /*
   * Adds a callback function into the listeners array which will
@@ -36,7 +35,7 @@ export default ObjectProxy.extend({
     assert('The second argument must be a function.', typeof callback === 'function');
 
     this.listeners.push({ url: this.socket.url, type, callback, context });
-  },
+  }
 
   /*
   * Removes a callback function from the listeners array. This callback
@@ -44,7 +43,7 @@ export default ObjectProxy.extend({
   */
   off(type, callback) {
     this.listeners = filter.call(this.listeners, listeners => !(listeners.callback === callback && listeners.type === type));
-  },
+  }
 
   /*
   * Message is the message which will be passed into the native websockets send method
@@ -59,16 +58,16 @@ export default ObjectProxy.extend({
     assert('Cannot send message to the websocket while it is not open.', this.readyState() === WebSocket.OPEN);
 
     this.socket.send(message);
-  },
+  }
 
   close() {
     this.socket.close();
-  },
+  }
 
   reconnect() {
     this.set('socket', new WebSocket(this.socket.url, this.get('protocols')));
     this.setupInternalListeners();
-  },
+  }
 
   setupInternalListeners() {
     forEach.call(events, eventName => {
@@ -90,10 +89,10 @@ export default ObjectProxy.extend({
         });
       };
     });
-  },
+  }
 
   /*
   * A helper method to get access to the readyState of the websocket.
   */
   readyState() { return this.socket.readyState; }
-});
+}
