@@ -1,4 +1,4 @@
-# Ember WebSockets
+# Ember Websockets
 
 [![GitHub Actions CI][github-actions-badge]][github-actions-ci-url]
 
