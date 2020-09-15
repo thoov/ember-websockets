@@ -1,18 +1,18 @@
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
 
-export default Controller.extend({
-  messageText: null,
-  messages: null,
+export default class ExampleController extends Controller {
+  messageText = null;
+  messages = A();
 
-  socketService: service('websockets'),
+  @service('websockets') socketService;
 
-  init() {
-    this._super(...arguments);
-    this.messages = A();
+  constructor() {
+    super(...arguments);
 
-    var socket = this.get('socketService').socketFor('ws://localhost:8080/foo/bar');
+    let socket = this.socketService.socketFor('ws://localhost:8080/foo/bar');
 
     socket.on('open', () => {
       console.log('On open called'); // eslint-disable-line no-console
@@ -23,14 +23,13 @@ export default Controller.extend({
     }, this);
 
     socket.on('message', (messageFromSocket) => {
-      this.get('messages').pushObject({text: messageFromSocket.data});
+      this.messages.pushObject({text: messageFromSocket.data});
     }, this);
-  },
-
-  actions: {
-    submitText: function() {
-      var socket = this.get('socketService').socketFor('ws://localhost:8080/foo/bar');
-      socket.send(this.get('messageText'), true);
-    }
   }
-});
+
+  @action
+  submitText() {
+    let socket = this.socketService.socketFor('ws://localhost:8080/foo/bar');
+    socket.send(this.messageText, true);
+  }
+}

@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
 
-export default Controller.extend({
-  actions: {
-    onopen: function() {
-      this.send('emit', 'hello world');
-    }
+export default class ApplicationController extends Controller {
+  @action
+  onopen() {
+    this.send('emit', 'hello world');
   }
-});
+}

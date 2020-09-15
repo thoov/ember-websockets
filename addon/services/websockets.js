@@ -3,7 +3,8 @@ import { set, get, computed } from '@ember/object';
 import WebsocketProxy from '../helpers/websocket-proxy';
 import { normalizeURL, cleanURL } from '../helpers';
 
-export default Service.extend({
+export default class WebSocketService extends Service {
+
   /*
     A hash of open websocket connections. This
     allows multiple components to share the same connection.
@@ -12,9 +13,10 @@ export default Service.extend({
       'websocket-url': WebSocket Proxy object
     }
   */
-  sockets: computed(function() {
+  @computed()
+  get sockets() {
     return {};
-  }),
+  }
 
   /*
     socketFor returns a websocket proxy object. On this object there is a property `socket`
@@ -67,7 +69,7 @@ export default Service.extend({
     set(this, `sockets.${cleanedUrl}`, newProxy);
 
     return newProxy;
-  },
+  }
 
   closeSocketFor(url) {
     const cleanedUrl = cleanURL(normalizeURL(url));
@@ -76,18 +78,18 @@ export default Service.extend({
     {
       existingSocket.socket.close();
     }
-    delete get(this, 'sockets')[cleanedUrl];
-  },
+    delete this.sockets[cleanedUrl];
+  }
 
   isWebSocketOpen(websocket) {
     return websocket.readyState !== WebSocket.CLOSED;
-  },
+  }
 
   createSocket(url, options) {
     return new WebSocket(url, options);
-  },
+  }
 
   createProxy(socket, protocols) {
-    return WebsocketProxy.create({ content: this, protocols, socket });
+    return new WebsocketProxy({ content: this, protocols, socket });
   }
-});
+}

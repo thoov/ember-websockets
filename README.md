@@ -23,19 +23,20 @@ ember install ember-websockets
 ## Simple example of using it in your app
 
 ```javascript
-import Component from '@ember/component';
+import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-export default Component.extend({
+export default class Controller extends Controller {
 
   /*
    * 1. Inject the websockets service
    */
-  websockets: service(),
-  socketRef: null,
+  @service('websockets') websockets;
+  socketRef = null,
 
-  didInsertElement() {
-    this._super(...arguments);
+  constructor() {
+    super(...arguments);
 
     /*
       2. The next step you need to do is to create your actual websocket. Calling socketFor
@@ -55,39 +56,25 @@ export default Component.extend({
     socket.on('close', this.myCloseHandler, this);
 
     this.set('socketRef', socket);
-  },
-
-  willDestroyElement() {
-    this._super(...arguments);
-
-    const socket = this.socketRef;
-
-    /*
-      4. The final step is to remove all of the listeners you have setup.
-    */
-    socket.off('open', this.myOpenHandler);
-    socket.off('message', this.myMessageHandler);
-    socket.off('close', this.myCloseHandler);
-  },
+  }
 
   myOpenHandler(event) {
     console.log(`On open event has been called: ${event}`);
-  },
+  }
 
   myMessageHandler(event) {
     console.log(`Message: ${event.data}`);
-  },
+  }
 
   myCloseHandler(event) {
     console.log(`On close event has been called: ${event}`);
-  },
-
-  actions: {
-    sendButtonPressed() {
-      this.socketRef.send('Hello Websocket World');
-    }
   }
-});
+
+  @action
+  sendButtonPressed() {
+    this.socketRef.send('Hello Websocket World');
+  }
+}
 ```
 
 ## Sending messages to the server
@@ -107,19 +94,19 @@ before passing it to the websocket send method. If you are sending strings it is
 ## Reconnecting
 
 ```javascript
-import Component from '@ember/component';
+import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
 
-export default Component.extend({
-  socketService: service('websockets'),
+export default class MyController extends Controller {
+  @service('websockets') socketService;
 
-  didInsertElement() {
-    this._super(...arguments);
+  constructor() {
+    super(...arguments);
 
     const socket = this.socketService.socketFor('ws://localhost:7000/');
     socket.on('close', this.myOnClose, this);
-  },
+  }
 
   myOnClose() {
     const socket = this.socketService.socketFor('ws://localhost:7000/');
@@ -131,15 +118,8 @@ export default Component.extend({
       */
       socket.reconnect();
     }, 1000);
-  },
-
-  willDestroyElement() {
-    this._super(...arguments);
-
-    const socket = this.socketService.socketFor('ws://localhost:7000/');
-    socket.off('close', this.myOnClose);
   }
-});
+}
 ```
 
 ## Closing the connection
@@ -148,8 +128,8 @@ export default Component.extend({
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 
-export default Component.extend({
-  socketService: service('websockets'),
+export default class MyComponent extends Component {
+  @service('websockets') socketService;
 
   /*
     To close a websocket connection simply call the closeSocketFor method. NOTE: it is good
@@ -157,10 +137,9 @@ export default Component.extend({
     place for this clean up is in the willDestroyElement method of the object.
   */
   willDestroyElement() {
-    this._super(...arguments);
     this.socketService.closeSocketFor('ws://localhost:7000/');
   }
-});
+}
 ```
 
 ## Multiple Websockets
@@ -169,36 +148,32 @@ export default Component.extend({
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 
-export default Component.extend({
-  socketService: service('websockets'),
+export default class MyComponent extends Component {
+  @service('websockets') socketService;
 
   didInsertElement() {
-    this._super(...arguments);
-
     const socketOne = this.socketService.socketFor('ws://localhost:7000/');
     const socketTwo = this.socketService.socketFor('ws://localhost:7001/');
 
     socketOne.on('open', this.myOpenFirst, this);
     socketTwo.on('open', this.myOpenSeconds, this);
-  },
+  }
 
   myOpenFirst(event) {
     console.log('Hello from socket one');
-  },
+  }
 
   myOpenSecond(event) {
     console.log('Hello from socket two');
-  },
+  }
 
   willDestroyElement() {
-    this._super(...arguments);
-
     const socketOne = this.socketService.socketFor('ws://localhost:7000/');
     const socketTwo = this.socketService.socketFor('ws://localhost:7001/');
     socketOne.off('open', this.myOpenFirst);
     socketTwo.off('open', this.myOpenSecond);
   }
-});
+}
 ```
 
 ## Multiple Event Handlers
@@ -207,33 +182,30 @@ export default Component.extend({
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 
-export default Component.extend({
+export default class MyComponent extends Component {
   socketService: service('websockets'),
 
   didInsertElement() {
-    this._super(...arguments);
     const socket = this.socketService.socketFor('ws://localhost:7000/');
 
     socket.on('open', this.myOpenFirst, this);
     socket.on('open', this.myOpenSecond, this);
-  },
+  }
 
   myOpenFirst() {
     console.log('This will be called');
-  },
+  }
 
   myOpenSecond() {
     console.log('This will also be called');
-  },
+  }
 
   willDestroyElement() {
-    this._super(...arguments);
-
     const socket = this.socketService.socketFor('ws://localhost:7000/');
     socket.off('open', this.myOpenFirst);
     socket.off('open', this.myOpenSecond);
   }
-});
+}
 ```
 
 ## Socket.IO Support
@@ -252,22 +224,20 @@ var ENV = {
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 
-export default Component.extend({
+export default class MyComponent extends Component {
 
   /*
     1. Inject the socketio service
   */
-  socketIOService: service('socket-io'),
+  @service('socket-io') socketIOService;
 
   /*
     Important note: The namespace is an implementation detail of the Socket.IO protocol...
     http://socket.io/docs/rooms-and-namespaces/#custom-namespaces
   */
-  namespace: 'myCustomNamespace',
+  namespace = 'myCustomNamespace',
 
   didInsertElement() {
-    this._super(...arguments);
-
     /*
       2. The next step you need to do is to create your actual socketIO.
     */
@@ -283,7 +253,7 @@ export default Component.extend({
       4. It is also possible to set event handlers on specific events
     */
     socket.on('myCustomEvent', () => { socket.emit('anotherCustomEvent', 'some data'); });
-  },
+  }
 
   onConnect() {
     const socket = this.socketIOService.socketFor(`http://localhost:7000/${this.namespace}`);
@@ -293,26 +263,24 @@ export default Component.extend({
     */
     socket.send('Hello World');
     socket.emit('Hello server');
-  },
+  }
 
   onMessage(data) {
     // This is executed within the ember run loop
-  },
+  }
 
   myCustomEvent(data) {
     const socket = this.socketIOService.socketFor(`http://localhost:7000/${this.namespace}`);
     socket.emit('anotherCustomEvent', 'some data');
-  },
+  }
 
   willDestroyElement() {
-    this._super(...arguments);
-
     const socket = this.socketIOService.socketFor(`http://localhost:7000/${this.namespace}`);
     socket.off('connect', this.onConnect);
     socket.off('message', this.onMessage);
     socket.off('myCustomEvent', this.myCustomEvent);
   }
-});
+}
 ```
 
 **Please visit**: [socket.io docs](https://github.com/thoov/ember-websockets/blob/master/docs/socket-io.md) for more details on ember-websocket + socket.io

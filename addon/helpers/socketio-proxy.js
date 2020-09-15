@@ -2,8 +2,7 @@ import { assert } from '@ember/debug';
 import ObjectProxy from '@ember/object/proxy';
 import { bind } from '@ember/runloop';
 
-export default ObjectProxy.extend({
-
+export default class SocketIOProxy extends ObjectProxy {
   /*
   * {
   *    url: 'String'
@@ -13,12 +12,16 @@ export default ObjectProxy.extend({
   *    ref: The actual callback function with is given to socketio
   * }
   */
-  listeners: null,
+  listeners = null;
 
-  init() {
-    this._super(...arguments);
+  socket = null;
+
+  constructor({ content, socket }) {
+    super(...arguments);
     this.listeners = [];
-  },
+    this.content = content;
+    this.socket = socket;
+  }
 
   /*
   * This method simply passes the arguments to the socketio on method except it binds the callback function to
@@ -30,7 +33,7 @@ export default ObjectProxy.extend({
     const bindedCallback = bind(context, callback);
     this.listeners.push({url: this.socket.io.uri, type, callback, context, ref: bindedCallback});
     this.socket.on(type, bindedCallback);
-  },
+  }
 
   off(type, callback) {
     assert('The second argument must be a function.', typeof(callback) === 'function');
@@ -41,20 +44,20 @@ export default ObjectProxy.extend({
     }
 
     this.listeners = this.listeners.filter(l => listeners.indexOf(l) === -1);
-  },
+  }
 
   /*
   * This method passes the argument to the socketio emit method.
   */
   emit() {
     this.socket.emit.apply(this.socket, arguments);
-  },
+  }
 
   close() {
     this.listeners = this.listeners.filter(listener => listener.url === this.socket.io.uri);
     this.socket.close.apply(this.socket, arguments);
-  },
+  }
 
-  send() { this.socket.send.apply(this.socket, arguments); },
+  send() { this.socket.send.apply(this.socket, arguments); }
   connect() { this.socket.connect.apply(this.socket, arguments); }
-});
+}

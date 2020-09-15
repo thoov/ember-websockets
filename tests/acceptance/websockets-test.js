@@ -26,11 +26,11 @@ module('Acceptance | websockets', function(hooks) {
 
     await visit('/sockets/example');
 
-    fillIn('input[type=text]', 'this is a test');
-    click('button');
+    await fillIn('input[type=text]', 'this is a test');
+    await click('button');
 
-    fillIn('input[type=text]', 'this is a test 2');
-    click('button');
+    await fillIn('input[type=text]', 'this is a test 2');
+    await click('button');
   });
 });
 
