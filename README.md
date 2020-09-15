@@ -1,19 +1,9 @@
-<p align="center"><img src="https://i.imgur.com/pFNxqZH.png" width="600"></p>
+# Ember Websockets
 
-<p align="center">
-  <a href="https://travis-ci.org/thoov/ember-websockets">
-    <img src="https://travis-ci.org/thoov/ember-websockets.svg?branch=master" alt="Build Status">
-  </a>
-  <a href="https://codeclimate.com/github/thoov/ember-websockets">
-    <img src="https://codeclimate.com/github/thoov/ember-websockets/badges/gpa.svg" alt="Code GPA">
-  </a>
-  <a href="http://emberobserver.com/addons/ember-websockets">
-    <img src="http://emberobserver.com/badges/ember-websockets.svg" alt="Ember Observer Score">
-  </a>
-  <a href="http://badge.fury.io/js/ember-websockets">
-    <img src="https://badge.fury.io/js/ember-websockets.svg" alt="NPM Version">
-  </a>
-</p>
+[![GitHub Actions CI][github-actions-badge]][github-actions-ci-url]
+
+[github-actions-badge]: https://github.com/thoov/ember-websockets/workflows/CI/badge.svg
+[github-actions-ci-url]: https://github.com/thoov/ember-websockets/actions?query=workflow%3ACI
 
 ## Installation
 ```
@@ -27,7 +17,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class Controller extends Controller {
+export default class MyController extends Controller {
 
   /*
    * 1. Inject the websockets service
