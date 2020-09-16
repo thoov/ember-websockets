@@ -74,8 +74,7 @@ export default class WebSocketService extends Service {
   closeSocketFor(url) {
     const cleanedUrl = cleanURL(normalizeURL(url));
     const existingSocket = get(this, `sockets.${cleanedUrl}`);
-    if (existingSocket)
-    {
+    if (existingSocket) {
       existingSocket.socket.close();
     }
     delete this.sockets[cleanedUrl];
@@ -90,6 +89,6 @@ export default class WebSocketService extends Service {
   }
 
   createProxy(socket, protocols) {
-    return new WebsocketProxy({ content: this, protocols, socket });
+    return WebsocketProxy.create({ content: this, protocols, socket })
   }
 }

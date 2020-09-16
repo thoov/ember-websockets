@@ -1,11 +1,11 @@
 import { run } from '@ember/runloop';
-import ObjectProxy from '@ember/object/proxy';
 import { assert } from '@ember/debug';
+import ObjectProxy from '@ember/object/proxy';
 
 const events  = ['close', 'error', 'message', 'open'];
 const { filter, indexOf, forEach } = Array.prototype;
 
-export default class WebSocketProxy extends ObjectProxy {
+export default ObjectProxy.extend({
   /*
   * {
   *    url: 'String'
@@ -14,22 +14,14 @@ export default class WebSocketProxy extends ObjectProxy {
   *    context: The context of the function
   * }
   */
-  listeners = null;
+  listeners: null,
 
-  protocols = null;
-
-  socket = null;
-
-  constructor({ content, protocols, socket }) {
-    super(...arguments);
+  init() {
+    this._super(...arguments);
     this.listeners = [];
 
-    this.content = content;
-    this.protocols = protocols;
-    this.socket = socket;
-
     this.setupInternalListeners();
-  }
+  },
 
   /*
   * Adds a callback function into the listeners array which will
@@ -42,7 +34,7 @@ export default class WebSocketProxy extends ObjectProxy {
     assert('The second argument must be a function.', typeof callback === 'function');
 
     this.listeners.push({ url: this.socket.url, type, callback, context });
-  }
+  },
 
   /*
   * Removes a callback function from the listeners array. This callback
@@ -50,7 +42,7 @@ export default class WebSocketProxy extends ObjectProxy {
   */
   off(type, callback) {
     this.listeners = filter.call(this.listeners, listeners => !(listeners.callback === callback && listeners.type === type));
-  }
+  },
 
   /*
   * Message is the message which will be passed into the native websockets send method
@@ -65,16 +57,16 @@ export default class WebSocketProxy extends ObjectProxy {
     assert('Cannot send message to the websocket while it is not open.', this.readyState() === WebSocket.OPEN);
 
     this.socket.send(message);
-  }
+  },
 
   close() {
     this.socket.close();
-  }
+  },
 
   reconnect() {
-    this.set('socket', new WebSocket(this.socket.url, this.get('protocols')));
+    this.set('socket', new WebSocket(this.socket.url, this.protocols));
     this.setupInternalListeners();
-  }
+  },
 
   setupInternalListeners() {
     forEach.call(events, eventName => {
@@ -96,10 +88,10 @@ export default class WebSocketProxy extends ObjectProxy {
         });
       };
     });
-  }
+  },
 
   /*
   * A helper method to get access to the readyState of the websocket.
   */
   readyState() { return this.socket.readyState; }
-}
+});
