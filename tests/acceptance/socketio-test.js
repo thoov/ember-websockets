@@ -4,15 +4,15 @@ import { setupApplicationTest } from 'ember-qunit';
 
 import { Server } from 'mock-socket';
 
-module('Acceptance | socket.io', function(hooks) {
+module('Acceptance | socket.io', function (hooks) {
   setupApplicationTest(hooks);
 
-  test('visiting /socketio/simple', async function(assert) {
+  test('visiting /socketio/simple', async function (assert) {
     const done = assert.async();
     const mockServer = new Server('ws://localhost:7100/');
 
     let counter = 0;
-    mockServer.on('message', data => {
+    mockServer.on('message', (data) => {
       const value = JSON.parse(data);
 
       if (counter === 1) {

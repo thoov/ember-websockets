@@ -15,7 +15,10 @@ module.exports = {
     let app = this._findHost(this);
 
     const appConfig = app.project.config(process.env.EMBER_ENV);
-    if (appConfig['ember-websockets'] && appConfig['ember-websockets']['socketIO'] === true) {
+    if (
+      appConfig['ember-websockets'] &&
+      appConfig['ember-websockets']['socketIO'] === true
+    ) {
       this.import(`vendor/${this.name}/socket.io-client/socket.io.slim.js`);
     }
   },

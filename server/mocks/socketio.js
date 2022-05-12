@@ -15,8 +15,10 @@ module.exports = function () {
       clearInterval(intervalFunction);
     });
 
-    const intervalFunction = setInterval(function(){
-      socket.send('Every 5 seconds the backend is sending a message via socket.io.');
+    const intervalFunction = setInterval(function () {
+      socket.send(
+        'Every 5 seconds the backend is sending a message via socket.io.'
+      );
     }, 5000);
   });
 };
