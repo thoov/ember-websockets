@@ -23,7 +23,10 @@ module.exports = {
   env: {
     browser: true,
   },
-  rules: {},
+  rules: {
+    'ember/no-classic-classes': 'off',
+    'ember/no-computed-properties-in-native-classes': 'off',
+  },
   overrides: [
     // node files
     {
@@ -52,6 +55,12 @@ module.exports = {
       // Test files:
       files: ['tests/**/*-test.{js,ts}'],
       extends: ['plugin:qunit/recommended'],
+      rules: {
+        'qunit/no-conditional-assertions': 'off',
+        'qunit/no-early-return': 'off',
+        'qunit/require-expect': 'off',
+        'qunit/resolve-async': 'off',
+      },
     },
   ],
 };
