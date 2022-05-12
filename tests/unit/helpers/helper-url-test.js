@@ -6,10 +6,19 @@ module('Unit | Helpers | Helper URL Functions', function (hooks) {
   setupTest(hooks);
 
   test('that normalizeURL works correctly', function (assert) {
-    assert.strictEqual(normalizeURL('ws://localhost:8000'), 'ws://localhost:8000/');
-    assert.strictEqual(normalizeURL('ws://localhost:8000/'), 'ws://localhost:8000/');
+    assert.strictEqual(
+      normalizeURL('ws://localhost:8000'),
+      'ws://localhost:8000/'
+    );
+    assert.strictEqual(
+      normalizeURL('ws://localhost:8000/'),
+      'ws://localhost:8000/'
+    );
     assert.strictEqual(normalizeURL('ws://example.com'), 'ws://example.com/');
-    assert.strictEqual(normalizeURL('ws://example.com/foo'), 'ws://example.com/foo');
+    assert.strictEqual(
+      normalizeURL('ws://example.com/foo'),
+      'ws://example.com/foo'
+    );
     assert.strictEqual(
       normalizeURL('ws://example.com/foo/'),
       'ws://example.com/foo/'

@@ -16,7 +16,10 @@ module('Unit | Service | Websocket', function (hooks) {
     service.socketFor('ws://example.com:7000/');
 
     assert.strictEqual(keys(service.get('sockets')).length, 1);
-    assert.strictEqual(keys(service.get('sockets'))[0], 'ws://examplecom:7000/');
+    assert.strictEqual(
+      keys(service.get('sockets'))[0],
+      'ws://examplecom:7000/'
+    );
 
     server.stop();
   });
