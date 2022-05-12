@@ -6,12 +6,12 @@ export default class Router extends EmberRouter {
   rootURL = config.rootURL;
 }
 
-Router.map(function() {
-  this.route('sockets', function() {
+Router.map(function () {
+  this.route('sockets', function () {
     this.route('example');
   });
 
-  this.route('socketio', function() {
+  this.route('socketio', function () {
     this.route('simple');
   });
 });

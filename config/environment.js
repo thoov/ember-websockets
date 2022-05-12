@@ -1,9 +1,9 @@
 'use strict';
 
-module.exports = function(/* environment, appConfig */) {
+module.exports = function (/* environment, appConfig */) {
   return {
     'ember-websockets': {
-      'socketIO': true
-    }
+      'socketIO': true,
+    },
   };
 };

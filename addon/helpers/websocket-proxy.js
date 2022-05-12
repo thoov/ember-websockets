@@ -2,18 +2,18 @@ import { run } from '@ember/runloop';
 import { assert } from '@ember/debug';
 import ObjectProxy from '@ember/object/proxy';
 
-const events  = ['close', 'error', 'message', 'open'];
+const events = ['close', 'error', 'message', 'open'];
 const { filter, indexOf, forEach } = Array.prototype;
 
 export default ObjectProxy.extend({
   /*
-  * {
-  *    url: 'String'
-  *    type: 'String' (such as 'open', 'message', 'close', and 'error')
-  *    callback: The function to envoke
-  *    context: The context of the function
-  * }
-  */
+   * {
+   *    url: 'String'
+   *    type: 'String' (such as 'open', 'message', 'close', and 'error')
+   *    callback: The function to envoke
+   *    context: The context of the function
+   * }
+   */
   listeners: null,
 
   init() {
@@ -24,37 +24,52 @@ export default ObjectProxy.extend({
   },
 
   /*
-  * Adds a callback function into the listeners array which will
-  * be invoked later whenever a given `type` event happens.
-  *
-  * type: must be either 'open', 'message', 'close', 'error'
-  */
+   * Adds a callback function into the listeners array which will
+   * be invoked later whenever a given `type` event happens.
+   *
+   * type: must be either 'open', 'message', 'close', 'error'
+   */
   on(type, callback, context) {
-    assert(`${type} is not a recognized event name. Please use on of the following: ${events.join(', ')}`, indexOf.call(events, type) !== -1);
-    assert('The second argument must be a function.', typeof callback === 'function');
+    assert(
+      `${type} is not a recognized event name. Please use on of the following: ${events.join(
+        ', '
+      )}`,
+      indexOf.call(events, type) !== -1
+    );
+    assert(
+      'The second argument must be a function.',
+      typeof callback === 'function'
+    );
 
     this.listeners.push({ url: this.socket.url, type, callback, context });
   },
 
   /*
-  * Removes a callback function from the listeners array. This callback
-  * will not longer be invoked when the given `type` event happens.
-  */
+   * Removes a callback function from the listeners array. This callback
+   * will not longer be invoked when the given `type` event happens.
+   */
   off(type, callback) {
-    this.listeners = filter.call(this.listeners, listeners => !(listeners.callback === callback && listeners.type === type));
+    this.listeners = filter.call(
+      this.listeners,
+      (listeners) =>
+        !(listeners.callback === callback && listeners.type === type)
+    );
   },
 
   /*
-  * Message is the message which will be passed into the native websockets send method
-  * and shouldStringify is a boolean which determines if we should call JSON.stringify on
-  * the message.
-  */
+   * Message is the message which will be passed into the native websockets send method
+   * and shouldStringify is a boolean which determines if we should call JSON.stringify on
+   * the message.
+   */
   send(message, shouldStringify = false) {
-    if(shouldStringify && JSON && JSON.stringify) {
+    if (shouldStringify && JSON && JSON.stringify) {
       message = JSON.stringify(message);
     }
 
-    assert('Cannot send message to the websocket while it is not open.', this.readyState() === WebSocket.OPEN);
+    assert(
+      'Cannot send message to the websocket while it is not open.',
+      this.readyState() === WebSocket.OPEN
+    );
 
     this.socket.send(message);
   },
@@ -69,19 +84,21 @@ export default ObjectProxy.extend({
   },
 
   setupInternalListeners() {
-    forEach.call(events, eventName => {
-      this.socket[`on${eventName}`] = event => {
+    forEach.call(events, (eventName) => {
+      this.socket[`on${eventName}`] = (event) => {
         run(() => {
-          var activeListeners = filter.call(this.listeners, listener => {
-            return listener.url === event.currentTarget.url && listener.type === eventName;
+          var activeListeners = filter.call(this.listeners, (listener) => {
+            return (
+              listener.url === event.currentTarget.url &&
+              listener.type === eventName
+            );
           });
 
           // TODO: filter active listeners for contexts that are not destroyed
-          forEach.call(activeListeners, item => {
+          forEach.call(activeListeners, (item) => {
             if (item.context) {
               item.callback.call(item.context, event);
-            }
-            else {
+            } else {
               item.callback(event);
             }
           });
@@ -91,7 +108,9 @@ export default ObjectProxy.extend({
   },
 
   /*
-  * A helper method to get access to the readyState of the websocket.
-  */
-  readyState() { return this.socket.readyState; }
+   * A helper method to get access to the readyState of the websocket.
+   */
+  readyState() {
+    return this.socket.readyState;
+  },
 });

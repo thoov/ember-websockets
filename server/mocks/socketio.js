@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-module.exports = function() {
+module.exports = function () {
   var io = require('socket.io')(7100);
 
   io.on('connection', function (socket) {

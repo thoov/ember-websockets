@@ -4,7 +4,6 @@ import WebsocketProxy from '../helpers/websocket-proxy';
 import { normalizeURL, cleanURL } from '../helpers';
 
 export default class WebSocketService extends Service {
-
   /*
     A hash of open websocket connections. This
     allows multiple components to share the same connection.
@@ -28,7 +27,9 @@ export default class WebSocketService extends Service {
       Websockets allows either a string or array of strings to be passed as the second argument.
       Normalize both cases into an array of strings so we can just deal with arrays.
     */
-    if (typeof protocols === 'string') { protocols = [protocols]; }
+    if (typeof protocols === 'string') {
+      protocols = [protocols];
+    }
 
     /*
       Normalize the url as native websockets add a / to the end of the url:
@@ -89,6 +90,6 @@ export default class WebSocketService extends Service {
   }
 
   createProxy(socket, protocols) {
-    return WebsocketProxy.create({ content: this, protocols, socket })
+    return WebsocketProxy.create({ content: this, protocols, socket });
   }
 }

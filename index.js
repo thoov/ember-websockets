@@ -26,8 +26,14 @@ module.exports = {
 
     return new Merge([
       new Funnel(__dirname + '/vendor', { destDir: this.name }),
-      new Funnel(path.dirname(mockSocketPath), { destDir: this.name + '/mock-socket' }),
-      fastbootTransform(new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), { destDir: this.name + '/socket.io-client' }))
+      new Funnel(path.dirname(mockSocketPath), {
+        destDir: this.name + '/mock-socket',
+      }),
+      fastbootTransform(
+        new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), {
+          destDir: this.name + '/socket.io-client',
+        })
+      ),
     ]);
-  }
+  },
 };
