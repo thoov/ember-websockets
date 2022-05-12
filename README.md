@@ -1,14 +1,29 @@
-# Ember Websockets
+ember-websockets
+==============================================================================
 
 [![GitHub Actions CI][github-actions-badge]][github-actions-ci-url]
 
 [github-actions-badge]: https://github.com/thoov/ember-websockets/workflows/CI/badge.svg
 [github-actions-ci-url]: https://github.com/thoov/ember-websockets/actions?query=workflow%3ACI
 
-## Installation
+Compatibility
+------------------------------------------------------------------------------
+
+* Ember.js v3.24 or above
+* Ember CLI v3.24 or above
+* Node.js v12 or above
+
+
+Installation
+------------------------------------------------------------------------------
+
 ```
 ember install ember-websockets
 ```
+
+
+Usage
+------------------------------------------------------------------------------
 
 ## Simple example of using it in your app
 
@@ -372,5 +387,13 @@ If you have any feedback, encounter any bugs, or just have a question, please fe
 * [ws](https://github.com/einaros/ws)
 * [socket.io](http://socket.io)
 
-### License
-This addon falls under the [MIT license](https://github.com/thoov/ember-websockets/blob/master/LICENSE.md)
+Contributing
+------------------------------------------------------------------------------
+
+See the [Contributing](CONTRIBUTING.md) guide for details.
+
+
+License
+------------------------------------------------------------------------------
+
+This project is licensed under the [MIT License](LICENSE.md).

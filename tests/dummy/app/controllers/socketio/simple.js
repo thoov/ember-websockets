@@ -9,8 +9,12 @@ export default class SimpleController extends Controller {
 
     let socketIO = this.socketService.socketFor('http://localhost:7100/');
 
-    socketIO.on('connect', function() {
-      console.log('We have a connection'); // eslint-disable-line no-console
-    }, this);
+    socketIO.on(
+      'connect',
+      function () {
+        console.log('We have a connection'); // eslint-disable-line no-console
+      },
+      this
+    );
   }
 }
