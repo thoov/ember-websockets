@@ -76,10 +76,10 @@ jobs:
       - name: Run Tests
         run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
 
-  automerge:
-    needs: [test, floating, try-scenarios]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: fastify/github-action-merge-dependabot@v2.2.0
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}              
+  # automerge:
+  #   needs: [test, floating, try-scenarios]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: fastify/github-action-merge-dependabot@v2.2.0
+  #       with:
+  #         github-token: ${{secrets.GITHUB_TOKEN}}              
