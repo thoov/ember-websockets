@@ -3,7 +3,7 @@
 module.exports = function (/* environment, appConfig */) {
   return {
     'ember-websockets': {
-      'socketIO': true,
+      socketIO: true,
     },
   };
 };
