@@ -16,11 +16,11 @@ module('Acceptance | socket.io', function (hooks) {
       const value = JSON.parse(data);
 
       if (counter === 1) {
-        assert.equal(value, 'this is a test 2');
+        assert.strictEqual(value, 'this is a test 2');
         return mockServer.stop(done);
       }
 
-      assert.equal(value, 'this is a test');
+      assert.strictEqual(value, 'this is a test');
       counter++;
     });
 

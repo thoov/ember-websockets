@@ -15,8 +15,8 @@ module('Unit | Service | Websocket', function (hooks) {
 
     service.socketFor('ws://example.com:7000/');
 
-    assert.equal(keys(service.get('sockets')).length, 1);
-    assert.equal(keys(service.get('sockets'))[0], 'ws://examplecom:7000/');
+    assert.strictEqual(keys(service.get('sockets')).length, 1);
+    assert.strictEqual(keys(service.get('sockets'))[0], 'ws://examplecom:7000/');
 
     server.stop();
   });
@@ -39,7 +39,7 @@ module('Unit | Service | Websocket', function (hooks) {
     const referenceA = service.socketFor('ws://example.com:7000/');
     const referenceB = service.socketFor('ws://example.com:7001/');
 
-    assert.equal(keys(service.get('sockets')).length, 2);
+    assert.strictEqual(keys(service.get('sockets')).length, 2);
     assert.notDeepEqual(referenceA, referenceB);
 
     serverA.stop();
@@ -102,7 +102,7 @@ module('Unit | Service | Websocket', function (hooks) {
 
     const mock = {
       messageHandler(event) {
-        assert.equal(event.data, sampleMessage);
+        assert.strictEqual(event.data, sampleMessage);
 
         server.stop();
         done();
@@ -177,7 +177,7 @@ module('Unit | Service | Websocket', function (hooks) {
     const mock = {
       openHandler() {
         service.closeSocketFor('ws://example.com:7000/');
-        assert.equal(Object.keys(service.get('sockets')).length, 0);
+        assert.strictEqual(Object.keys(service.get('sockets')).length, 0);
 
         done1();
       },
