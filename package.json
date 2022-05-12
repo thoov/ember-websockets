@@ -79,7 +79,7 @@
     "qunit": "^2.17.2",
     "qunit-dom": "^1.6.0",
     "release-it": "^14.2.1",
-    "release-it-lerna-changelog": "^3.1.0",
+    "release-it-lerna-changelog": "^4.0.1",
     "webpack": "^5.72.1"
   },
   "engines": {
