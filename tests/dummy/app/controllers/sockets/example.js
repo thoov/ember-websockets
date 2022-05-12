@@ -14,17 +14,29 @@ export default class ExampleController extends Controller {
 
     let socket = this.socketService.socketFor('ws://localhost:8080/foo/bar');
 
-    socket.on('open', () => {
-      console.log('On open called'); // eslint-disable-line no-console
-    }, this);
+    socket.on(
+      'open',
+      () => {
+        console.log('On open called'); // eslint-disable-line no-console
+      },
+      this
+    );
 
-    socket.on('close', () => {
-      console.log('On close called'); // eslint-disable-line no-console
-    }, this);
+    socket.on(
+      'close',
+      () => {
+        console.log('On close called'); // eslint-disable-line no-console
+      },
+      this
+    );
 
-    socket.on('message', (messageFromSocket) => {
-      this.messages.pushObject({text: messageFromSocket.data});
-    }, this);
+    socket.on(
+      'message',
+      (messageFromSocket) => {
+        this.messages.pushObject({ text: messageFromSocket.data });
+      },
+      this
+    );
   }
 
   @action

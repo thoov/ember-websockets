@@ -4,10 +4,10 @@ import { setupApplicationTest } from 'ember-qunit';
 
 import { Server as MockServer } from 'mock-socket';
 
-module('Acceptance | websockets', function(hooks) {
+module('Acceptance | websockets', function (hooks) {
   setupApplicationTest(hooks);
 
-  test('visiting /websockets', async function(assert) {
+  test('visiting /websockets', async function (assert) {
     const done = assert.async();
     const mockServer = new MockServer('ws://localhost:8080/foo/bar');
 
@@ -33,4 +33,3 @@ module('Acceptance | websockets', function(hooks) {
     await click('button');
   });
 });
-

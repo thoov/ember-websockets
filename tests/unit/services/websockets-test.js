@@ -2,17 +2,14 @@ import { module, test } from 'qunit';
 import { later } from '@ember/runloop';
 import { setupTest } from 'ember-qunit';
 
-import {
-  WebSocket as MockWebSocket,
-  Server as MockServer
-} from 'mock-socket';
+import { WebSocket as MockWebSocket, Server as MockServer } from 'mock-socket';
 
 const { keys } = Object;
 
-module('Unit | Service | Websocket', function(hooks) {
+module('Unit | Service | Websocket', function (hooks) {
   setupTest(hooks);
 
-  test('that calling socketFor will correctly create a connection', function(assert) {
+  test('that calling socketFor will correctly create a connection', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const server = new MockServer('ws://example.com:7000/');
 
@@ -24,7 +21,7 @@ module('Unit | Service | Websocket', function(hooks) {
     server.stop();
   });
 
-  test('that calling socketFor will correctly cache a connection', function(assert) {
+  test('that calling socketFor will correctly cache a connection', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const server = new MockServer('ws://example.com:7000/');
     const referenceA = service.socketFor('ws://example.com:7000/');
@@ -35,7 +32,7 @@ module('Unit | Service | Websocket', function(hooks) {
     server.stop();
   });
 
-  test('that calling socketFor with different urls opens seperate connections', function(assert) {
+  test('that calling socketFor with different urls opens seperate connections', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const serverA = new MockServer('ws://example.com:7000/');
     const serverB = new MockServer('ws://example.com:7001/');
@@ -49,7 +46,7 @@ module('Unit | Service | Websocket', function(hooks) {
     serverB.stop();
   });
 
-  test('that on(open) works correctly', function(assert) {
+  test('that on(open) works correctly', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const server = new MockServer('ws://example.com:7000/');
     const socket = service.socketFor('ws://example.com:7000/');
@@ -60,14 +57,14 @@ module('Unit | Service | Websocket', function(hooks) {
 
         server.stop();
         done();
-      }
+      },
     };
 
     const done = assert.async();
     socket.on('open', mock.openHandler, mock);
   });
 
-  test('that on(close) works correctly', function(assert) {
+  test('that on(close) works correctly', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const server = new MockServer('ws://example.com:7000/');
     const socket = service.socketFor('ws://example.com:7000/');
@@ -82,7 +79,7 @@ module('Unit | Service | Websocket', function(hooks) {
 
         server.stop();
         done();
-      }
+      },
     };
 
     const done = assert.async();
@@ -91,7 +88,7 @@ module('Unit | Service | Websocket', function(hooks) {
     socket.on('close', mock.closeHandler, mock);
   });
 
-  test('that on(message) works correctly', function(assert) {
+  test('that on(message) works correctly', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const server = new MockServer('ws://example.com:7000/');
     const socket = service.socketFor('ws://example.com:7000/');
@@ -109,13 +106,13 @@ module('Unit | Service | Websocket', function(hooks) {
 
         server.stop();
         done();
-      }
+      },
     };
 
     socket.on('message', mock.messageHandler, mock);
   });
 
-  test('that on(error) works correctly', function(assert) {
+  test('that on(error) works correctly', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const originalWebSocket = window.WebSocket;
     window.WebSocket = MockWebSocket;
@@ -134,14 +131,14 @@ module('Unit | Service | Websocket', function(hooks) {
 
         window.WebSocket = originalWebSocket;
         done();
-      }
+      },
     };
 
     socket.on('open', mock.openHandler, mock);
     socket.on('error', mock.errorHandler, mock);
   });
 
-  test('that off(close) works correctly', function(assert) {
+  test('that off(close) works correctly', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const server = new MockServer('ws://example.com:7000/');
     const socket = service.socketFor('ws://example.com:7000/');
@@ -162,14 +159,14 @@ module('Unit | Service | Websocket', function(hooks) {
 
       closeHandler() {
         assert.ok(false); // this should not be called
-      }
+      },
     };
 
     socket.on('open', mock.openHandler, mock);
     socket.on('close', mock.closeHandler, mock);
   });
 
-  test('that closeSocketFor works correctly', function(assert) {
+  test('that closeSocketFor works correctly', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const server = new MockServer('ws://example.com:7000/');
     const socket = service.socketFor('ws://example.com:7000/');
@@ -190,14 +187,14 @@ module('Unit | Service | Websocket', function(hooks) {
 
         server.stop();
         done2();
-      }
+      },
     };
 
     socket.on('open', mock.openHandler, mock);
     socket.on('close', mock.closeHandler, mock);
   });
 
-  test('that you can reopen a socket after it closes', function(assert) {
+  test('that you can reopen a socket after it closes', function (assert) {
     const service = this.owner.lookup('service:websockets');
     const server = new MockServer('ws://example.com:7000/');
     const socket = service.socketFor('ws://example.com:7000/');
@@ -205,21 +202,28 @@ module('Unit | Service | Websocket', function(hooks) {
     const done = assert.async();
     let counter = 0;
 
-    socket.on('open', () => {
-      assert.ok(true);
-      socket.close();
-    }, this);
+    socket.on(
+      'open',
+      () => {
+        assert.ok(true);
+        socket.close();
+      },
+      this
+    );
 
-    socket.on('close', () => {
-      assert.ok(true);
-      if (counter === 0) {
-        socket.reconnect();
-      } else {
-        server.stop();
-        done();
-      }
-      counter++;
-    }, this);
+    socket.on(
+      'close',
+      () => {
+        assert.ok(true);
+        if (counter === 0) {
+          socket.reconnect();
+        } else {
+          server.stop();
+          done();
+        }
+        counter++;
+      },
+      this
+    );
   });
 });
-
