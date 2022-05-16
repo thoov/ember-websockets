@@ -1,5 +1,14 @@
 
 
+
+## v10.1.0 (2022-05-16)
+
+#### :bug: Bug Fix
+* [#229](https://github.com/thoov/ember-websockets/pull/229) Add back urijs to support relative urls ([@rwwagner90](https://github.com/rwwagner90))
+
+#### Committers: 1
+- Robert Wagner ([@rwwagner90](https://github.com/rwwagner90))
+
 ## v10.0.0 (2022-05-16)
 
 #### :boom: Breaking Change
