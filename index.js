@@ -1,10 +1,4 @@
-/* eslint-env node */
 'use strict';
-
-const path = require('path');
-const Funnel = require('broccoli-funnel');
-const Merge = require('broccoli-merge-trees');
-const fastbootTransform = require('fastboot-transform');
 
 module.exports = {
   name: require('./package').name,
@@ -19,20 +13,7 @@ module.exports = {
       appConfig['ember-websockets'] &&
       appConfig['ember-websockets']['socketIO'] === true
     ) {
-      this.import(`vendor/${this.name}/socket.io-client/socket.io.min.js`);
+      this.import('node_modules/socket.io-client/dist/socket.io.min.js');
     }
-  },
-
-  treeForVendor() {
-    const socketIOClientPath = require.resolve('socket.io-client');
-
-    return new Merge([
-      new Funnel(__dirname + '/vendor', { destDir: this.name }),
-      fastbootTransform(
-        new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), {
-          destDir: this.name + '/socket.io-client',
-        })
-      ),
-    ]);
   },
 };
