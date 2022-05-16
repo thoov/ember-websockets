@@ -1,4 +1,13 @@
 
+
+## v10.0.0 (2022-05-16)
+
+#### :boom: Breaking Change
+* [#228](https://github.com/thoov/ember-websockets/pull/228) Update socket.io to 3.x ([@rwwagner90](https://github.com/rwwagner90))
+
+#### Committers: 1
+- Robert Wagner ([@rwwagner90](https://github.com/rwwagner90))
+
 ## v9.0.0 (2022-05-12)
 
 #### :boom: Breaking Change
