@@ -19,7 +19,7 @@ module.exports = {
       appConfig['ember-websockets'] &&
       appConfig['ember-websockets']['socketIO'] === true
     ) {
-      this.import(`vendor/${this.name}/socket.io-client/socket.io.slim.js`);
+      this.import(`vendor/${this.name}/socket.io-client/socket.io.min.js`);
     }
   },
 

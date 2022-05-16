@@ -29,15 +29,15 @@ export default ObjectProxy.extend({
       typeof callback === 'function'
     );
 
-    const bindedCallback = bind(context, callback);
+    const boundCallback = bind(context, callback);
     this.listeners.push({
       url: this.socket.io.uri,
       type,
       callback,
       context,
-      ref: bindedCallback,
+      ref: boundCallback,
     });
-    this.socket.on(type, bindedCallback);
+    this.socket.io.on(type, boundCallback);
   },
 
   off(type, callback) {
