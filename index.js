@@ -24,14 +24,10 @@ module.exports = {
   },
 
   treeForVendor() {
-    const mockSocketPath = require.resolve('mock-socket');
     const socketIOClientPath = require.resolve('socket.io-client');
 
     return new Merge([
       new Funnel(__dirname + '/vendor', { destDir: this.name }),
-      new Funnel(path.dirname(mockSocketPath), {
-        destDir: this.name + '/mock-socket',
-      }),
       fastbootTransform(
         new Funnel(path.join(path.dirname(socketIOClientPath), '../dist'), {
           destDir: this.name + '/socket.io-client',
