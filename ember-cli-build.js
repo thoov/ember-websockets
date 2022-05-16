@@ -14,9 +14,6 @@ module.exports = function (defaults) {
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
 
-  app.import(`vendor/ember-websockets/shims/mock-socket.js`);
-  app.import(`vendor/ember-websockets/mock-socket/mock-socket.js`);
-
   const { maybeEmbroider } = require('@embroider/test-setup');
   return maybeEmbroider(app, {
     skipBabel: [
