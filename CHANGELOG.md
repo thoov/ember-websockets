@@ -1,6 +1,15 @@
 
 
 
+
+## v10.2.0 (2022-05-16)
+
+#### :rocket: Enhancement
+* [#230](https://github.com/thoov/ember-websockets/pull/230) Remove unnecessary vendor funnels ([@rwwagner90](https://github.com/rwwagner90))
+
+#### Committers: 1
+- Robert Wagner ([@rwwagner90](https://github.com/rwwagner90))
+
 ## v10.1.0 (2022-05-16)
 
 #### :bug: Bug Fix
