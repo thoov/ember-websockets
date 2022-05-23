@@ -37,7 +37,7 @@ export default ObjectProxy.extend({
       context,
       ref: boundCallback,
     });
-    this.socket.io.on(type, boundCallback);
+    this.socket.on(type, boundCallback);
   },
 
   off(type, callback) {
