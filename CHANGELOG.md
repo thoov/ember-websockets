@@ -2,6 +2,15 @@
 
 
 
+
+## v10.2.1 (2022-05-23)
+
+#### :bug: Bug Fix
+* [#238](https://github.com/thoov/ember-websockets/pull/238) Fix socket.on ([@rwwagner90](https://github.com/rwwagner90))
+
+#### Committers: 1
+- Robert Wagner ([@rwwagner90](https://github.com/rwwagner90))
+
 ## v10.2.0 (2022-05-16)
 
 #### :rocket: Enhancement
