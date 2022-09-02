@@ -2177,10 +2177,10 @@ argparse@^2.0.1:
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
-aria-query@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-5.0.0.tgz#210c21aaf469613ee8c9a62c7f86525e058db52c"
-  integrity sha512-V+SM7AbUwJ+EBnB8+DXs0hPZHO0W6pqBcc0dW90OwtVG02PswOu/teuARoLQjdDOH+t9pJgGnW5/Qmouf3gPJg==
+aria-query@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-5.0.2.tgz#0b8a744295271861e1d933f8feca13f9b70cfdc1"
+  integrity sha512-eigU3vhqSO+Z8BKDnVLN/ompjhf3pYzecKXz8+whRy+9gZu8n1TCGfwzQUUPnqdHl9ax1Hr9031orZ+UOEYr7Q==
 
 arr-diff@^4.0.0:
   version "4.0.0"
@@ -2425,6 +2425,11 @@ babel-helpers@^6.24.1:
   dependencies:
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
+
+babel-import-util@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/babel-import-util/-/babel-import-util-0.2.0.tgz#b468bb679919601a3570f9e317536c54f2862e23"
+  integrity sha512-CtWYYHU/MgK88rxMrLfkD356dApswtR/kWZ/c6JifG1m10e7tBBrs/366dFzWMAoqYmG5/JSh+94tUSpIwh+ag==
 
 babel-import-util@^1.1.0, babel-import-util@^1.2.0:
   version "1.2.2"
@@ -4216,10 +4221,10 @@ data-uri-to-buffer@3:
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-3.0.1.tgz#594b8973938c5bc2c33046535785341abc4f3636"
   integrity sha512-WboRycPNsVw3B3TL559F7kuBUM4d8CgMEvk6xEJlOp7OBPjt6G7z8WMWlD2rOFZLk6OYfFIUGsCOWzcQH9K2og==
 
-date-fns@^2.29.1:
-  version "2.29.1"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.1.tgz#9667c2615525e552b5135a3116b95b1961456e60"
-  integrity sha512-dlLD5rKaKxpFdnjrs+5azHDFOPEu4ANy/LTh04A1DTzMM7qoajmKCBc8pkKRFT41CNzw+4gQh79X5C+Jq27HAw==
+date-fns@^2.29.2:
+  version "2.29.2"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.2.tgz#0d4b3d0f3dff0f920820a070920f0d9662c51931"
+  integrity sha512-0VNbwmWJDS/G3ySwFSJA3ayhbURMTJLtwM2DTxf9CWondCnh6DTNlO9JgRSq6ibf4eD0lfMJNBxUdEAHHix+bA==
 
 debug@2.6.9, debug@^2.1.0, debug@^2.1.1, debug@^2.1.3, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   version "2.6.9"
@@ -5030,16 +5035,32 @@ ember-source@~4.6.0:
     semver "^7.3.7"
     silent-error "^1.1.1"
 
+ember-template-imports@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/ember-template-imports/-/ember-template-imports-3.1.1.tgz#9b7a4f37c0a638b3d3d9894dade494efceb30f9a"
+  integrity sha512-ZsujuOwaF6lWDDeKC0NleCUAC8f06CfxWQPmejNnxg5gUdqHFTfW9L++X9RLLV/pJZ6eCtax7L94XkXQJ1LfBA==
+  dependencies:
+    babel-import-util "^0.2.0"
+    broccoli-stew "^3.0.0"
+    ember-cli-babel-plugin-helpers "^1.1.1"
+    ember-cli-version-checker "^5.1.2"
+    line-column "^1.0.2"
+    magic-string "^0.25.7"
+    parse-static-imports "^1.1.0"
+    string.prototype.matchall "^4.0.6"
+    validate-peer-dependencies "^1.1.0"
+
 ember-template-lint@^4.7.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/ember-template-lint/-/ember-template-lint-4.12.0.tgz#0708cf280cbad9419c399e52714d29a72dad2dbf"
-  integrity sha512-udWWclqxMc7bljIWAnR7wr1/U7R6V0wmSAWGnQ/DqKmNshnVWnzC94wixzvbdrubi/kn1SIEGsyf0bebTkS8rQ==
+  version "4.14.0"
+  resolved "https://registry.yarnpkg.com/ember-template-lint/-/ember-template-lint-4.14.0.tgz#7807ad19fc88c99de451a639ded2e3bbd14baa74"
+  integrity sha512-kr7jvAx74y4CZxMJ+B8AYszYZjdyE0opSPo+6vLW43jKyq2oowjqPDEBd6upsUALvYtNAPn8b6D+Vbiy7UP+Kg==
   dependencies:
     "@lint-todo/utils" "^13.0.3"
-    aria-query "^5.0.0"
+    aria-query "^5.0.2"
     chalk "^4.1.2"
     ci-info "^3.3.2"
-    date-fns "^2.29.1"
+    date-fns "^2.29.2"
+    ember-template-imports "^3.1.1"
     ember-template-recast "^6.1.3"
     find-up "^6.3.0"
     fuse.js "^6.5.3"
@@ -11289,7 +11310,7 @@ string-width@^2.1.0:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
 
-string.prototype.matchall@^4.0.5:
+string.prototype.matchall@^4.0.5, string.prototype.matchall@^4.0.6:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/string.prototype.matchall/-/string.prototype.matchall-4.0.7.tgz#8e6ecb0d8a1fb1fda470d81acecb2dba057a481d"
   integrity sha512-f48okCX7JiwVi1NXCVWcFnZgADDC/n2vePlQ/KUCNqCikLLilQvwjMO8+BHVKvgzH0JB0J9LEPgxOGT02RoETg==
@@ -12164,7 +12185,7 @@ validate-npm-package-name@^3.0.0:
   dependencies:
     builtins "^1.0.3"
 
-validate-peer-dependencies@^1.2.0:
+validate-peer-dependencies@^1.1.0, validate-peer-dependencies@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/validate-peer-dependencies/-/validate-peer-dependencies-1.2.0.tgz#22aab93c514f4fda457d36c80685e8b1160d2036"
   integrity sha512-nd2HUpKc6RWblPZQ2GDuI65sxJ2n/UqZwSBVtj64xlWjMx0m7ZB2m9b2JS3v1f+n9VWH/dd1CMhkHfP6pIdckA==
