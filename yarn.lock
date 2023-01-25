@@ -1061,6 +1061,20 @@
     semver "^7.3.5"
     typescript-memoize "^1.0.1"
 
+"@embroider/shared-internals@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@embroider/shared-internals/-/shared-internals-2.0.0.tgz#d8205ec6944362aeecfbb51143db352430ced316"
+  integrity sha512-qZ2/xky9mWm5YC6noOa6AiAwgISEQ78YTZNv4SNu2PFgEK/H+Ha/3ddngzGSsnXkVnIHZyxIBzhxETonQYHY9g==
+  dependencies:
+    babel-import-util "^1.1.0"
+    ember-rfc176-data "^0.3.17"
+    fs-extra "^9.1.0"
+    js-string-escape "^1.0.1"
+    lodash "^4.17.21"
+    resolve-package-path "^4.0.1"
+    semver "^7.3.5"
+    typescript-memoize "^1.0.1"
+
 "@embroider/test-setup@^1.5.0":
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/@embroider/test-setup/-/test-setup-1.8.3.tgz#445b9fe5a363ce50367ac2114750597f98d7806d"
@@ -4528,16 +4542,16 @@ ember-auto-import@^1.11.3:
     webpack "^4.43.0"
 
 ember-auto-import@^2.4.1:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/ember-auto-import/-/ember-auto-import-2.4.2.tgz#d4d3bc6885a11cf124f606f5c37169bdf76e37ae"
-  integrity sha512-REh+1aJWpTkvN42a/ga41OuRpUsSW7UQfPr2wPtYx56o/xoSNhVBXejy7yV9ObrkN7gogz6fs2xZwih5cOwpYg==
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/ember-auto-import/-/ember-auto-import-2.6.0.tgz#c7a2f799c9b700d74648cb02e35cf7bc1b44ac02"
+  integrity sha512-xUyypxlaqWvrx2KSseLus0H8K7Dt+sXNCvcxtquT2EmIM6r67NuQUT9woiEMa9UBvqcaX2k9hNLeubDl78saig==
   dependencies:
     "@babel/core" "^7.16.7"
     "@babel/plugin-proposal-class-properties" "^7.16.7"
     "@babel/plugin-proposal-decorators" "^7.16.7"
     "@babel/preset-env" "^7.16.7"
     "@embroider/macros" "^1.0.0"
-    "@embroider/shared-internals" "^1.0.0"
+    "@embroider/shared-internals" "^2.0.0"
     babel-loader "^8.0.6"
     babel-plugin-ember-modules-api-polyfill "^3.5.0"
     babel-plugin-htmlbars-inline-precompile "^5.2.1"
