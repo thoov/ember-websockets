@@ -70,7 +70,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-qunit": "^7.2.0",
     "loader.js": "^4.7.0",
-    "mock-socket": "^7.1.0",
+    "mock-socket": "^9.2.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.1",
     "qunit": "^2.18.0",
